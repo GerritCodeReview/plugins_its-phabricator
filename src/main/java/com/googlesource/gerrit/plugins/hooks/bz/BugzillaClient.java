@@ -62,7 +62,7 @@ public class BugzillaClient {
     connector.executeMethod(getBugId);
     return getBugId.getBug();
   }
-  
+
   public Bug getBug(String bugId) throws BugzillaException {
     return getBug(Integer.parseInt(bugId));
   }
@@ -71,7 +71,7 @@ public class BugzillaClient {
     CommentBug bugComment = new CommentBug(getBug(bugId), comment);
     connector.executeMethod(bugComment);
   }
-  
+
   public void performAction(final String bugId, final String actionName,
       final String actionValue) throws BugzillaException {
     Bug bug = getBug(bugId);
@@ -93,7 +93,7 @@ public class BugzillaClient {
     connector.executeMethod(versionCheck);
     return versionCheck.getVersion();
   }
-  
+
   public String getXmlRpcUrl() {
     return xmlRpcUrl;
   }
