@@ -124,9 +124,11 @@ Syntax of the status transition configuration file is the following:
 
 `<verified-value>`
 :	Verified flag added on Gerrit with values from -1 to +1
+	For positive values, you must not omit a leading +.
 
 `<code-review-value>`
 :	Code-Review flag added on Gerrit with values from -2 to +2
+	For positive values, you must not omit a leading +.
 
 Note: multiple conditions in the action stanza are optional but at least one must be present.
 
