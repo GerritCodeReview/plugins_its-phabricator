@@ -18,6 +18,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.j2bugzilla.base.Bug;
 import com.j2bugzilla.base.BugzillaConnector;
 import com.j2bugzilla.base.BugzillaException;
@@ -32,6 +35,8 @@ import com.j2bugzilla.rpc.LogOut;
 import com.j2bugzilla.rpc.UpdateBug;
 
 public class BugzillaClient {
+
+  private Logger log = LoggerFactory.getLogger(BugzillaClient.class);
 
   private final BugzillaConnector connector;
   private final String xmlRpcUrl;
@@ -81,6 +86,9 @@ public class BugzillaClient {
       } else if (actionName.equals("resolution")) {
         bug.setResolution(actionValue);
       }
+    } else {
+      log.warn( "Action '" + actionName + "' with value '" + actionValue
+        + "' is not valid. Skipping action on issue " + bugId + "." );
     }
     connector.executeMethod(new UpdateBug(bug));
   }
