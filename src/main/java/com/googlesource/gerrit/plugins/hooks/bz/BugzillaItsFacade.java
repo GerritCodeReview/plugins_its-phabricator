@@ -245,7 +245,7 @@ public class BugzillaItsFacade implements ItsFacade {
 
   @Override
   public String createLinkForWebui(String url, String text) {
-    return "["+text+"|"+url+"]";
+    return url + " ("+text+")";
   }
 
   private String healthCheckAccess() throws BugzillaException, ConnectionException {
