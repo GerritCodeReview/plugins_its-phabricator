@@ -117,6 +117,12 @@ Syntax of the status transition configuration file is the following:
 
 `<issue-status-action>`
 :	Action to perform on Bugzila issue when all the condition in the stanza are met.
+	<issue-status-action> can be any of:
+	  status STATUS
+	    change the associated bug's status to STATUS, where STATUS can be
+	    any of the values your bugzilla configuration allows as status. Be
+	    aware, that changing a bug from any status for open bugs to a status
+	    for closed bugs will not work, as the resolution would be missing.
 
 `<change-action>`
 :	Action performed on Gerrit change-id, possible values are:
