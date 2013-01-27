@@ -21,6 +21,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.googlesource.gerrit.plugins.hooks.its.InvalidTransitionException;
 import com.j2bugzilla.base.Bug;
 import com.j2bugzilla.base.BugzillaConnector;
 import com.j2bugzilla.base.BugzillaException;
@@ -77,25 +78,41 @@ public class BugzillaClient {
     connector.executeMethod(bugComment);
   }
 
-  public void performAction(final String bugId, final String actionName,
-      final String actionValue) throws BugzillaException {
-    Bug bug = getBug(bugId);
-    if (validateAction(actionName, actionValue)) {
-      if (actionName.equals("status")) {
-        bug.setStatus(actionValue);
-      } else if (actionName.equals("resolution")) {
-        bug.setResolution(actionValue);
-      }
+  private void performSimpleActionChainable(final Bug bug, final String actionName,
+      final String actionValue) throws BugzillaException,
+      InvalidTransitionException {
+    if ("status".equals(actionName)) {
+      assertLegalValue(Fields.STATUS, actionValue);
+      bug.setStatus(actionValue);
+    } else if ("resolution".equals(actionName)) {
+      assertLegalValue(Fields.RESOLUTION, actionValue);
+      bug.setResolution(actionValue);
     } else {
-      log.warn( "Action '" + actionName + "' with value '" + actionValue
-        + "' is not valid. Skipping action on issue " + bugId + "." );
+      throw new InvalidTransitionException("Simple action " + actionName
+        + " is not known");
+    }
+  }
+
+  public void performAction(final String bugId, final String actionName,
+      final String actionValue) throws BugzillaException,
+      InvalidTransitionException {
+    Bug bug = getBug(bugId);
+    if ("status".equals(actionName) || "resolution".equals(actionName)) {
+      performSimpleActionChainable(bug, actionName, actionValue);
+    } else {
+      throw new InvalidTransitionException("Action " + actionName + " is not"
+        + " known");
     }
     connector.executeMethod(new UpdateBug(bug));
   }
 
-  private boolean validateAction(String actionName, String actionValue) throws BugzillaException {
-    Fields field = getFields().get(actionName);
-    return field != null && getLegalValues(field).contains(actionValue);
+  private void assertLegalValue(Fields field, String actionValue)
+      throws BugzillaException, InvalidTransitionException {
+    if (!getLegalValues(field).contains(actionValue)) {
+      throw new InvalidTransitionException( "The value '" + actionValue
+        + "' is not an allowed value for bugzilla's " + field.getInternalName()
+        + " field");
+    }
   }
 
   public String getServerVersion() throws BugzillaException {
@@ -106,13 +123,6 @@ public class BugzillaClient {
 
   public String getXmlRpcUrl() {
     return xmlRpcUrl;
-  }
-
-  public Map<String, Fields> getFields() {
-    Map<String, Fields> fields = new HashMap<String, Fields>();
-    fields.put("status", Fields.STATUS);
-    fields.put("resolution", Fields.RESOLUTION);
-    return fields;
   }
 
   private Set<String> getLegalValues(Fields field) throws BugzillaException {

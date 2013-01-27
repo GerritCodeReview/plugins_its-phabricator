@@ -30,7 +30,6 @@ import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
 import com.j2bugzilla.base.Bug;
 import com.j2bugzilla.base.BugzillaException;
 import com.j2bugzilla.base.ConnectionException;
-import com.j2bugzilla.rpc.GetLegalValues.Fields;
 
 public class BugzillaItsFacade implements ItsFacade {
   public static final String ITS_NAME_BUGZILLA = "bugzilla";
@@ -110,31 +109,7 @@ public class BugzillaItsFacade implements ItsFacade {
 
   private void doPerformAction(final String bugId, final String fieldName, final String fieldValue)
       throws BugzillaException, IOException {
-    String actionKey = null;
-    Map<String, Fields> fields = client().getFields();
-    for (Map.Entry<String, Fields> field : fields.entrySet()) {
-      if (field.getKey().equalsIgnoreCase(fieldName)) {
-        actionKey = field.getKey();
-      }
-    }
-
-    if (actionKey != null) {
-      log.debug("Executing action " + actionKey + " on issue " + bugId);
-      client().performAction(bugId, actionKey, fieldValue);
-    } else {
-      StringBuilder sb = new StringBuilder();
-      for (Map.Entry<String, Fields> action : fields.entrySet()) {
-        if (sb.length() > 0) sb.append(',');
-        sb.append('\'');
-        sb.append(action.getKey());
-        sb.append('\'');
-      }
-
-      log.error("Action " + fieldName
-          + " not found within available actions: " + sb);
-      throw new InvalidTransitionException("Action " + fieldName
-          + " not executable on issue " + bugId);
-    }
+    client().performAction(bugId, fieldName.toLowerCase(), fieldValue);
   }
 
   @Override
