@@ -115,7 +115,7 @@ public class BugzillaClient {
     return fields;
   }
 
-  public Set<String> getLegalValues(Fields field) throws BugzillaException {
+  private Set<String> getLegalValues(Fields field) throws BugzillaException {
     if (legalFieldValues.get(field) == null) {
       GetLegalValues getValues = new GetLegalValues(field);
       connector.executeMethod(getValues);
