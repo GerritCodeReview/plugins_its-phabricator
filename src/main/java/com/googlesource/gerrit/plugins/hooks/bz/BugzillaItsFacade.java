@@ -171,7 +171,7 @@ public class BugzillaItsFacade implements ItsFacade {
     }
     catch (Exception ex) {
       if (!quiet) {
-        log.error("I was unable to logout", ex);
+        log.error("I was unable to login", ex);
       }
 
       return null;
@@ -182,11 +182,11 @@ public class BugzillaItsFacade implements ItsFacade {
 
     if (client == null) {
       try {
-        log.debug("Connecting to bugzillab at URL " + getUrl());
+        log.debug("Connecting to bugzilla at URL " + getUrl());
         client = new BugzillaClient(getUrl());
         log.debug("Autenthicating as user " + getUsername());
       } catch (Exception ex) {
-        log.info("Unable to connect to Connected to " + getUrl() + " as "
+        log.info("Unable to connect to " + getUrl() + " as "
             + getUsername());
         throw new IOException(ex);
       }
