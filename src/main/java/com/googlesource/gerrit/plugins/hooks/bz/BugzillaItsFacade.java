@@ -101,8 +101,8 @@ public class BugzillaItsFacade implements ItsFacade {
     execute(new Callable<String>(){
       @Override
       public String call() throws Exception {
-        String actionName = actionString.substring(0, actionString.indexOf(" ") - 1);
-        String actionValue = actionString.substring(actionString.indexOf(" "));
+        String actionName = actionString.substring(0, actionString.indexOf(" "));
+        String actionValue = actionString.substring(actionString.indexOf(" ") + 1);
         doPerformAction(bugId, actionName, actionValue);
         return bugId;
       }});
