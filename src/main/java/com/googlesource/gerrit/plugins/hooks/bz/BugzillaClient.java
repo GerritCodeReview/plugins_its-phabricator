@@ -78,6 +78,8 @@ public class BugzillaClient {
     if (validateAction(actionName, actionValue)) {
       if (actionName.equals("status")) {
         bug.setStatus(actionValue);
+      } else if (actionName.equals("resolution")) {
+        bug.setResolution(actionValue);
       }
     }
     connector.executeMethod(new UpdateBug(bug));
@@ -101,6 +103,7 @@ public class BugzillaClient {
   public Map<String, Fields> getFields() {
     Map<String, Fields> fields = new HashMap<String, Fields>();
     fields.put("status", Fields.STATUS);
+    fields.put("resolution", Fields.RESOLUTION);
     return fields;
   }
 

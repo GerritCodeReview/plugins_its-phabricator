@@ -123,6 +123,11 @@ Syntax of the status transition configuration file is the following:
 	    any of the values your bugzilla configuration allows as status. Be
 	    aware, that changing a bug from any status for open bugs to a status
 	    for closed bugs will not work, as the resolution would be missing.
+	  resolution RESOLUTION
+	    change the associated bug's resolution to RESOLUTION, where
+	    RESOLUTION can be any of the values your bugzilla configuration
+	    allows as resolution. Setting the resolution has only an effect if
+	    the associated bug is in a closed state.
 
 `<change-action>`
 :	Action performed on Gerrit change-id, possible values are:
