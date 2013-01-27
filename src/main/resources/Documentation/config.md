@@ -102,6 +102,10 @@ Issues workflow automation
 Bugzilla plugin is able to automate status transition on the issues based on
 code-review actions performed on Gerrit; actions are performed on Bugzilla using
 the username/password provided during Gerrit init.
+
+When using this possibility, the plugin assumes that gerrit.canonicalWebUrl is set.
+If it is not, the plugin will throw exceptions.
+
 Transition automation is driven by `$GERRIT_SITE/issue-state-transition.config` file.
 
 Syntax of the status transition configuration file is the following:
