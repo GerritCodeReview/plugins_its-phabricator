@@ -29,14 +29,20 @@ OPTIONAL
 
 Example:
 
-    [commentLink "Bugzilla"]
-    match = (\\([Bb][Uu][Gg][ ]*[1-9][0-9]*\\))
-    html = "<a href=\"http://mybugzilla.org/show_bug.cgi?id=$1\">$1</a>"
+    [commentLink "bugzilla"]
+    match = \\([Bb][Uu][Gg][ ]*([1-9][0-9]*)\\)
+    html = "<a href=\"http://mybugzilla.org/show_bug.cgi?id=$1\">(bug $1)</a>"
     association = SUGGESTED
 
 Once a Git commit with a comment link is detected, the Bugzilla bug ID
 is extracted and a new comment added to the issue, pointing back to
 the original Git commit.
+
+Note that the plugin relies on $1 holding the numeric id, so we cannot
+have match group 1 spanning over the whole “(Bug 4711)”.
+
+Be sure to label the commentLink “bugzilla” with lowercase “b” to
+match the config section's name below.
 
 Bugzilla connectivity
 ---------------------
@@ -49,7 +55,7 @@ Example:
     [bugzilla]
     url=http://mybugzilla.org
     username=bzuser
-    passsword=bzpass
+    password=bzpass
 
 Bugzilla credentials and connectivity details are asked and verified during the Gerrit init.
 
