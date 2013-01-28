@@ -15,7 +15,6 @@
 package com.googlesource.gerrit.plugins.hooks.bz;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 import com.googlesource.gerrit.plugins.hooks.its.InvalidTransitionException;

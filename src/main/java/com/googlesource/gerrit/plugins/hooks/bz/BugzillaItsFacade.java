@@ -16,7 +16,6 @@ package com.googlesource.gerrit.plugins.hooks.bz;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Map;
 import java.util.concurrent.Callable;
 
 import org.eclipse.jgit.lib.Config;
@@ -25,9 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.inject.Inject;
-import com.googlesource.gerrit.plugins.hooks.its.InvalidTransitionException;
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
-import com.j2bugzilla.base.Bug;
 import com.j2bugzilla.base.BugzillaException;
 import com.j2bugzilla.base.ConnectionException;
 
