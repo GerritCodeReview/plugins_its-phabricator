@@ -93,12 +93,30 @@ public class BugzillaClient {
     }
   }
 
+  private void performChainedAction(final Bug bug, final String actionName,
+      final String actionValue) throws BugzillaException,
+      InvalidTransitionException {
+    String[] actionNames = actionName.split("/");
+    String[] actionValues = actionValue.split("/");
+    if (actionNames.length != actionValues.length) {
+      throw new InvalidTransitionException("Number of chained actions does not"
+        + " match number of action values");
+    }
+
+    int i;
+    for (i=0; i<actionNames.length; i++) {
+        performSimpleActionChainable(bug, actionNames[i], actionValues[i]);
+    }
+  }
+
   public void performAction(final String bugId, final String actionName,
       final String actionValue) throws BugzillaException,
       InvalidTransitionException {
     Bug bug = getBug(bugId);
     if ("status".equals(actionName) || "resolution".equals(actionName)) {
       performSimpleActionChainable(bug, actionName, actionValue);
+    } else if ("status/resolution".equals(actionName)) {
+      performChainedAction(bug, actionName, actionValue);
     } else {
       throw new InvalidTransitionException("Action " + actionName + " is not"
         + " known");
