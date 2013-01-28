@@ -18,9 +18,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.googlesource.gerrit.plugins.hooks.its.InvalidTransitionException;
 import com.j2bugzilla.base.Bug;
 import com.j2bugzilla.base.BugzillaConnector;
@@ -36,8 +33,6 @@ import com.j2bugzilla.rpc.LogOut;
 import com.j2bugzilla.rpc.UpdateBug;
 
 public class BugzillaClient {
-
-  private Logger log = LoggerFactory.getLogger(BugzillaClient.class);
 
   private final BugzillaConnector connector;
   private final String xmlRpcUrl;
