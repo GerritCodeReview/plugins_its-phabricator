@@ -116,7 +116,7 @@ Syntax of the status transition configuration file is the following:
     code-review=<code-review-value>
 
 `<issue-status-action>`
-:	Action to perform on Bugzila issue when all the condition in the stanza are met.
+:	Action to perform on Bugzila issue when all the conditions in the stanza are met.
 	<issue-status-action> can be any of:
 	  status STATUS
 	    change the associated bug's status to STATUS, where STATUS can be
