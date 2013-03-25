@@ -24,7 +24,7 @@ limitations under the License.
   <version>2.7-SNAPSHOT</version>
 
   <name>Gerrit - Bugzilla support</name>
-  
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <Gerrit-ApiType>plugin</Gerrit-ApiType>
