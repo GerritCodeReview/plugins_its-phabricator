@@ -217,7 +217,11 @@ public class BugzillaItsFacade implements ItsFacade {
 
   @Override
   public String createLinkForWebui(String url, String text) {
-    return url + " ("+text+")";
+    String ret = url;
+    if (text != null && ! text.equals(url)) {
+        ret += " (" + text + ")";
+    }
+    return ret;
   }
 
   private String healthCheckAccess() throws BugzillaException, ConnectionException {
