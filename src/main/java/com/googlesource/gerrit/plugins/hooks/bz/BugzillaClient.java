@@ -103,17 +103,27 @@ public class BugzillaClient {
     }
   }
 
-  public void performAction(final String bugId, final String actionName,
-      final String actionValue) throws BugzillaException,
+  public void performAction(final String bugId, final String actionNameParam,
+      final String actionValueParam) throws BugzillaException,
       InvalidTransitionException {
     Bug bug = getBug(bugId);
+
+    String actionName = actionNameParam;
+    if (actionName.startsWith("set-")) {
+      actionName = actionName.substring(4);
+    }
+    actionName = actionName.replaceAll("-and-", "/");
+
+    String actionValue = actionValueParam;
+    actionValue = actionValue.replaceAll(" ", "/");
+
     if ("status".equals(actionName) || "resolution".equals(actionName)) {
       performSimpleActionChainable(bug, actionName, actionValue);
     } else if ("status/resolution".equals(actionName)) {
       performChainedAction(bug, actionName, actionValue);
     } else {
-      throw new InvalidTransitionException("Action " + actionName + " is not"
-        + " known");
+      throw new InvalidTransitionException("Action " + actionNameParam
+          + " is not known");
     }
     connector.executeMethod(new UpdateBug(bug));
   }
