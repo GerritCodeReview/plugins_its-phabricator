@@ -31,6 +31,9 @@ limitations under the License.
     <Gerrit-ReloadMode>reload</Gerrit-ReloadMode>
     <Gerrit-InitStep>com.googlesource.gerrit.plugins.hooks.bz.InitBugzilla</Gerrit-InitStep>
     <Gerrit-Module>com.googlesource.gerrit.plugins.hooks.bz.BugzillaModule</Gerrit-Module>
+    <easymockVersion>3.0</easymockVersion>
+    <powermockVersion>1.5</powermockVersion>
+    <slf4jVersion>1.6.2</slf4jVersion>
   </properties>
 
   <build>
@@ -99,6 +102,30 @@ limitations under the License.
       <groupId>com.j2bugzilla</groupId>
       <artifactId>j2bugzilla</artifactId>
       <version>2.2-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <version>${slf4jVersion}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.easymock</groupId>
+      <artifactId>easymock</artifactId>
+      <version>${easymockVersion}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-module-junit4</artifactId>
+      <version>${powermockVersion}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-api-easymock</artifactId>
+      <version>${powermockVersion}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
