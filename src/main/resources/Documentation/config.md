@@ -515,11 +515,11 @@ The following actions are available:
   adds a rendered Velocity template as issue comment.
 <<action-log-event,log-event>>::
   appends the event's properties to gerrit's log.
-<<action-resolution,resolution>>::
+<<action-set-resolution,set-resolution>>::
   sets the resolution of the issue
-<<action-status,status>>::
+<<action-set-status,set-status>>::
   sets the status of the issue
-<<action-status-resolution,status/resolution>>::
+<<action-set-status-and-resolution,set-status-and-resolution>>::
   sets the status of the issue
 
 Further actions may be provided by 'hooks-its' based plugins.
@@ -627,47 +627,46 @@ other parameters are ignored.
 This action is useful, when testing rules or trying to refine
 conditions on rules, as it make the available properties visible.
 
-[[action-resolution]]
-Action: resolution
-^^^^^^^^^^^^^^^^^^
+[[action-set-resolution]]
+Action: set-resolution
+^^^^^^^^^^^^^^^^^^^^^^
 
-The 'resolution' action sets the issue's resolution. The first parameter is
-the resolution to set. So for example
+The 'set-resolution' action sets the issue's resolution. The first
+parameter is the resolution to set. So for example
 ----
-action = resolution WORKSFORME
+action = set-resolution WORKSFORME
 ----
 sets the issue's status to WORKSFORME.
 
 If you want to set the status and the resolution, use the
-'status/resolution' action, so you can set both status and resolution
-in one go.
+'set-status-and-resolution' action, so you can set both status and
+resolution in one go.
 
-[[action-status]]
-Action: status
-^^^^^^^^^^^^^^
+[[action-set-status]]
+Action: set-status
+^^^^^^^^^^^^^^^^^^
 
-The 'status' action sets the issue's status. The first parameter is
-the status to set. So for example
+The 'set-status' action sets the issue's status. The first parameter
+is the status to set. So for example
 ----
-action = status CONFIRMED
+action = set-status CONFIRMED
 ----
 sets the issue's status to CONFIRMED.
 
 If you want to set the status to a value that also requires a
-resolution, use the 'status/resolution' action, so you can set both
-status and resolution in one go.
+resolution, use the 'set-status-and-resolution' action, so you can set
+both status and resolution in one go.
 
-[[action-status-resolution]]
-Action: status/resolution
-^^^^^^^^^^^^^^^^^^^^^^^^^
+[[action-set-status-and-resolution]]
+Action: set-status-and-resolution
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The 'status/resolution' action sets both the issue's status and it's
-resolution in one go. The first parameter is of the form
-'STATUS/RESOLUTION' and sets the status to 'STATUS' and the resolution
-to 'RESOLUTION'.
+The 'set-status-and-resolution' action sets both the issue's status
+and it's resolution in one go. The first parameter denotes the status
+to set, the second parameter denotes the resolution to set.
 
 So for example
 ----
-action = status/resolution RESOLVED/FIXED
+action = set-status-and-resolution RESOLVED FIXED
 ----
 sets the issue's status to RESOLVED and it's resolution to FIXED.
