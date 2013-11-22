@@ -76,7 +76,7 @@ Gerrit init example:
     Change admin's password        [y/N]? y
     admin's password               : *****
                   confirm password : *****
-    Test connectivity to http://mybugzilla.org [N/?]: y
+    Test connectivity to http://mybugzilla.org [y/N]: y
     Checking Bugzilla connectivity ... [OK]
 
     *** Bugzilla issue-tracking association
