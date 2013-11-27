@@ -4,6 +4,28 @@ Plugin @PLUGIN@
 This plugin allows to associate Bugzilla bugs to Git commits thanks to
 the Gerrit listener interface.
 
+It can be configured per project whether the Bugzilla integration is
+enabled or not. To enable the Bugzilla integration for a project the
+project must have the following entry in its `project.config` file in
+the `refs/meta/config` branch:
+
+```
+  [plugin "its-bugzilla"]
+    enabled = true
+```
+
+If `plugin.its-bugzilla.enabled` is not specified in the `project.config` file
+the value is inherited from the parent project. If it is also not set
+on any parent project the Bugzilla integration is disabled for this
+project.
+
+By setting `plugin.its-bugzilla.enabled` to true in the `project.config` of the
+`All-Projects` project the Bugzilla integration can be enabled by default
+for all projects. During the initialization of the plugin you are asked
+if the Bugzilla integration should be enabled by default for all projects
+and if yes this setting in the `project.config` of the `All-Projects`
+project is done automatically.
+
 Comment links
 ----------------
 
@@ -67,6 +89,11 @@ through the configuration of Bugzilla integration and connectivity check, avoidi
 bogus settings to prevent Gerrit plugin to start correctly.
 
 Gerrit init example:
+
+    *** Bugzilla Integration
+    ***
+
+    By default enabled for all projects [Y/n]?
 
     *** Bugzilla connectivity
     ***

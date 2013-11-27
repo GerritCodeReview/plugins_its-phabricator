@@ -15,12 +15,10 @@
 package com.googlesource.gerrit.plugins.hooks.bz;
 
 import com.google.gerrit.extensions.annotations.PluginName;
-import com.google.gerrit.pgm.init.InitStep;
+import com.google.gerrit.pgm.init.AllProjectsConfig;
 import com.google.gerrit.pgm.init.Section;
-import com.google.gerrit.pgm.init.Section.Factory;
 import com.google.gerrit.pgm.util.ConsoleUI;
 import com.google.inject.Inject;
-import com.google.inject.Injector;
 import com.google.inject.Singleton;
 
 import com.googlesource.gerrit.plugins.hooks.its.InitIts;
@@ -28,12 +26,15 @@ import com.googlesource.gerrit.plugins.hooks.validation.ItsAssociationPolicy;
 import com.j2bugzilla.base.BugzillaException;
 import com.j2bugzilla.base.ConnectionException;
 
+import org.eclipse.jgit.errors.ConfigInvalidException;
+
+import java.io.IOException;
+
 /** Initialize the GitRepositoryManager configuration section. */
 @Singleton
-class InitBugzilla extends InitIts implements InitStep {
+class InitBugzilla extends InitIts {
   private final String pluginName;
-  private final ConsoleUI ui;
-  private final Factory sections;
+  private final Section.Factory sections;
   private Section bugzilla;
   private Section bugzillaComment;
   private String bugzillaUrl;
@@ -41,14 +42,16 @@ class InitBugzilla extends InitIts implements InitStep {
   private String bugzillaPassword;
 
   @Inject
-  InitBugzilla(final @PluginName String pluginName, final ConsoleUI ui,
-      final Injector injector, final Section.Factory sections) {
+  InitBugzilla(@PluginName String pluginName, ConsoleUI ui, Section.Factory sections,
+      AllProjectsConfig allProjectsConfig) {
+    super(pluginName, "Bugzilla", ui, allProjectsConfig);
     this.pluginName = pluginName;
     this.sections = sections;
-    this.ui = ui;
   }
 
-  public void run() {
+  public void postRun() throws IOException, ConfigInvalidException {
+    super.postRun();
+
     this.bugzilla = sections.get(pluginName, null);
     this.bugzillaComment = sections.get(COMMENT_LINK_SECTION, pluginName);
 
@@ -58,7 +61,7 @@ class InitBugzilla extends InitIts implements InitStep {
     do {
       enterBugzillaConnectivity();
     } while (bugzillaUrl != null
-        && (isConnectivityRequested(ui, bugzillaUrl) && !isBugzillaConnectSuccessful()));
+        && (isConnectivityRequested(bugzillaUrl) && !isBugzillaConnectSuccessful()));
 
     if (bugzillaUrl == null) {
       return;
