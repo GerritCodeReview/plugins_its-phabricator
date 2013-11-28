@@ -26,6 +26,10 @@ if the Bugzilla integration should be enabled by default for all projects
 and if yes this setting in the `project.config` of the `All-Projects`
 project is done automatically.
 
+If child projects must not be allowed to disable the Bugzilla integration
+a project can enforce the Bugzilla integration for all child projects by
+setting `plugin.its-bugzilla.enabled` to `enforced`.
+
 Comment links
 ----------------
 
@@ -93,7 +97,7 @@ Gerrit init example:
     *** Bugzilla Integration
     ***
 
-    By default enabled for all projects [Y/n]?
+    Issue tracker integration for all projects? [DISABLED/?]: enabled
 
     *** Bugzilla connectivity
     ***
