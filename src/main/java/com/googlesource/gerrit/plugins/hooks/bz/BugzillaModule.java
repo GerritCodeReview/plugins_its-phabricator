@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.server.config.GerritServerConfig;
+import com.google.gerrit.server.config.PluginConfigFactory;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 
@@ -32,12 +33,15 @@ public class BugzillaModule extends AbstractModule {
 
   private final String pluginName;
   private final Config gerritConfig;
+  private final PluginConfigFactory pluginCfgFactory;
 
   @Inject
   public BugzillaModule(@PluginName final String pluginName,
-      @GerritServerConfig final Config config) {
+      @GerritServerConfig final Config config,
+      PluginConfigFactory pluginCfgFactory) {
     this.pluginName = pluginName;
     this.gerritConfig = config;
+    this.pluginCfgFactory = pluginCfgFactory;
   }
 
   @Override
@@ -46,7 +50,7 @@ public class BugzillaModule extends AbstractModule {
       log.info("Bugzilla is configured as ITS");
       bind(ItsFacade.class).toInstance(new BugzillaItsFacade(pluginName, gerritConfig));
 
-      install(new ItsHookModule());
+      install(new ItsHookModule(pluginName, pluginCfgFactory));
     }
   }
 }
