@@ -18,9 +18,11 @@ import org.eclipse.jgit.lib.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
+
 import com.googlesource.gerrit.plugins.hooks.ItsHookModule;
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
 
@@ -28,20 +30,23 @@ public class BugzillaModule extends AbstractModule {
 
   private static final Logger log = LoggerFactory.getLogger(BugzillaModule.class);
 
+  private final String pluginName;
   private final Config gerritConfig;
 
   @Inject
-  public BugzillaModule(@GerritServerConfig final Config config) {
+  public BugzillaModule(@PluginName final String pluginName,
+      @GerritServerConfig final Config config) {
+    this.pluginName = pluginName;
     this.gerritConfig = config;
   }
 
   @Override
   protected void configure() {
-    if (gerritConfig.getString(BugzillaItsFacade.ITS_NAME_BUGZILLA, null, "url") != null) {
+    if (gerritConfig.getString(pluginName, null, "url") != null) {
       log.info("Bugzilla is configured as ITS");
-      bind(ItsFacade.class).toInstance(new BugzillaItsFacade(gerritConfig));
+      bind(ItsFacade.class).toInstance(new BugzillaItsFacade(pluginName, gerritConfig));
 
-      install(new ItsHookModule(BugzillaItsFacade.ITS_NAME_BUGZILLA));
+      install(new ItsHookModule());
     }
   }
 }

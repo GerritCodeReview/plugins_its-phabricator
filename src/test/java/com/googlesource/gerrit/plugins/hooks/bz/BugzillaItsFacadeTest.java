@@ -17,6 +17,7 @@ import static org.easymock.EasyMock.expect;
 
 import org.eclipse.jgit.lib.Config;
 
+import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.server.config.FactoryModule;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.inject.Guice;
@@ -77,11 +78,11 @@ public class BugzillaItsFacadeTest extends LoggingMockingTestCase {
   }
 
   private void mockUnconnectableBugzilla() {
-    expect(serverConfig.getString("bugzilla",  null, "url"))
+    expect(serverConfig.getString("its-bugzilla",  null, "url"))
     .andReturn("<no-url>").anyTimes();
-    expect(serverConfig.getString("bugzilla",  null, "username"))
+    expect(serverConfig.getString("its-bugzilla",  null, "username"))
     .andReturn("none").anyTimes();
-    expect(serverConfig.getString("bugzilla",  null, "password"))
+    expect(serverConfig.getString("its-bugzilla",  null, "password"))
     .andReturn("none").anyTimes();
   }
 
@@ -104,6 +105,8 @@ public class BugzillaItsFacadeTest extends LoggingMockingTestCase {
       serverConfig = createMock(Config.class);
       bind(Config.class).annotatedWith(GerritServerConfig.class)
           .toInstance(serverConfig);
+      bind(String.class).annotatedWith(PluginName.class)
+          .toInstance("its-bugzilla");
     }
   }
 }

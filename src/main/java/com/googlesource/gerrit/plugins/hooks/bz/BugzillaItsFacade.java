@@ -22,15 +22,15 @@ import org.eclipse.jgit.lib.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.inject.Inject;
+
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
 import com.j2bugzilla.base.BugzillaException;
 import com.j2bugzilla.base.ConnectionException;
 
 public class BugzillaItsFacade implements ItsFacade {
-  public static final String ITS_NAME_BUGZILLA = "bugzilla";
-
   private static final String GERRIT_CONFIG_USERNAME = "username";
   private static final String GERRIT_CONFIG_PASSWORD = "password";
   private static final String GERRIT_CONFIG_URL = "url";
@@ -39,12 +39,15 @@ public class BugzillaItsFacade implements ItsFacade {
 
   private Logger log = LoggerFactory.getLogger(BugzillaItsFacade.class);
 
+  private final String pluginName;
   private Config gerritConfig;
 
   private BugzillaClient client;
 
   @Inject
-  public BugzillaItsFacade(@GerritServerConfig Config cfg) {
+  public BugzillaItsFacade(@PluginName String pluginName,
+      @GerritServerConfig Config cfg) {
+    this.pluginName = pluginName;
     try {
       this.gerritConfig = cfg;
       log.info("Connected to Bugzilla at " + client().getXmlRpcUrl()
@@ -197,21 +200,21 @@ public class BugzillaItsFacade implements ItsFacade {
 
   private String getPassword() {
     final String pass =
-        gerritConfig.getString(ITS_NAME_BUGZILLA, null,
+        gerritConfig.getString(pluginName, null,
             GERRIT_CONFIG_PASSWORD);
     return pass;
   }
 
   private String getUsername() {
     final String user =
-        gerritConfig.getString(ITS_NAME_BUGZILLA, null,
+        gerritConfig.getString(pluginName, null,
             GERRIT_CONFIG_USERNAME);
     return user;
   }
 
   private String getUrl() {
     final String url =
-        gerritConfig.getString(ITS_NAME_BUGZILLA, null, GERRIT_CONFIG_URL);
+        gerritConfig.getString(pluginName, null, GERRIT_CONFIG_URL);
     return url;
   }
 

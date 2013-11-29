@@ -29,6 +29,7 @@ limitations under the License.
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <Gerrit-ApiType>plugin</Gerrit-ApiType>
     <Gerrit-ReloadMode>reload</Gerrit-ReloadMode>
+    <Gerrit-PluginName>its-bugzilla</Gerrit-PluginName>
     <Gerrit-InitStep>com.googlesource.gerrit.plugins.hooks.bz.InitBugzilla</Gerrit-InitStep>
     <Gerrit-Module>com.googlesource.gerrit.plugins.hooks.bz.BugzillaModule</Gerrit-Module>
     <easymockVersion>3.0</easymockVersion>
@@ -74,6 +75,7 @@ limitations under the License.
                   <Gerrit-ApiType>${Gerrit-ApiType}</Gerrit-ApiType>
                   <Gerrit-ApiVersion>${project.version}</Gerrit-ApiVersion>
                   <Gerrit-ReloadMode>${Gerrit-ReloadMode}</Gerrit-ReloadMode>
+                  <Gerrit-PluginName>${Gerrit-PluginName}</Gerrit-PluginName>
                   <Gerrit-InitStep>${Gerrit-InitStep}</Gerrit-InitStep>
                   <Gerrit-Module>${Gerrit-Module}</Gerrit-Module>
                 </manifestEntries>

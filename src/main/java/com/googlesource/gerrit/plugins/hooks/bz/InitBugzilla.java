@@ -14,6 +14,7 @@
 
 package com.googlesource.gerrit.plugins.hooks.bz;
 
+import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.pgm.init.InitStep;
 import com.google.gerrit.pgm.init.Section;
 import com.google.gerrit.pgm.init.Section.Factory;
@@ -21,6 +22,7 @@ import com.google.gerrit.pgm.util.ConsoleUI;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
+
 import com.googlesource.gerrit.plugins.hooks.its.InitIts;
 import com.googlesource.gerrit.plugins.hooks.validation.ItsAssociationPolicy;
 import com.j2bugzilla.base.BugzillaException;
@@ -29,7 +31,7 @@ import com.j2bugzilla.base.ConnectionException;
 /** Initialize the GitRepositoryManager configuration section. */
 @Singleton
 class InitBugzilla extends InitIts implements InitStep {
-  private static final String BUGZILLA_SECTION = "bugzilla";
+  private final String pluginName;
   private final ConsoleUI ui;
   private final Factory sections;
   private Section bugzilla;
@@ -39,14 +41,16 @@ class InitBugzilla extends InitIts implements InitStep {
   private String bugzillaPassword;
 
   @Inject
-  InitBugzilla(final ConsoleUI ui, final Injector injector, final Section.Factory sections) {
+  InitBugzilla(final @PluginName String pluginName, final ConsoleUI ui,
+      final Injector injector, final Section.Factory sections) {
+    this.pluginName = pluginName;
     this.sections = sections;
     this.ui = ui;
   }
 
   public void run() {
-    this.bugzilla = sections.get(BUGZILLA_SECTION, null);
-    this.bugzillaComment = sections.get(COMMENT_LINK_SECTION, BUGZILLA_SECTION);
+    this.bugzilla = sections.get(pluginName, null);
+    this.bugzillaComment = sections.get(COMMENT_LINK_SECTION, pluginName);
 
     ui.message("\n");
     ui.header("Bugzilla connectivity");

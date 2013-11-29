@@ -29,7 +29,7 @@ OPTIONAL
 
 Example:
 
-    [commentLink "bugzilla"]
+    [commentLink "its-bugzilla"]
     match = \\([Bb][Uu][Gg][ ]*([1-9][0-9]*)\\)
     html = "<a href=\"http://mybugzilla.org/show_bug.cgi?id=$1\">(bug $1)</a>"
     association = SUGGESTED
@@ -41,18 +41,18 @@ the original Git commit.
 Note that the plugin relies on $1 holding the numeric id, so we cannot
 have match group 1 spanning over the whole “(Bug 4711)”.
 
-Be sure to label the commentLink “bugzilla” with lowercase “b” to
+Be sure to label the commentLink “its-bugzilla” with all lowercase to
 match the config section's name below.
 
 Bugzilla connectivity
 ---------------------
 
 In order for Gerrit to connect to Bugzilla/XML-RPC url and credentials
-are required in your gerrit.config / secure.config under the [bugzilla] section.
+are required in your gerrit.config / secure.config under the [its-bugzilla] section.
 
 Example:
 
-    [bugzilla]
+    [its-bugzilla]
     url=http://mybugzilla.org
     username=bzuser
     password=bzpass
@@ -108,7 +108,7 @@ configured through a xref:config-rule-base[rule base] in
 
 To turn off the legacy event handling of older 'its-*' plugins and
 stop unwanted legacy comments, add the following settings to the
-'bugzilla' section of 'etc/gerrit.config':
+'its-bugzilla' section of 'etc/gerrit.config':
 
 ----
 commentOnChangeAbandoned = false
