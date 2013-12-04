@@ -30,6 +30,21 @@ If child projects must not be allowed to disable the Bugzilla integration
 a project can enforce the Bugzilla integration for all child projects by
 setting `plugin.its-bugzilla.enabled` to `enforced`.
 
+The Bugzilla integration can be limited to specific branches by setting
+`plugin.its-bugzilla.branch`. The branches may be configured using explicit
+branch names, ref patterns, or regular expressions. Multiple branches
+may be specified.
+
+E.g. to limit the Bugzilla integration to the `master` branch and all
+stable branches the following could be configured:
+
+```
+  [plugin "its-bugzilla"]
+    enabled = true
+    branch = refs/heads/master
+    branch = ^refs/heads/stable-.*
+```
+
 Comment links
 ----------------
 
