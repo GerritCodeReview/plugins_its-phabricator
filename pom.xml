@@ -20,7 +20,7 @@ limitations under the License.
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.googlesource.gerrit.plugins.bugzilla</groupId>
-  <artifactId>hooks-bugzilla</artifactId>
+  <artifactId>its-bugzilla</artifactId>
   <version>2.9-SNAPSHOT</version>
 
   <name>Gerrit - Bugzilla support</name>
@@ -95,7 +95,7 @@ limitations under the License.
   <dependencies>
     <dependency>
       <groupId>com.googlesource.gerrit.plugins.its</groupId>
-      <artifactId>hooks-its</artifactId>
+      <artifactId>its-base</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>

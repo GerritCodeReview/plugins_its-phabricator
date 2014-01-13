@@ -106,7 +106,7 @@ what action on the ITS (e.g.: “Set issue's status to ‘Resolved’”) is
 configured through a xref:config-rule-base[rule base] in
 `etc/its/action.config`.
 
-To turn off the legacy event handling of older 'hooks-*' plugins and
+To turn off the legacy event handling of older 'its-*' plugins and
 stop unwanted legacy comments, add the following settings to the
 'bugzilla' section of 'etc/gerrit.config':
 
@@ -522,7 +522,7 @@ The following actions are available:
 <<action-set-status-and-resolution,set-status-and-resolution>>::
   sets the status of the issue
 
-Further actions may be provided by 'hooks-its' based plugins.
+Further actions may be provided by 'its-base' based plugins.
 
 [[action-add-comment]]
 Action: add-comment
