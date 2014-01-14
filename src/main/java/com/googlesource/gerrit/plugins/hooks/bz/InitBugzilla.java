@@ -16,6 +16,7 @@ package com.googlesource.gerrit.plugins.hooks.bz;
 
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.pgm.init.AllProjectsConfig;
+import com.google.gerrit.pgm.init.AllProjectsNameOnInitProvider;
 import com.google.gerrit.pgm.init.Section;
 import com.google.gerrit.pgm.util.ConsoleUI;
 import com.google.inject.Inject;
@@ -42,9 +43,10 @@ class InitBugzilla extends InitIts {
   private String bugzillaPassword;
 
   @Inject
-  InitBugzilla(@PluginName String pluginName, ConsoleUI ui, Section.Factory sections,
-      AllProjectsConfig allProjectsConfig) {
-    super(pluginName, "Bugzilla", ui, allProjectsConfig);
+  InitBugzilla(@PluginName String pluginName, ConsoleUI ui,
+      Section.Factory sections, AllProjectsConfig allProjectsConfig,
+      AllProjectsNameOnInitProvider allProjects) {
+    super(pluginName, "Bugzilla", ui, allProjectsConfig, allProjects);
     this.pluginName = pluginName;
     this.sections = sections;
   }
