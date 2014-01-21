@@ -51,8 +51,9 @@ class InitBugzilla extends InitIts {
     this.sections = sections;
   }
 
-  public void postRun() throws IOException, ConfigInvalidException {
-    super.postRun();
+  @Override
+  public void run() throws IOException, ConfigInvalidException {
+    super.run();
 
     this.bugzilla = sections.get(pluginName, null);
     this.bugzillaComment = sections.get(COMMENT_LINK_SECTION, pluginName);
