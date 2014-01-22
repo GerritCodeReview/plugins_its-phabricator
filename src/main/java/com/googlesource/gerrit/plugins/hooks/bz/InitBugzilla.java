@@ -17,6 +17,7 @@ package com.googlesource.gerrit.plugins.hooks.bz;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.pgm.init.AllProjectsConfig;
 import com.google.gerrit.pgm.init.AllProjectsNameOnInitProvider;
+import com.google.gerrit.pgm.init.InitFlags;
 import com.google.gerrit.pgm.init.Section;
 import com.google.gerrit.pgm.util.ConsoleUI;
 import com.google.inject.Inject;
@@ -30,12 +31,14 @@ import com.j2bugzilla.base.ConnectionException;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 /** Initialize the GitRepositoryManager configuration section. */
 @Singleton
 class InitBugzilla extends InitIts {
   private final String pluginName;
   private final Section.Factory sections;
+  private final InitFlags flags;
   private Section bugzilla;
   private Section bugzillaComment;
   private String bugzillaUrl;
@@ -45,21 +48,50 @@ class InitBugzilla extends InitIts {
   @Inject
   InitBugzilla(@PluginName String pluginName, ConsoleUI ui,
       Section.Factory sections, AllProjectsConfig allProjectsConfig,
-      AllProjectsNameOnInitProvider allProjects) {
+      AllProjectsNameOnInitProvider allProjects, InitFlags flags) {
     super(pluginName, "Bugzilla", ui, allProjectsConfig, allProjects);
     this.pluginName = pluginName;
     this.sections = sections;
+    this.flags = flags;
   }
 
   @Override
   public void run() throws IOException, ConfigInvalidException {
     super.run();
 
+    ui.message("\n");
+    ui.header("Bugzilla connectivity");
+
+    if (!pluginName.equalsIgnoreCase("bugzilla")
+        && !flags.cfg.getSections().contains(pluginName)
+        && flags.cfg.getSections().contains("bugzilla")) {
+      ui.message("A Bugzilla configuration for the 'hooks-bugzilla' plugin was found.\n");
+      if (ui.yesno(true, "Copy it for the '%s' plugin?", pluginName)) {
+        for (String n : flags.cfg.getNames("bugzilla")) {
+          flags.cfg.setStringList(pluginName, null, n,
+              Arrays.asList(flags.cfg.getStringList("bugzilla", null, n)));
+        }
+        for (String n : flags.cfg.getNames(COMMENT_LINK_SECTION, "bugzilla")) {
+          flags.cfg.setStringList(COMMENT_LINK_SECTION, pluginName, n,
+              Arrays.asList(flags.cfg.getStringList(COMMENT_LINK_SECTION, "bugzilla", n)));
+        }
+
+        if (ui.yesno(false, "Remove configuration for 'hooks-bugzilla' plugin?")) {
+          flags.cfg.unsetSection("bugzilla", null);
+          flags.cfg.unsetSection(COMMENT_LINK_SECTION, "bugzilla");
+        }
+      } else {
+        init();
+      }
+    } else {
+      init();
+    }
+  }
+
+  private void init() {
     this.bugzilla = sections.get(pluginName, null);
     this.bugzillaComment = sections.get(COMMENT_LINK_SECTION, pluginName);
 
-    ui.message("\n");
-    ui.header("Bugzilla connectivity");
 
     do {
       enterBugzillaConnectivity();
