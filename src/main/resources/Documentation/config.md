@@ -30,6 +30,12 @@ If child projects must not be allowed to disable the Bugzilla integration
 a project can enforce the Bugzilla integration for all child projects by
 setting `plugin.its-bugzilla.enabled` to `enforced`.
 
+On the project info screen there is a dropdown list for the
+`plugin.its-bugzilla.enabled` parameter which offers the values `true`,
+`false`, `enforced` and `INHERIT`. Project owners can change this
+parameter and save it. If the Bugzilla integration is enforced by a
+parent project the dropdown list is disabled.
+
 The Bugzilla integration can be limited to specific branches by setting
 `plugin.its-bugzilla.branch`. The branches may be configured using explicit
 branch names, ref patterns, or regular expressions. Multiple branches
