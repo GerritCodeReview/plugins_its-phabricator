@@ -59,7 +59,7 @@ public class BugzillaItsFacade implements ItsFacade {
 
   @Override
   public String name() {
-    return "Bugzilla";
+    return pluginName;
   }
 
   @Override
