@@ -11,9 +11,41 @@ gerrit_plugin(
     'Implementation-URL: https://www.wikimediafoundation.org',
   ],
   deps = [
-    '//plugins/its-base:its-base__plugin',
+    ':its-base_stripped',
     '//plugins/its-bugzilla/lib:j2bugzilla',
   ],
+)
+
+def strip_jar(
+    name,
+    src,
+    excludes = [],
+    visibility = [],
+  ):
+  name_zip = name + '.zip'
+  genrule(
+    name = name_zip,
+    cmd = 'cp $SRCS $OUT && zip -qd $OUT ' + ' '.join(excludes),
+    srcs = [ src ],
+    deps = [ src ],
+    out = name_zip,
+    visibility = visibility,
+  )
+  prebuilt_jar(
+    name = name,
+    binary_jar = ':' + name_zip,
+    visibility = visibility,
+  )
+
+strip_jar(
+  name = 'its-base_stripped',
+  src = '//plugins/its-base:its-base',
+  excludes = [
+    'Documentation/about.md',
+    'Documentation/build.md',
+    'Documentation/config-connectivity.md',
+    'Documentation/config-rulebase-plugin-actions.md',
+  ]
 )
 
 TEST_UTIL_SRC = glob(['src/test/java/com/googlesource/gerrit/plugins/hooks/testutil/**/*.java'])
