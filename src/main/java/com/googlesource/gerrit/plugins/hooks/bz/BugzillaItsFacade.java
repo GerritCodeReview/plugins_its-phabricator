@@ -58,11 +58,6 @@ public class BugzillaItsFacade implements ItsFacade {
   }
 
   @Override
-  public String name() {
-    return pluginName;
-  }
-
-  @Override
   public String healthCheck(final Check check) throws IOException {
       return execute(new Callable<String>(){
         @Override
