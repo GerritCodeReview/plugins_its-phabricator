@@ -1,18 +1,18 @@
 gerrit_plugin(
-  name = 'its-bugzilla',
+  name = 'its-phabricator',
   srcs = glob(['src/main/java/**/*.java']),
   resources = glob(['src/main/resources/**/*']),
   manifest_entries = [
-    'Gerrit-PluginName: its-bugzilla',
-    'Gerrit-Module: com.googlesource.gerrit.plugins.hooks.bz.BugzillaModule',
-    'Gerrit-InitStep: com.googlesource.gerrit.plugins.hooks.bz.InitBugzilla',
+    'Gerrit-Module: com.googlesource.gerrit.plugins.its.phabricator.PhabricatorModule',
     'Gerrit-ReloadMode: reload',
-    'Implementation-Title: Plugin its-bugzilla',
+    'Implementation-Title: Plugin its-phabricator',
     'Implementation-URL: https://www.wikimediafoundation.org',
   ],
   deps = [
     ':its-base_stripped',
-    '//plugins/its-bugzilla/lib:j2bugzilla',
+    '//lib/httpcomponents:httpcore',
+    '//lib/httpcomponents:httpclient',
+    '//lib:gson',
   ],
 )
 
@@ -48,18 +48,18 @@ strip_jar(
   ]
 )
 
-TEST_UTIL_SRC = glob(['src/test/java/com/googlesource/gerrit/plugins/hooks/testutil/**/*.java'])
+TEST_UTIL_SRC = glob(['src/test/java/com/googlesource/gerrit/plugins/its/testutil/**/*.java'])
 
 java_library(
-  name = 'its-bugzilla_tests-utils',
+  name = 'its-phabricator_tests-utils',
   srcs = TEST_UTIL_SRC,
   deps = [
     '//lib:guava',
-    '//lib/easymock:easymock',
+    '//plugins/its-phabricator/lib:easymock',
     '//lib/log:impl_log4j',
     '//lib/log:log4j',
     '//lib:junit',
-    '//lib/powermock:powermock-api-easymock',
+    '//plugins/its-phabricator/lib:powermock-api-easymock',
     '//lib/powermock:powermock-api-support',
     '//lib/powermock:powermock-core',
     '//lib/powermock:powermock-module-junit4',
@@ -68,18 +68,18 @@ java_library(
 )
 
 java_test(
-  name = 'its-bugzilla_tests',
+  name = 'its-phabricator_tests',
   srcs = glob(
     ['src/test/java/**/*.java'],
     excludes = TEST_UTIL_SRC
   ),
-  labels = ['its-bugzilla'],
-  source_under_test = [':its-bugzilla__plugin'],
+  labels = ['its-phabricator'],
+  source_under_test = [':its-phabricator__plugin'],
   deps = [
-    ':its-bugzilla__plugin',
-    ':its-bugzilla_tests-utils',
+    ':its-phabricator__plugin',
+    ':its-phabricator_tests-utils',
     '//gerrit-plugin-api:lib',
-    '//lib/easymock:easymock',
+    '//plugins/its-phabricator/lib:easymock',
     '//lib:guava',
     '//lib/guice:guice',
     '//lib/jgit:jgit',
@@ -87,9 +87,13 @@ java_test(
     '//lib/log:api',
     '//lib/log:impl_log4j',
     '//lib/log:log4j',
-    '//lib/powermock:powermock-api-easymock',
+    '//plugins/its-phabricator/lib:powermock-api-easymock',
     '//lib/powermock:powermock-api-support',
     '//lib/powermock:powermock-core',
     '//lib/powermock:powermock-module-junit4',
+    '//lib/powermock:powermock-module-junit4-common',
+    '//lib/powermock:powermock-reflect',
+    '//lib/httpcomponents:httpclient',
+    '//lib:gson',
   ],
 )
