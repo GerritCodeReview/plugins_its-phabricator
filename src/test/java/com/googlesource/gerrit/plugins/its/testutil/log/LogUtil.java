@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.googlesource.gerrit.plugins.hooks.testutil.log;
+package com.googlesource.gerrit.plugins.its.testutil.log;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.spi.LoggingEvent;
 
-import com.googlesource.gerrit.plugins.hooks.testutil.log.CollectionAppender;
+import com.googlesource.gerrit.plugins.its.testutil.log.CollectionAppender;
 
 
 import java.util.Collection;

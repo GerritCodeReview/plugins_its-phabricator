@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.googlesource.gerrit.plugins.hooks.testutil;
+package com.googlesource.gerrit.plugins.its.testutil;
 
 import com.google.common.collect.Lists;
-import com.googlesource.gerrit.plugins.hooks.testutil.MockingTestCase;
-import com.googlesource.gerrit.plugins.hooks.testutil.log.LogUtil;
+import com.googlesource.gerrit.plugins.its.testutil.MockingTestCase;
+import com.googlesource.gerrit.plugins.its.testutil.log.LogUtil;
 
 import org.apache.log4j.spi.LoggingEvent;
 import org.junit.After;

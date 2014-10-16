@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.googlesource.gerrit.plugins.hooks.bz;
+package com.googlesource.gerrit.plugins.its.phabricator;
 
 import org.eclipse.jgit.lib.Config;
 import org.slf4j.Logger;
@@ -27,16 +27,16 @@ import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.hooks.ItsHookModule;
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
 
-public class BugzillaModule extends AbstractModule {
+public class PhabricatorModule extends AbstractModule {
 
-  private static final Logger log = LoggerFactory.getLogger(BugzillaModule.class);
+  private static final Logger log = LoggerFactory.getLogger(PhabricatorModule.class);
 
   private final String pluginName;
   private final Config gerritConfig;
   private final PluginConfigFactory pluginCfgFactory;
 
   @Inject
-  public BugzillaModule(@PluginName final String pluginName,
+  public PhabricatorModule(@PluginName final String pluginName,
       @GerritServerConfig final Config config,
       PluginConfigFactory pluginCfgFactory) {
     this.pluginName = pluginName;
@@ -47,8 +47,8 @@ public class BugzillaModule extends AbstractModule {
   @Override
   protected void configure() {
     if (gerritConfig.getString(pluginName, null, "url") != null) {
-      log.info("Bugzilla is configured as ITS");
-      bind(ItsFacade.class).toInstance(new BugzillaItsFacade(pluginName, gerritConfig));
+      log.info("Phabricator is configured as ITS");
+      bind(ItsFacade.class).toInstance(new PhabricatorItsFacade(pluginName, gerritConfig));
 
       install(new ItsHookModule(pluginName, pluginCfgFactory));
     }
