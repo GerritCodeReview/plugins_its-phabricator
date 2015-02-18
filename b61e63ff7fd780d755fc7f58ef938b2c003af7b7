@@ -135,6 +135,24 @@
       "revId": "b61e63ff7fd780d755fc7f58ef938b2c003af7b7",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ebf948ff_1bfb1bce",
+        "filename": "src/main/resources/Documentation/config-connectivity.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2015-02-18T10:16:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61abb49e_9e263ddb",
+      "revId": "b61e63ff7fd780d755fc7f58ef938b2c003af7b7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
