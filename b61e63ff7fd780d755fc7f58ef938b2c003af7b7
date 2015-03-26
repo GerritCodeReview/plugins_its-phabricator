@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "030bee18_382b49ae",
+        "filename": "BUCK",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2015-03-26T09:01:35Z",
+      "side": 1,
+      "message": "I uploaded a separate change for that at:\n\nhttps://gerrit-review.googlesource.com/#/c/66627/",
+      "parentUuid": "01b2f811_1bfebbc1",
+      "revId": "b61e63ff7fd780d755fc7f58ef938b2c003af7b7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c1870028_a9315d0d",
         "filename": "BUCK",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2014-12-18T21:41:18Z",
       "side": 1,
       "message": "shouldn\u0027t \u0027Implementation-Vendor\u0027 reference wikimedia and \u0027Implementation-URL\u0027 reference   \u0027https://gerrit.googlesource.com/plugins/its-phabricator\u0027 instead?\n\ndoc reference: https://gerrit-review.googlesource.com/Documentation/dev-plugins.html#auto-index",
+      "revId": "b61e63ff7fd780d755fc7f58ef938b2c003af7b7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "030bee18_18308518",
+        "filename": "BUCK",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2015-03-26T09:01:35Z",
+      "side": 1,
+      "message": "I uploaded a separate change for that at:\n\nhttps://gerrit-review.googlesource.com/#/c/66626/",
+      "parentUuid": "c1870028_a9315d0d",
       "revId": "b61e63ff7fd780d755fc7f58ef938b2c003af7b7",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "c32476a6_5636d419",
+        "filename": "BUCK",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2015-03-26T09:01:35Z",
+      "side": 1,
+      "message": "That is still accurrate.\n\nBut that dependency is for the `deps` of the `gerrit_plugin`.\nThat\u0027s good for a plain build.\n\nBut here, we\u0027re trying to do something more involved.\nWe want to reuse some parts of the its-base documentation while\noverriding others. Hence, we have to go through the\n`strip_jar`, which changes dependencies a bit.",
+      "parentUuid": "8157c840_773bd0ee",
+      "revId": "b61e63ff7fd780d755fc7f58ef938b2c003af7b7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6426629e_66e62e41",
         "filename": "pom.xml",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2014-12-18T21:41:18Z",
       "side": 1,
       "message": "update date?",
+      "revId": "b61e63ff7fd780d755fc7f58ef938b2c003af7b7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "030bee18_f824b1dc",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2015-03-26T09:01:35Z",
+      "side": 1,
+      "message": "Won\u0027t fix, since the time has come anyways to drop Maven support for\nthis plugin. See:\nhttps://gerrit-review.googlesource.com/#/c/66628/",
+      "parentUuid": "6426629e_66e62e41",
       "revId": "b61e63ff7fd780d755fc7f58ef938b2c003af7b7",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "c32476a6_362b58ae",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2015-03-26T09:01:35Z",
+      "side": 1,
+      "message": "Won\u0027t fix, since the time has come anyways to drop Maven support for\nthis plugin. See:\nhttps://gerrit-review.googlesource.com/#/c/66628/",
+      "parentUuid": "01b2f811_3b01772d",
+      "revId": "b61e63ff7fd780d755fc7f58ef938b2c003af7b7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "61abb49e_5e09d54b",
         "filename": "pom.xml",
         "patchSetId": 1
@@ -104,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "c32476a6_16305c18",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2015-03-26T09:01:35Z",
+      "side": 1,
+      "message": "Won\u0027t fix, since the time has come anyways to drop Maven support for\nthis plugin. See:\nhttps://gerrit-review.googlesource.com/#/c/66628/",
+      "parentUuid": "61abb49e_5e09d54b",
+      "revId": "b61e63ff7fd780d755fc7f58ef938b2c003af7b7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "61abb49e_7e0c915d",
         "filename": "pom.xml",
         "patchSetId": 1
@@ -115,6 +223,24 @@
       "writtenOn": "2014-12-18T21:41:18Z",
       "side": 1,
       "message": "this is probably not needed since you didn\u0027t implement an init module and \u0027Gerrit-InitStep\u0027 isn\u0027t defined as a property in this file.",
+      "revId": "b61e63ff7fd780d755fc7f58ef938b2c003af7b7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "030bee18_d821edca",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2015-03-26T09:01:35Z",
+      "side": 1,
+      "message": "Won\u0027t fix, since the time has come anyways to drop Maven support for\nthis plugin. See:\nhttps://gerrit-review.googlesource.com/#/c/66628/",
+      "parentUuid": "61abb49e_7e0c915d",
       "revId": "b61e63ff7fd780d755fc7f58ef938b2c003af7b7",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
