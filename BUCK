@@ -6,7 +6,8 @@ gerrit_plugin(
     'Gerrit-Module: com.googlesource.gerrit.plugins.its.phabricator.PhabricatorModule',
     'Gerrit-ReloadMode: reload',
     'Implementation-Title: Plugin its-phabricator',
-    'Implementation-URL: https://www.wikimediafoundation.org',
+    'Implementation-Vendor: Wikimedia Foundation',
+    'Implementation-URL: https://gerrit.googlesource.com/plugins/its-phabricator',
   ],
   deps = [
     ':its-base_stripped',
