@@ -78,6 +78,7 @@ java_test(
   deps = [
     ':its-phabricator__plugin',
     ':its-phabricator_tests-utils',
+    ':its-base_stripped',
     '//gerrit-plugin-api:lib',
     '//plugins/its-phabricator/lib:easymock',
     '//lib:guava',
