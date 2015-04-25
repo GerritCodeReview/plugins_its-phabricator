@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -96,11 +97,7 @@ class ConduitConnection {
 
     log.trace("Calling phabricator method " + method
         + " with the parameters " + json );
-    try {
-      httppost.setEntity(new StringEntity("params=" + json));
-    } catch (UnsupportedEncodingException e) {
-      throw new ConduitException("Cannot encode parameters", e);
-    }
+    httppost.setEntity(new StringEntity("params=" + json, StandardCharsets.UTF_8));
 
     CloseableHttpResponse response;
     try {
