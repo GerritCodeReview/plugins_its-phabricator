@@ -1,10 +1,6 @@
 Phabricator connectivity
 ========================
 
-In order for Gerrit to connect to Bugzilla, provide url, user, and certificate
-to @PLUGIN@.
-
-
 In order for @PLUGIN@ to connect to your Phabricator instance, url (without
 trailing “/api”, “/conduit” or some such), user, and certificate are required in
 your site's `etc/gerrit.config` or `etc/secure.config` under the `@PLUGIN@`
