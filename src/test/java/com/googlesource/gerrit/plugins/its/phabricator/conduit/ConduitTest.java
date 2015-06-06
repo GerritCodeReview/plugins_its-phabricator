@@ -33,7 +33,7 @@ import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitCo
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitPing;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestInfo;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestUpdate;
-import com.googlesource.gerrit.plugins.its.testutil.LoggingMockingTestCase;
+import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Conduit.class)
