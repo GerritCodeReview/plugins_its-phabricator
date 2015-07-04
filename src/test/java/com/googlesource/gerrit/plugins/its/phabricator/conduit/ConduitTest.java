@@ -29,11 +29,11 @@ import java.util.Map;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
+import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitConnect;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitPing;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestInfo;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestUpdate;
-import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Conduit.class)
