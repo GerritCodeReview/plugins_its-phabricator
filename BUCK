@@ -29,7 +29,6 @@ def strip_jar(
     name = name_zip,
     cmd = 'cp $SRCS $OUT && zip -qd $OUT ' + ' '.join(excludes),
     srcs = [ src ],
-    deps = [ src ],
     out = name_zip,
     visibility = visibility,
   )
