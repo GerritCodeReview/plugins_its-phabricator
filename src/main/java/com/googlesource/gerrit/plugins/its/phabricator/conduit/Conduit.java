@@ -22,6 +22,8 @@ import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitCo
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitPing;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestInfo;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestUpdate;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectInfo;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.QueryResult;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,8 +31,10 @@ import org.slf4j.LoggerFactory;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -173,13 +177,57 @@ public class Conduit {
    * Runs the API's 'maniphest.update' method
    */
   public ManiphestUpdate maniphestUpdate(int taskId, String comment) throws ConduitException {
+    return maniphestUpdate(taskId, comment, null);
+  }
+
+  /**
+   * Runs the API's 'maniphest.update' method
+   */
+  public ManiphestUpdate maniphestUpdate(int taskId, Iterable<String> projects) throws ConduitException {
+    return maniphestUpdate(taskId, null, projects);
+  }
+
+  /**
+   * Runs the API's 'maniphest.update' method
+   */
+  public ManiphestUpdate maniphestUpdate(int taskId, String comment, Iterable<String> projects) throws ConduitException {
     Map<String, Object> params = new HashMap<String, Object>();
     fillInSession(params);
     params.put("id", taskId);
-    params.put("comments", comment);
+    if (comment != null) {
+      params.put("comments", comment);
+    }
+    if (projects != null) {
+      params.put("projectPHIDs", projects);
+    }
 
     JsonElement callResult = conduitConnection.call("maniphest.update", params);
     ManiphestUpdate result = gson.fromJson(callResult, ManiphestUpdate.class);
+    return result;
+  }
+
+  /**
+   * Runs the API's 'projectQuery' method to match exactly one project name
+   */
+  public ProjectInfo projectQuery(String name) throws ConduitException {
+    Map<String, Object> params = new HashMap<String, Object>();
+    fillInSession(params);
+    params.put("names", Arrays.asList(name));
+
+    JsonElement callResult = conduitConnection.call("project.query", params);
+    QueryResult queryResult = gson.fromJson(callResult, QueryResult.class);
+    JsonObject queryResultData = queryResult.getData().getAsJsonObject();
+
+    ProjectInfo result = null;
+    for (Entry<String, JsonElement> queryResultEntry:
+      queryResultData.entrySet()) {
+      JsonElement queryResultEntryValue = queryResultEntry.getValue();
+      ProjectInfo queryResultProjectInfo =
+          gson.fromJson(queryResultEntryValue, ProjectInfo.class);
+      if (queryResultProjectInfo.getName().equals(name)) {
+        result = queryResultProjectInfo;
+      }
+    }
     return result;
   }
 }
