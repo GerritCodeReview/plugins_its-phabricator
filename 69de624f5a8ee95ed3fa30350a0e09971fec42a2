@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "598a77dc_81d3da05",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/PhabricatorItsFacade.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2016-08-07T20:21:48Z",
+      "side": 1,
+      "message": "That part is no longer true. It should be removed.",
+      "range": {
+        "startLine": 140,
+        "startChar": 4,
+        "endLine": 143,
+        "endChar": 26
+      },
+      "revId": "69de624f5a8ee95ed3fa30350a0e09971fec42a2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
