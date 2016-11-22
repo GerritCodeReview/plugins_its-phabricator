@@ -24,8 +24,13 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
@@ -34,6 +39,7 @@ import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitCo
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitPing;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestInfo;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestUpdate;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectInfo;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Conduit.class)
@@ -242,7 +248,7 @@ public class ConduitTest extends LoggingMockingTestCase {
     assertLogMessageContains("Trying to start new session");
   }
 
-  public void testManiphestUpdatePass() throws Exception {
+  public void testManiphestUpdatePassComment() throws Exception {
     mockConnection();
 
     resetToStrict(connection);
@@ -281,6 +287,94 @@ public class ConduitTest extends LoggingMockingTestCase {
 
     assertLogMessageContains("Trying to start new session");
   }
+
+  public void testManiphestUpdatePassProjects() throws Exception {
+    mockConnection();
+
+    resetToStrict(connection);
+
+    JsonObject retConnect = new JsonObject();
+    retConnect.add("sessionKey", new JsonPrimitive("KeyFoo"));
+
+    Capture<Map<String, Object>> paramsCaptureConnect = new Capture<Map<String, Object>>();
+
+    expect(connection.call(eq("conduit.connect"), capture(paramsCaptureConnect)))
+      .andReturn(retConnect)
+      .once();
+
+    JsonObject retRelevant = new JsonObject();
+    retRelevant.add("id", new JsonPrimitive(42));
+
+    Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<Map<String, Object>>();
+
+    expect(connection.call(eq("maniphest.update"), capture(paramsCaptureRelevant)))
+    .andReturn(retRelevant)
+    .once();
+
+    replayMocks();
+
+    Conduit conduit = new Conduit(URL, USERNAME, CERTIFICATE);
+
+    ManiphestUpdate maniphestUpdate = conduit.maniphestUpdate(42,
+        Arrays.asList("foo", "bar"));
+
+    Map<String, Object> paramsConnect = paramsCaptureConnect.getValue();
+    assertEquals("Usernames do not match", USERNAME, paramsConnect.get("user"));
+
+    Map<String, Object> paramsRelevant = paramsCaptureRelevant.getValue();
+    assertEquals("Task id is not set", 42, paramsRelevant.get("id"));
+    assertEquals("Task projects are not set", Arrays.asList("foo", "bar"),
+        paramsRelevant.get("projectPHIDs"));
+
+    assertEquals("ManiphestUpdate's id does not match", 42, maniphestUpdate.getId());
+
+    assertLogMessageContains("Trying to start new session");
+  }
+
+  public void testManiphestUpdatePassCommentAndProjects() throws Exception {
+    mockConnection();
+
+    resetToStrict(connection);
+
+    JsonObject retConnect = new JsonObject();
+    retConnect.add("sessionKey", new JsonPrimitive("KeyFoo"));
+
+    Capture<Map<String, Object>> paramsCaptureConnect = new Capture<Map<String, Object>>();
+
+    expect(connection.call(eq("conduit.connect"), capture(paramsCaptureConnect)))
+      .andReturn(retConnect)
+      .once();
+
+    JsonObject retRelevant = new JsonObject();
+    retRelevant.add("id", new JsonPrimitive(42));
+
+    Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<Map<String, Object>>();
+
+    expect(connection.call(eq("maniphest.update"), capture(paramsCaptureRelevant)))
+    .andReturn(retRelevant)
+    .once();
+
+    replayMocks();
+
+    Conduit conduit = new Conduit(URL, USERNAME, CERTIFICATE);
+
+    ManiphestUpdate maniphestUpdate = conduit.maniphestUpdate(42, "baz",
+        Arrays.asList("foo", "bar"));
+
+    Map<String, Object> paramsConnect = paramsCaptureConnect.getValue();
+    assertEquals("Usernames do not match", USERNAME, paramsConnect.get("user"));
+
+    Map<String, Object> paramsRelevant = paramsCaptureRelevant.getValue();
+    assertEquals("Task id is not set", 42, paramsRelevant.get("id"));
+    assertEquals("Task comment is not set", "baz", paramsRelevant.get("comments"));
+    assertEquals("Task projects are not set", Arrays.asList("foo", "bar"),
+        paramsRelevant.get("projectPHIDs"));
+
+    assertEquals("ManiphestUpdate's id does not match", 42, maniphestUpdate.getId());
+
+    assertLogMessageContains("Trying to start new session");
+  }
+
 
   public void testManiphestUpdateFailConnect() throws Exception {
     mockConnection();
@@ -391,6 +485,114 @@ public class ConduitTest extends LoggingMockingTestCase {
     assertEquals("Session keys don't match", "KeyFoo", conduitConnect.getSessionKey());
 
     assertEquals("ManiphestInfo's id does not match", 42, maniphestInfo.getId());
+  }
+
+  public void testProjectQueryPass() throws Exception {
+    mockConnection();
+
+    resetToStrict(connection);
+
+    JsonObject retConnect = new JsonObject();
+    retConnect.add("sessionKey", new JsonPrimitive("KeyFoo"));
+
+    Capture<Map<String, Object>> paramsCaptureConnect = new Capture<Map<String, Object>>();
+
+    expect(connection.call(eq("conduit.connect"), capture(paramsCaptureConnect)))
+      .andReturn(retConnect)
+      .once();
+
+    JsonObject projectInfoJson = new JsonObject();
+    projectInfoJson.addProperty("name", "foo");
+    projectInfoJson.addProperty("phid", "PHID-PROJ-bar");
+
+    JsonObject queryDataJson = new JsonObject();
+    queryDataJson.add("PHID-PROJ-bar", projectInfoJson);
+
+    JsonObject retRelevant = new JsonObject();
+    retRelevant.add("data", queryDataJson);
+
+    Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<Map<String, Object>>();
+
+    expect(connection.call(eq("project.query"), capture(paramsCaptureRelevant)))
+    .andReturn(retRelevant)
+    .once();
+
+    replayMocks();
+
+    Conduit conduit = new Conduit(URL, USERNAME, CERTIFICATE);
+
+    ProjectInfo projectInfo = conduit.projectQuery("foo");
+
+    Map<String, Object> paramsConnect = paramsCaptureConnect.getValue();
+    assertEquals("Usernames do not match", USERNAME, paramsConnect.get("user"));
+
+    Map<String, Object> paramsRelevant = paramsCaptureRelevant.getValue();
+    List<String> expectedNames = Arrays.asList("foo");
+    assertEquals("Project name does not match", expectedNames,
+        paramsRelevant.get("names"));
+
+    assertEquals("ProjectInfo's name does not match", "foo", projectInfo.getName());
+
+    assertLogMessageContains("Trying to start new session");
+  }
+
+  public void testProjectQueryPassMultipleResults() throws Exception {
+    mockConnection();
+
+    resetToStrict(connection);
+
+    JsonObject retConnect = new JsonObject();
+    retConnect.add("sessionKey", new JsonPrimitive("KeyFoo"));
+
+    Capture<Map<String, Object>> paramsCaptureConnect = new Capture<Map<String, Object>>();
+
+    expect(connection.call(eq("conduit.connect"), capture(paramsCaptureConnect)))
+      .andReturn(retConnect)
+      .once();
+
+    JsonObject projectInfoJson1 = new JsonObject();
+    projectInfoJson1.addProperty("name", "foo1");
+    projectInfoJson1.addProperty("phid", "PHID-PROJ-bar1");
+
+    JsonObject projectInfoJson2 = new JsonObject();
+    projectInfoJson2.addProperty("name", "foo2");
+    projectInfoJson2.addProperty("phid", "PHID-PROJ-bar2");
+
+    JsonObject projectInfoJson3 = new JsonObject();
+    projectInfoJson3.addProperty("name", "foo3");
+    projectInfoJson3.addProperty("phid", "PHID-PROJ-bar3");
+
+    JsonObject queryDataJson = new JsonObject();
+    queryDataJson.add("PHID-PROJ-bar1", projectInfoJson1);
+    queryDataJson.add("PHID-PROJ-bar2", projectInfoJson2);
+    queryDataJson.add("PHID-PROJ-bar3", projectInfoJson3);
+
+    JsonObject retRelevant = new JsonObject();
+    retRelevant.add("data", queryDataJson);
+
+    Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<Map<String, Object>>();
+
+    expect(connection.call(eq("project.query"), capture(paramsCaptureRelevant)))
+    .andReturn(retRelevant)
+    .once();
+
+    replayMocks();
+
+    Conduit conduit = new Conduit(URL, USERNAME, CERTIFICATE);
+
+    ProjectInfo projectInfo = conduit.projectQuery("foo2");
+
+    Map<String, Object> paramsConnect = paramsCaptureConnect.getValue();
+    assertEquals("Usernames do not match", USERNAME, paramsConnect.get("user"));
+
+    Map<String, Object> paramsRelevant = paramsCaptureRelevant.getValue();
+    List<String> expectedNames = Arrays.asList("foo2");
+    assertEquals("Project name does not match", expectedNames,
+        paramsRelevant.get("names"));
+
+    assertEquals("ProjectInfo's name does not match", "foo2", projectInfo.getName());
+
+    assertLogMessageContains("Trying to start new session");
   }
 
   private void mockConnection() throws Exception {
