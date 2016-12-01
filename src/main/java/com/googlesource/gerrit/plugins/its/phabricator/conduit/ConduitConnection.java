@@ -30,7 +30,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -73,7 +72,7 @@ class ConduitConnection {
    *
    * @param method The name of the method that should get called
    * @return The call's result, if there has been no error
-   * @throws Exception
+   * @throws ConduitException
    */
   JsonElement call(String method) throws ConduitException {
     return call(method, new HashMap<String, Object>());
@@ -85,7 +84,7 @@ class ConduitConnection {
    * @param method The name of the method that should get called
    * @param params A map of parameters to pass to the call
    * @return The call's result, if there has been no error
-   * @throws Exception
+   * @throws ConduitException
    */
   JsonElement call(String method, Map<String, Object> params) throws ConduitException {
     String methodUrl = apiUrlBase + method;
