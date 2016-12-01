@@ -98,7 +98,7 @@ public class Conduit {
       log.debug("Trying to start new session");
       conduitConnect();
     }
-    Map<String, Object> conduitParams = new HashMap<String, Object>();
+    Map<String, Object> conduitParams = new HashMap<>();
     conduitParams.put("sessionKey",sessionKey);
     params.put("__conduit__", conduitParams);
   }
@@ -118,7 +118,7 @@ public class Conduit {
    * Runs the API's 'conduit.connect' method
    */
   public ConduitConnect conduitConnect() throws ConduitException {
-    Map<String, Object> params = new HashMap<String, Object>();
+    Map<String, Object> params = new HashMap<>();
     params.put("client", "its-phabricator");
     params.put("clientVersion", CONDUIT_VERSION);
     params.put("user", username);
@@ -164,7 +164,7 @@ public class Conduit {
    * Runs the API's 'maniphest.Info' method
    */
   public ManiphestInfo maniphestInfo(int taskId) throws ConduitException {
-    Map<String, Object> params = new HashMap<String, Object>();
+    Map<String, Object> params = new HashMap<>();
     fillInSession(params);
     params.put("task_id", taskId);
 
@@ -191,7 +191,7 @@ public class Conduit {
    * Runs the API's 'maniphest.update' method
    */
   public ManiphestUpdate maniphestUpdate(int taskId, String comment, Iterable<String> projects) throws ConduitException {
-    Map<String, Object> params = new HashMap<String, Object>();
+    Map<String, Object> params = new HashMap<>();
     fillInSession(params);
     params.put("id", taskId);
     if (comment != null) {
@@ -210,7 +210,7 @@ public class Conduit {
    * Runs the API's 'projectQuery' method to match exactly one project name
    */
   public ProjectInfo projectQuery(String name) throws ConduitException {
-    Map<String, Object> params = new HashMap<String, Object>();
+    Map<String, Object> params = new HashMap<>();
     fillInSession(params);
     params.put("names", Arrays.asList(name));
 
