@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b33e41a0_fe2d2cae",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2017-01-25T08:02:17Z",
+      "side": 1,
+      "message": "In: [1] I proposed another approach to achieve that: to not include these files in the its-base artifact in the first place. I think that the main audience for those documentation files is plugin developers and not plugin users.\n\n* [1] https://gerrit-review.googlesource.com/95172",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 35
+      },
+      "revId": "ea1d2da1ab8d53ea3e651bf873a7083e2466a8a6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
