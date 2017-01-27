@@ -68,6 +68,69 @@
       "revId": "a832f98bbd42480d8210fe724d9358727f08d793",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d0ee5e64_7eb8a460",
+        "filename": "src/main/resources/Documentation/build.md",
+        "patchSetId": 11
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2017-01-27T06:26:38Z",
+      "side": 1,
+      "message": "@PLUGIN@",
+      "range": {
+        "startLine": 21,
+        "startChar": 25,
+        "endLine": 21,
+        "endChar": 40
+      },
+      "revId": "a832f98bbd42480d8210fe724d9358727f08d793",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4913d529_7603e639",
+        "filename": "src/main/resources/Documentation/build.md",
+        "patchSetId": 11
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2017-01-27T06:26:38Z",
+      "side": 1,
+      "message": "its-phabricator",
+      "range": {
+        "startLine": 21,
+        "startChar": 41,
+        "endLine": 21,
+        "endChar": 56
+      },
+      "revId": "a832f98bbd42480d8210fe724d9358727f08d793",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "138cfe9d_729c896c",
+        "filename": "src/main/resources/Documentation/build.md",
+        "patchSetId": 11
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2017-01-27T06:26:38Z",
+      "side": 1,
+      "message": "For this to work, the plugin must be added to tools/bzl/plugins.bzl in Gerrit core to CUSTOM_PLUGINS set.",
+      "revId": "a832f98bbd42480d8210fe724d9358727f08d793",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
