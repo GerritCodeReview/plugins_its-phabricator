@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a918d11_2e2d9487",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2017-01-27T05:38:01Z",
+      "side": 1,
+      "message": "I\u0027m fine t merge it with this TODO, but the commit message should be adjusted e.g.:\n\n  \"Not addressed in this commit...\"",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 62
+      },
+      "revId": "a832f98bbd42480d8210fe724d9358727f08d793",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b40707f6_399c27a2",
+        "filename": "BUILD",
+        "patchSetId": 11
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2017-01-27T05:38:01Z",
+      "side": 1,
+      "message": "This one is currently overwritten by gerrit_plugin rule. I would rather delete it here and mention it in the commit message.",
+      "range": {
+        "startLine": 16,
+        "startChar": 8,
+        "endLine": 16,
+        "endChar": 54
+      },
+      "revId": "a832f98bbd42480d8210fe724d9358727f08d793",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f220b4b_28d39e9b",
+        "filename": "BUILD",
+        "patchSetId": 11
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2017-01-27T05:38:01Z",
+      "side": 1,
+      "message": "All these libraries area already included in the Gerrit core. Adding transitive dependencies on them here would mean the eunecessary bloating the plugin JARs. Instead, they muste be provided. The way to achieve it in Bazel is to create java_library or java_import with neverlink\u003d1 attribute.",
+      "range": {
+        "startLine": 21,
+        "startChar": 8,
+        "endLine": 23,
+        "endChar": 40
+      },
+      "revId": "a832f98bbd42480d8210fe724d9358727f08d793",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
