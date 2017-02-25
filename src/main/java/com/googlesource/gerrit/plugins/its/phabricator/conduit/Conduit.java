@@ -193,15 +193,15 @@ public class Conduit {
   public ManiphestUpdate maniphestUpdate(int taskId, String comment, Iterable<String> projects) throws ConduitException {
     Map<String, Object> params = new HashMap<>();
     fillInSession(params);
-    params.put("id", taskId);
+    params.put("objectIdentifier", taskId);
     if (comment != null) {
-      params.put("comments", comment);
+      params.put("comment", comment);
     }
     if (projects != null) {
-      params.put("projectPHIDs", projects);
+      params.put("transactions", [{'type': 'projects.add', 'value': [projects]}]);
     }
 
-    JsonElement callResult = conduitConnection.call("maniphest.update", params);
+    JsonElement callResult = conduitConnection.call("maniphest.edit", params);
     ManiphestUpdate result = gson.fromJson(callResult, ManiphestUpdate.class);
     return result;
   }
