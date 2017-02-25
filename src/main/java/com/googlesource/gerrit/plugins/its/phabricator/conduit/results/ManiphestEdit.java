@@ -14,7 +14,7 @@
 package com.googlesource.gerrit.plugins.its.phabricator.conduit.results;
 
 /**
- * Models the result for a call to maniphest.update
+ * Models the result for a call to maniphest.edit
  * <p/>
  * JSON looks like:
  * <pre>
@@ -46,6 +46,6 @@ package com.googlesource.gerrit.plugins.its.phabricator.conduit.results;
  * }
  * </pre>
  */
-public class ManiphestUpdate extends Task {
+public class ManiphestEdit extends Task {
 
 }

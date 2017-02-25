@@ -61,7 +61,7 @@ public class PhabricatorItsFacade implements ItsFacade {
       throws IOException {
     int task_id = Integer.parseInt(bugId);
     try {
-      conduit.maniphestUpdate(task_id, comment);
+      conduit.maniphestEdit(task_id, comment);
     } catch (ConduitException e) {
       throw new IOException("Could not update message for task " + task_id, e);
     }
@@ -122,7 +122,7 @@ public class PhabricatorItsFacade implements ItsFacade {
                 projectPhids.add(jsonElement.getAsString());
               }
 
-              conduit.maniphestUpdate(taskId, projectPhids);
+              conduit.maniphestEdit(taskId, projectPhids);
             } catch (ConduitException e) {
               throw new IOException("Error on conduit", e);
             }
