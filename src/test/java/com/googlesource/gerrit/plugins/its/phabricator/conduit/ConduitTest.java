@@ -35,7 +35,7 @@ import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitConnect;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitPing;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestInfo;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestUpdate;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestEdit;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectInfo;
 
 @RunWith(PowerMockRunner.class)
@@ -245,7 +245,7 @@ public class ConduitTest extends LoggingMockingTestCase {
     assertLogMessageContains("Trying to start new session");
   }
 
-  public void testManiphestUpdatePassComment() throws Exception {
+  public void testManiphestEditPassComment() throws Exception {
     mockConnection();
 
     resetToStrict(connection);
@@ -272,7 +272,7 @@ public class ConduitTest extends LoggingMockingTestCase {
 
     Conduit conduit = new Conduit(URL, USERNAME, CERTIFICATE);
 
-    ManiphestUpdate maniphestUpdate = conduit.maniphestUpdate(42, "foo");
+    ManiphestEdit maniphestEdit = conduit.maniphestEdit(42, "foo");
 
     Map<String, Object> paramsConnect = paramsCaptureConnect.getValue();
     assertEquals("Usernames do not match", USERNAME, paramsConnect.get("user"));
@@ -280,12 +280,12 @@ public class ConduitTest extends LoggingMockingTestCase {
     Map<String, Object> paramsRelevant = paramsCaptureRelevant.getValue();
     assertEquals("Task id is not set", 42, paramsRelevant.get("id"));
 
-    assertEquals("ManiphestInfo's id does not match", 42, maniphestUpdate.getId());
+    assertEquals("ManiphestInfo's id does not match", 42, maniphestEdit.getId());
 
     assertLogMessageContains("Trying to start new session");
   }
 
-  public void testManiphestUpdatePassProjects() throws Exception {
+  public void testManiphestEditPassProjects() throws Exception {
     mockConnection();
 
     resetToStrict(connection);
@@ -304,7 +304,7 @@ public class ConduitTest extends LoggingMockingTestCase {
 
     Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
 
-    expect(connection.call(eq("maniphest.update"), capture(paramsCaptureRelevant)))
+    expect(connection.call(eq("maniphest.edit"), capture(paramsCaptureRelevant)))
     .andReturn(retRelevant)
     .once();
 
@@ -312,7 +312,7 @@ public class ConduitTest extends LoggingMockingTestCase {
 
     Conduit conduit = new Conduit(URL, USERNAME, CERTIFICATE);
 
-    ManiphestUpdate maniphestUpdate = conduit.maniphestUpdate(42,
+    ManiphestEdit maniphestEdit = conduit.maniphestEdit(42,
         Arrays.asList("foo", "bar"));
 
     Map<String, Object> paramsConnect = paramsCaptureConnect.getValue();
@@ -323,12 +323,12 @@ public class ConduitTest extends LoggingMockingTestCase {
     assertEquals("Task projects are not set", Arrays.asList("foo", "bar"),
         paramsRelevant.get("projectPHIDs"));
 
-    assertEquals("ManiphestUpdate's id does not match", 42, maniphestUpdate.getId());
+    assertEquals("ManiphestEdit's id does not match", 42, maniphestEdit.getId());
 
     assertLogMessageContains("Trying to start new session");
   }
 
-  public void testManiphestUpdatePassCommentAndProjects() throws Exception {
+  public void testManiphestEditPassCommentAndProjects() throws Exception {
     mockConnection();
 
     resetToStrict(connection);
@@ -347,7 +347,7 @@ public class ConduitTest extends LoggingMockingTestCase {
 
     Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
 
-    expect(connection.call(eq("maniphest.update"), capture(paramsCaptureRelevant)))
+    expect(connection.call(eq("maniphest.edit"), capture(paramsCaptureRelevant)))
     .andReturn(retRelevant)
     .once();
 
@@ -355,7 +355,7 @@ public class ConduitTest extends LoggingMockingTestCase {
 
     Conduit conduit = new Conduit(URL, USERNAME, CERTIFICATE);
 
-    ManiphestUpdate maniphestUpdate = conduit.maniphestUpdate(42, "baz",
+    ManiphestEdit maniphestEdit = conduit.maniphestEdit(42, "baz",
         Arrays.asList("foo", "bar"));
 
     Map<String, Object> paramsConnect = paramsCaptureConnect.getValue();
@@ -367,13 +367,13 @@ public class ConduitTest extends LoggingMockingTestCase {
     assertEquals("Task projects are not set", Arrays.asList("foo", "bar"),
         paramsRelevant.get("projectPHIDs"));
 
-    assertEquals("ManiphestUpdate's id does not match", 42, maniphestUpdate.getId());
+    assertEquals("ManiphestUpdate's id does not match", 42, maniphestEdit.getId());
 
     assertLogMessageContains("Trying to start new session");
   }
 
 
-  public void testManiphestUpdateFailConnect() throws Exception {
+  public void testManiphestEditFailConnect() throws Exception {
     mockConnection();
 
     ConduitException conduitException = new ConduitException();
@@ -389,7 +389,7 @@ public class ConduitTest extends LoggingMockingTestCase {
     Conduit conduit = new Conduit(URL, USERNAME, CERTIFICATE);
 
     try {
-      conduit.maniphestUpdate(42, "foo");
+      conduit.maniphestEdit(42, "foo");
       fail("no exception got thrown");
     } catch (ConduitException e) {
       assertSame(conduitException, e);
@@ -401,7 +401,7 @@ public class ConduitTest extends LoggingMockingTestCase {
     assertLogMessageContains("Trying to start new session");
   }
 
-  public void testManiphestUpdateFailRelevant() throws Exception {
+  public void testManiphestEditFailRelevant() throws Exception {
     mockConnection();
 
     resetToStrict(connection);
@@ -419,7 +419,7 @@ public class ConduitTest extends LoggingMockingTestCase {
 
     Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
 
-    expect(connection.call(eq("maniphest.update"), capture(paramsCaptureRelevant)))
+    expect(connection.call(eq("maniphest.edit"), capture(paramsCaptureRelevant)))
       .andThrow(conduitException)
       .once();
 
@@ -428,7 +428,7 @@ public class ConduitTest extends LoggingMockingTestCase {
     Conduit conduit = new Conduit(URL, USERNAME, CERTIFICATE);
 
     try {
-      conduit.maniphestUpdate(42, "foo");
+      conduit.maniphestEdit(42, "foo");
       fail("no exception got thrown");
     } catch (ConduitException e) {
       assertSame(conduitException, e);
