@@ -31,13 +31,13 @@ import org.slf4j.LoggerFactory;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.xml.bind.DatatypeConverter;
-
 
 /**
  * Bindings for Phabricator's Conduit API
@@ -174,34 +174,42 @@ public class Conduit {
   }
 
   /**
-   * Runs the API's 'maniphest.update' method
+   * Runs the API's 'maniphest.edit' method
    */
   public ManiphestUpdate maniphestUpdate(int taskId, String comment) throws ConduitException {
     return maniphestUpdate(taskId, comment, null);
   }
 
   /**
-   * Runs the API's 'maniphest.update' method
+   * Runs the API's 'maniphest.edit' method
    */
   public ManiphestUpdate maniphestUpdate(int taskId, Iterable<String> projects) throws ConduitException {
     return maniphestUpdate(taskId, null, projects);
   }
 
   /**
-   * Runs the API's 'maniphest.update' method
+   * Runs the API's 'maniphest.edit' method
    */
   public ManiphestUpdate maniphestUpdate(int taskId, String comment, Iterable<String> projects) throws ConduitException {
     Map<String, Object> params = new HashMap<>();
     fillInSession(params);
-    params.put("id", taskId);
+    params.add("objectIdentifier", taskId);
+    ArrayList<HashMap> list = new ArrayList<>();
+    Map<String, Object> params2 = new HashMap<>();
     if (comment != null) {
-      params.put("comments", comment);
+      params2.add("type", "comment");
+      params2.add("value", comment);
     }
     if (projects != null) {
-      params.put("projectPHIDs", projects);
+      params2.add("type", "projects.add");
+      params2.add("value", projects);
     }
 
-    JsonElement callResult = conduitConnection.call("maniphest.update", params);
+    list.add(params2)
+
+    params.add("transactions", list);
+
+    JsonElement callResult = conduitConnection.call("maniphest.edit", params);
     ManiphestUpdate result = gson.fromJson(callResult, ManiphestUpdate.class);
     return result;
   }
