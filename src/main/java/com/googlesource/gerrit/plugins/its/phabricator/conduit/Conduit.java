@@ -21,7 +21,7 @@ import com.google.gson.JsonObject;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitConnect;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitPing;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestInfo;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestUpdate;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestEdit;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectInfo;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.QueryResult;
 
@@ -31,13 +31,14 @@ import org.slf4j.LoggerFactory;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.xml.bind.DatatypeConverter;
-
 
 /**
  * Bindings for Phabricator's Conduit API
@@ -174,34 +175,46 @@ public class Conduit {
   }
 
   /**
-   * Runs the API's 'maniphest.update' method
+   * Runs the API's 'maniphest.edit' method
    */
-  public ManiphestUpdate maniphestUpdate(int taskId, String comment) throws ConduitException {
-    return maniphestUpdate(taskId, comment, null);
+  public ManiphestUpdate maniphestEdit(int taskId, String comment) throws ConduitException {
+    return maniphestEdit(taskId, comment, null);
   }
 
   /**
-   * Runs the API's 'maniphest.update' method
+   * Runs the API's 'maniphest.edit' method
    */
-  public ManiphestUpdate maniphestUpdate(int taskId, Iterable<String> projects) throws ConduitException {
-    return maniphestUpdate(taskId, null, projects);
+  public ManiphestEdit maniphestEdit(int taskId, Iterable<String> projects) throws ConduitException {
+    return maniphestEdit(taskId, null, projects);
   }
 
   /**
-   * Runs the API's 'maniphest.update' method
+   * Runs the API's 'maniphest.edit' method
    */
-  public ManiphestUpdate maniphestUpdate(int taskId, String comment, Iterable<String> projects) throws ConduitException {
-    Map<String, Object> params = new HashMap<>();
+  public ManiphestEdit maniphestEdit(int taskId, String comment, Iterable<String> projects) throws ConduitException {
+    HashMap<String, Object> params = new HashMap<>();
     fillInSession(params);
-    params.put("id", taskId);
+    List<Object> list = new ArrayList<>();
+    HashMap<String, Object> params2 = new HashMap<>();
     if (comment != null) {
-      params.put("comments", comment);
-    }
-    if (projects != null) {
-      params.put("projectPHIDs", projects);
+      String comments = "comment";
+      params2.put("type", comments);
+      params2.put("value", comment);
     }
 
-    JsonElement callResult = conduitConnection.call("maniphest.update", params);
+    if (projects != null) {
+      String project = "projects.add";
+      params2.put("type", project);
+      params2.put("value", projects);
+    }
+
+    if (!params2.isEmpty()) {
+      list.add(params2);
+      params.put("transactions", list);
+    }
+    params.put("objectIdentifier", taskId);
+
+    JsonElement callResult = conduitConnection.call("maniphest.edit", params);
     ManiphestUpdate result = gson.fromJson(callResult, ManiphestUpdate.class);
     return result;
   }
