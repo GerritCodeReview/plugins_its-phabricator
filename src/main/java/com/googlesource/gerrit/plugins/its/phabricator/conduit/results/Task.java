@@ -68,6 +68,8 @@ public class Task {
   private String dateCreated;
   private String dateModified;
   private JsonElement dependsOnTaskPHIDs;
+  private JsonElement objectIdentifier;
+  private JsonElement transactions;
 
   public int getId() {
     return id;
@@ -143,5 +145,13 @@ public class Task {
 
   public JsonElement getDependsOnTaskPHIDs() {
     return dependsOnTaskPHIDs;
+  }
+
+  public JsonElement getObjectIdentifier() {
+    return objectIdentifier;
+  }
+
+  public JsonElement getTransactions() {
+    return transactions;
   }
 }
