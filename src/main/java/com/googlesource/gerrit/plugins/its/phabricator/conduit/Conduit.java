@@ -36,8 +36,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.xml.bind.DatatypeConverter;
-
 
 /**
  * Bindings for Phabricator's Conduit API
@@ -174,34 +177,41 @@ public class Conduit {
   }
 
   /**
-   * Runs the API's 'maniphest.update' method
+   * Runs the API's 'maniphest.edit' method
    */
   public ManiphestUpdate maniphestUpdate(int taskId, String comment) throws ConduitException {
     return maniphestUpdate(taskId, comment, null);
   }
 
   /**
-   * Runs the API's 'maniphest.update' method
+   * Runs the API's 'maniphest.edit' method
    */
   public ManiphestUpdate maniphestUpdate(int taskId, Iterable<String> projects) throws ConduitException {
     return maniphestUpdate(taskId, null, projects);
   }
 
   /**
-   * Runs the API's 'maniphest.update' method
+   * Runs the API's 'maniphest.edit' method
    */
   public ManiphestUpdate maniphestUpdate(int taskId, String comment, Iterable<String> projects) throws ConduitException {
     Map<String, Object> params = new HashMap<>();
+    JsonObject params = Json.createObjectBuilder();
     fillInSession(params);
-    params.put("id", taskId);
+    params.add("objectIdentifier", taskId);
     if (comment != null) {
-      params.put("comments", comment);
+      params.add("transactions", Json.createArrayBuilder()
+          .add(Json.createObjectBuilder()
+            .add("type", "comment")
+            .add("value", comment);
     }
     if (projects != null) {
-      params.put("projectPHIDs", projects);
+      params.add("transactions", Json.createArrayBuilder()
+          .add(Json.createObjectBuilder()
+            .add("type", "projects.add")
+            .add("value", projects);
     }
 
-    JsonElement callResult = conduitConnection.call("maniphest.update", params);
+    JsonElement callResult = conduitConnection.call("maniphest.edit", params.build());
     ManiphestUpdate result = gson.fromJson(callResult, ManiphestUpdate.class);
     return result;
   }
