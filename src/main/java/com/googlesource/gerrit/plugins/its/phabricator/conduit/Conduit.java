@@ -195,13 +195,13 @@ public class Conduit {
     fillInSession(params);
     params.put("id", taskId);
     if (comment != null) {
-      params.put("comments", comment);
+      params.put("comment", comment);
     }
     if (projects != null) {
-      params.put("projectPHIDs", projects);
+      params.put(objectIdentifier=taskId, transactions=[{'type': 'projects.add', 'value': [projects]}]));
     }
 
-    JsonElement callResult = conduitConnection.call("maniphest.update", params);
+    JsonElement callResult = conduitConnection.call("maniphest.edit", params);
     ManiphestUpdate result = gson.fromJson(callResult, ManiphestUpdate.class);
     return result;
   }
