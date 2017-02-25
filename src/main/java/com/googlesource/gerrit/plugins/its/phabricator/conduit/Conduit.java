@@ -31,13 +31,13 @@ import org.slf4j.LoggerFactory;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.xml.bind.DatatypeConverter;
-
 
 /**
  * Bindings for Phabricator's Conduit API
@@ -174,34 +174,44 @@ public class Conduit {
   }
 
   /**
-   * Runs the API's 'maniphest.update' method
+   * Runs the API's 'maniphest.edit' method
    */
   public ManiphestUpdate maniphestUpdate(int taskId, String comment) throws ConduitException {
     return maniphestUpdate(taskId, comment, null);
   }
 
   /**
-   * Runs the API's 'maniphest.update' method
+   * Runs the API's 'maniphest.edit' method
    */
   public ManiphestUpdate maniphestUpdate(int taskId, Iterable<String> projects) throws ConduitException {
     return maniphestUpdate(taskId, null, projects);
   }
 
   /**
-   * Runs the API's 'maniphest.update' method
+   * Runs the API's 'maniphest.edit' method
    */
   public ManiphestUpdate maniphestUpdate(int taskId, String comment, Iterable<String> projects) throws ConduitException {
-    Map<String, Object> params = new HashMap<>();
+    HashMap<String, Object> params = new HashMap<>();
     fillInSession(params);
-    params.put("id", taskId);
+    params.put("objectIdentifier", taskId);
+    ArrayList<HashMap> list = new ArrayList<>();
+    HashMap<String, String> params2 = new HashMap<>();
+    HashMap<String, Object> params3 = new HashMap<>();
     if (comment != null) {
-      params.put("comments", comment);
+      params2.put("type", "comment");
+      params3.put("value", comment);
     }
     if (projects != null) {
-      params.put("projectPHIDs", projects);
+      params2.put("type", "projects.add");
+      params3.put("value", projects);
     }
 
-    JsonElement callResult = conduitConnection.call("maniphest.update", params);
+    list.add(params2);
+    list.add(params3);
+
+    params.put("transactions", list);
+
+    JsonElement callResult = conduitConnection.call("maniphest.edit", params);
     ManiphestUpdate result = gson.fromJson(callResult, ManiphestUpdate.class);
     return result;
   }
