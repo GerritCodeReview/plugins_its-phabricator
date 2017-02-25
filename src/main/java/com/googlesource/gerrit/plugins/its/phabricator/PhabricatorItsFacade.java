@@ -122,7 +122,7 @@ public class PhabricatorItsFacade implements ItsFacade {
                 projectPhids.add(jsonElement.getAsString());
               }
 
-              conduit.maniphestUpdate(taskId, projectPhids);
+              conduit.maniphestEdit(taskId, projectPhids);
             } catch (ConduitException e) {
               throw new IOException("Error on conduit", e);
             }
