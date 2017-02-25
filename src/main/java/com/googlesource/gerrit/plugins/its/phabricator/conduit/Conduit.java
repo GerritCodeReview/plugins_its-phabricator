@@ -201,7 +201,7 @@ public class Conduit {
       params.put("projectPHIDs", projects);
     }
 
-    JsonElement callResult = conduitConnection.call("maniphest.update", params);
+    JsonElement callResult = conduitConnection.call("maniphest.edit", params);
     ManiphestUpdate result = gson.fromJson(callResult, ManiphestUpdate.class);
     return result;
   }
