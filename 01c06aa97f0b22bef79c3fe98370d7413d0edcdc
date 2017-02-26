@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c0c428b0_c1965e18",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/PhabricatorItsFacade.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-02-26T22:25:34Z",
+      "side": 1,
+      "message": "Thanks, done.",
+      "parentUuid": "ff3af449_570bc103",
+      "range": {
+        "startLine": 132,
+        "startChar": 42,
+        "endLine": 132,
+        "endChar": 56
+      },
+      "revId": "01c06aa97f0b22bef79c3fe98370d7413d0edcdc",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a4e76b6d_355cf74b",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/conduit/Conduit.java",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2017-02-26T22:24:21Z",
       "side": 1,
       "message": "Where is this used?",
+      "range": {
+        "startLine": 194,
+        "startChar": 96,
+        "endLine": 194,
+        "endChar": 110
+      },
+      "revId": "01c06aa97f0b22bef79c3fe98370d7413d0edcdc",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2d56e926_0dceffdc",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/conduit/Conduit.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-02-26T22:25:34Z",
+      "side": 1,
+      "message": "in PhabricatorItsFacade.java",
+      "parentUuid": "a4e76b6d_355cf74b",
       "range": {
         "startLine": 194,
         "startChar": 96,
