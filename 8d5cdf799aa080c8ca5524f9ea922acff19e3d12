@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9702724e_c8f8b378",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/PhabricatorItsFacade.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-02-26T23:29:02Z",
+      "side": 1,
+      "message": "Thanks, done.",
+      "parentUuid": "23925e05_2098255d",
+      "range": {
+        "startLine": 40,
+        "startChar": 29,
+        "endLine": 40,
+        "endChar": 47
+      },
+      "revId": "8d5cdf799aa080c8ca5524f9ea922acff19e3d12",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0d34e4a6_e6f327fb",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/PhabricatorItsFacade.java",
         "patchSetId": 7
@@ -94,6 +118,30 @@
     },
     {
       "key": {
+        "uuid": "8a6f7eda_a94954a6",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/conduit/Conduit.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-02-26T23:29:02Z",
+      "side": 1,
+      "message": "Thanks, done.",
+      "parentUuid": "fa8c5c9d_521d047e",
+      "range": {
+        "startLine": 194,
+        "startChar": 103,
+        "endLine": 194,
+        "endChar": 117
+      },
+      "revId": "8d5cdf799aa080c8ca5524f9ea922acff19e3d12",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "41e79ff5_f2267f4d",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/conduit/Conduit.java",
         "patchSetId": 7
@@ -105,6 +153,30 @@
       "writtenOn": "2017-02-26T23:02:20Z",
       "side": 1,
       "message": "If I understand the code correctly, the type of the api request can be either comment or projects.add or projects.remove, but not two of them. So I would suggest to move this \"comment\" string also to a constant and pass it using the now called project_action patrameter (which I would suggest to be \"action\" only). Then, you can put the value passed as project_action as the type to the params2 hash map.\n\nYou would also need to update the code where the comment is not null and update the overloaded functions above.",
+      "range": {
+        "startLine": 201,
+        "startChar": 4,
+        "endLine": 201,
+        "endChar": 32
+      },
+      "revId": "8d5cdf799aa080c8ca5524f9ea922acff19e3d12",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "66b11acf_713c91e2",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/conduit/Conduit.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-02-26T23:29:02Z",
+      "side": 1,
+      "message": "Thanks, done.\n\nIm also unsure will the project action be use in the comment one or will comment be?",
+      "parentUuid": "41e79ff5_f2267f4d",
       "range": {
         "startLine": 201,
         "startChar": 4,
