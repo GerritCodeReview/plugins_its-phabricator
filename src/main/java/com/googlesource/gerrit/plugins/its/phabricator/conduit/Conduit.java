@@ -23,6 +23,7 @@ import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitPi
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestInfo;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestEdit;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectInfo;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectInfo.ProjectInfoNested;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.QueryResult;
 
 import org.slf4j.Logger;
@@ -225,9 +226,13 @@ public class Conduit {
   public ProjectInfo projectQuery(String name) throws ConduitException {
     Map<String, Object> params = new HashMap<>();
     fillInSession(params);
-    params.put("names", Arrays.asList(name));
+    Map<String, Object> params2 = new HashMap<>();
 
-    JsonElement callResult = conduitConnection.call("project.query", params);
+    params2.put("name", name);
+
+    params.put("constraints", params2);
+
+    JsonElement callResult = conduitConnection.call("project.search", params);
     QueryResult queryResult = gson.fromJson(callResult, QueryResult.class);
     JsonObject queryResultData = queryResult.getData().getAsJsonObject();
 
@@ -237,7 +242,7 @@ public class Conduit {
       JsonElement queryResultEntryValue = queryResultEntry.getValue();
       ProjectInfo queryResultProjectInfo =
           gson.fromJson(queryResultEntryValue, ProjectInfo.class);
-      if (queryResultProjectInfo.getName().equals(name)) {
+      if (queryResultProjectInfo.fields[0].name.equals(name)) {
         result = queryResultProjectInfo;
       }
     }
