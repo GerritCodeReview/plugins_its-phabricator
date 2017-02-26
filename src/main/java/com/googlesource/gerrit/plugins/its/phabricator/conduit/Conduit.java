@@ -178,20 +178,20 @@ public class Conduit {
    * Runs the API's 'maniphest.edit' method
    */
   public ManiphestUpdate maniphestUpdate(int taskId, String comment) throws ConduitException {
-    return maniphestUpdate(taskId, comment, null);
+    return maniphestUpdate(taskId, comment, null, null);
   }
 
   /**
    * Runs the API's 'maniphest.edit' method
    */
-  public ManiphestUpdate maniphestUpdate(int taskId, Iterable<String> projects) throws ConduitException {
-    return maniphestUpdate(taskId, null, projects);
+  public ManiphestUpdate maniphestUpdate(int taskId, Iterable<String> projects, String project) throws ConduitException {
+    return maniphestUpdate(taskId, null, projects, project);
   }
 
   /**
    * Runs the API's 'maniphest.edit' method
    */
-  public ManiphestUpdate maniphestUpdate(int taskId, String comment, Iterable<String> projects) throws ConduitException {
+  public ManiphestUpdate maniphestUpdate(int taskId, String comment, Iterable<String> projects, String project) throws ConduitException {
     HashMap<String, Object> params = new HashMap<>();
     fillInSession(params);
     List<Object> list = new ArrayList<>();
@@ -199,7 +199,6 @@ public class Conduit {
     HashMap<String, Object> params2 = new HashMap<>();
     HashMap<String, Object> params3 = new HashMap<>();
     String comments = "comment";
-    String project = "projects.add";
     if (comment != null) {
       params2.put("type", comments);
       params2.put("value", comment);
