@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e4ed6d31_5fde4bae",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/PhabricatorItsFacade.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-02-26T22:49:34Z",
+      "side": 1,
+      "message": "I\u0027ve decided to use a constant as i am unsure how to do enum or even how easy it is to implement that.",
+      "parentUuid": "ad7db8b3_de15d540",
+      "range": {
+        "startLine": 125,
+        "startChar": 21,
+        "endLine": 125,
+        "endChar": 28
+      },
+      "revId": "409800b02c9feef4c087eafacb3058c380d80811",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "60660653_aea3acc7",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/PhabricatorItsFacade.java",
         "patchSetId": 4
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "7f96efba_51d3a3bc",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/PhabricatorItsFacade.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-02-26T22:49:34Z",
+      "side": 1,
+      "message": "Thanks, done.",
+      "parentUuid": "60660653_aea3acc7",
+      "range": {
+        "startLine": 164,
+        "startChar": 58,
+        "endLine": 164,
+        "endChar": 63
+      },
+      "revId": "409800b02c9feef4c087eafacb3058c380d80811",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e5d610fb_a6e093bf",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/PhabricatorItsFacade.java",
         "patchSetId": 4
@@ -59,6 +107,30 @@
       "writtenOn": "2017-02-26T22:38:18Z",
       "side": 1,
       "message": "??? pretty useless, remove it.",
+      "range": {
+        "startLine": 167,
+        "startChar": 68,
+        "endLine": 167,
+        "endChar": 73
+      },
+      "revId": "409800b02c9feef4c087eafacb3058c380d80811",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ce36d54_d9fa36a1",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/PhabricatorItsFacade.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-02-26T22:49:34Z",
+      "side": 1,
+      "message": "Thanks, done.",
+      "parentUuid": "e5d610fb_a6e093bf",
       "range": {
         "startLine": 167,
         "startChar": 68,
