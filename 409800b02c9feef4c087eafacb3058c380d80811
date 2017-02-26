@@ -163,6 +163,30 @@
       "revId": "409800b02c9feef4c087eafacb3058c380d80811",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0ea60570_395e08e8",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/conduit/Conduit.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-02-26T22:49:53Z",
+      "side": 1,
+      "message": "I\u0027ve changed this to project_action",
+      "parentUuid": "c58fdfc3_c5f10014",
+      "range": {
+        "startLine": 187,
+        "startChar": 80,
+        "endLine": 187,
+        "endChar": 94
+      },
+      "revId": "409800b02c9feef4c087eafacb3058c380d80811",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
