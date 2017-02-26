@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad7db8b3_de15d540",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/PhabricatorItsFacade.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1018237
+      },
+      "writtenOn": "2017-02-26T22:38:18Z",
+      "side": 1,
+      "message": "I\u0027m not totally happy with the name of the variable. In fact, it\u0027s not the \"Project\", it\u0027s the action you do (add, remove, whatever). The name of a variable should indicate, what you want to do.\n\nAlso: I\u0027m not sure, how it is handled here, but having strings, which represent a defined set of actions, sounds a bit bad to me. Have you thought about moving the possible actions to a constant or even better an enum (you would need to use a different constructor, as points are not allowed as enum names). This would make the action a bit more resistence against type errors and, as a nice benefit, you can use your IDE to show all usages of a specific action string.",
+      "range": {
+        "startLine": 125,
+        "startChar": 21,
+        "endLine": 125,
+        "endChar": 28
+      },
+      "revId": "409800b02c9feef4c087eafacb3058c380d80811",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "60660653_aea3acc7",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/PhabricatorItsFacade.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1018237
+      },
+      "writtenOn": "2017-02-26T22:38:18Z",
+      "side": 1,
+      "message": "??? pretty useless, remove it.",
+      "range": {
+        "startLine": 164,
+        "startChar": 58,
+        "endLine": 164,
+        "endChar": 63
+      },
+      "revId": "409800b02c9feef4c087eafacb3058c380d80811",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e5d610fb_a6e093bf",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/PhabricatorItsFacade.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1018237
+      },
+      "writtenOn": "2017-02-26T22:38:18Z",
+      "side": 1,
+      "message": "??? pretty useless, remove it.",
+      "range": {
+        "startLine": 167,
+        "startChar": 68,
+        "endLine": 167,
+        "endChar": 73
+      },
+      "revId": "409800b02c9feef4c087eafacb3058c380d80811",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c58fdfc3_c5f10014",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/conduit/Conduit.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1018237
+      },
+      "writtenOn": "2017-02-26T22:38:18Z",
+      "side": 1,
+      "message": "like I wrote already: From the name of the variable it\u0027s not clear what it holds, neither what it does.",
+      "range": {
+        "startLine": 187,
+        "startChar": 80,
+        "endLine": 187,
+        "endChar": 94
+      },
+      "revId": "409800b02c9feef4c087eafacb3058c380d80811",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
