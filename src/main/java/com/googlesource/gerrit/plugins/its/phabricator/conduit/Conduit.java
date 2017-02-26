@@ -1,4 +1,4 @@
-//Copyright (C) 2014 The Android Open Source Project
+//Copyright (C) 2017 The Android Open Source Project
 //
 //Licensed under the Apache License, Version 2.0 (the "License");
 //you may not use this file except in compliance with the License.
@@ -14,6 +14,7 @@
 
 package com.googlesource.gerrit.plugins.its.phabricator.conduit;
 
+import com.google.gson.JsonArray;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -22,7 +23,7 @@ import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitCo
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitPing;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestInfo;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestEdit;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectInfo;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectSearch;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.QueryResult;
 
 import org.slf4j.Logger;
@@ -220,26 +221,26 @@ public class Conduit {
   }
 
   /**
-   * Runs the API's 'projectQuery' method to match exactly one project name
+   * Runs the API's 'project.search' method to match exactly one project name
    */
-  public ProjectInfo projectQuery(String name) throws ConduitException {
+  public ProjectSearch projectQuery(String name) throws ConduitException {
     Map<String, Object> params = new HashMap<>();
     fillInSession(params);
-    params.put("names", Arrays.asList(name));
+    Map<String, Object> constraints = new HashMap<>();
 
-    JsonElement callResult = conduitConnection.call("project.query", params);
+    constraints.put("name", name);
+
+    params.put("constraints", constraints);
+
+    JsonElement callResult = conduitConnection.call("project.search", params);
     QueryResult queryResult = gson.fromJson(callResult, QueryResult.class);
-    JsonObject queryResultData = queryResult.getData().getAsJsonObject();
+    JsonArray queryResultData = queryResult.getData().getAsJsonArray();
 
     ProjectInfo result = null;
-    for (Entry<String, JsonElement> queryResultEntry:
-      queryResultData.entrySet()) {
-      JsonElement queryResultEntryValue = queryResultEntry.getValue();
+    for (JsonElement queryResultEntry : queryResultData) {
       ProjectInfo queryResultProjectInfo =
-          gson.fromJson(queryResultEntryValue, ProjectInfo.class);
-      if (queryResultProjectInfo.getName().equals(name)) {
-        result = queryResultProjectInfo;
-      }
+          gson.fromJson(queryResultEntry, ProjectInfo.class);
+      result = queryResultProjectInfo;
     }
     return result;
   }
