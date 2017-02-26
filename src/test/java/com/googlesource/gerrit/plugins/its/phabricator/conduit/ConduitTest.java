@@ -1,4 +1,4 @@
-//Copyright (C) 2014 The Android Open Source Project
+//Copyright (C) 2017 The Android Open Source Project
 //
 //Licensed under the Apache License, Version 2.0 (the "License");
 //you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitCo
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitPing;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestInfo;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestEdit;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectInfo;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectSearch;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Conduit.class)
@@ -498,19 +498,19 @@ public class ConduitTest extends LoggingMockingTestCase {
       .andReturn(retConnect)
       .once();
 
-    JsonObject projectInfoJson = new JsonObject();
-    projectInfoJson.addProperty("name", "foo");
-    projectInfoJson.addProperty("phid", "PHID-PROJ-bar");
+    JsonObject projectSearchJson = new JsonObject();
+    projectSearchJson.addProperty("name", "foo");
+    projectSearchJson.addProperty("phid", "PHID-PROJ-bar");
 
     JsonObject queryDataJson = new JsonObject();
-    queryDataJson.add("PHID-PROJ-bar", projectInfoJson);
+    queryDataJson.add("PHID-PROJ-bar", projectSearchJson);
 
     JsonObject retRelevant = new JsonObject();
     retRelevant.add("data", queryDataJson);
 
     Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
 
-    expect(connection.call(eq("project.query"), capture(paramsCaptureRelevant)))
+    expect(connection.call(eq("project.search"), capture(paramsCaptureRelevant)))
     .andReturn(retRelevant)
     .once();
 
@@ -518,7 +518,7 @@ public class ConduitTest extends LoggingMockingTestCase {
 
     Conduit conduit = new Conduit(URL, USERNAME, CERTIFICATE);
 
-    ProjectInfo projectInfo = conduit.projectQuery("foo");
+    ProjectSearch projectSearch = conduit.projectQuery("foo");
 
     Map<String, Object> paramsConnect = paramsCaptureConnect.getValue();
     assertEquals("Usernames do not match", USERNAME, paramsConnect.get("user"));
@@ -528,7 +528,7 @@ public class ConduitTest extends LoggingMockingTestCase {
     assertEquals("Project name does not match", expectedNames,
         paramsRelevant.get("names"));
 
-    assertEquals("ProjectInfo's name does not match", "foo", projectInfo.getName());
+    assertEquals("ProjectInfo's name does not match", "foo", projectSearch.getName());
 
     assertLogMessageContains("Trying to start new session");
   }
@@ -547,29 +547,29 @@ public class ConduitTest extends LoggingMockingTestCase {
       .andReturn(retConnect)
       .once();
 
-    JsonObject projectInfoJson1 = new JsonObject();
-    projectInfoJson1.addProperty("name", "foo1");
-    projectInfoJson1.addProperty("phid", "PHID-PROJ-bar1");
+    JsonObject projectSearchJson1 = new JsonObject();
+    projectSearchJson1.addProperty("name", "foo1");
+    projectSearchJson1.addProperty("phid", "PHID-PROJ-bar1");
 
-    JsonObject projectInfoJson2 = new JsonObject();
-    projectInfoJson2.addProperty("name", "foo2");
-    projectInfoJson2.addProperty("phid", "PHID-PROJ-bar2");
+    JsonObject projectSearchJson2 = new JsonObject();
+    projectSearchJson2.addProperty("name", "foo2");
+    projectSearchJson2.addProperty("phid", "PHID-PROJ-bar2");
 
-    JsonObject projectInfoJson3 = new JsonObject();
-    projectInfoJson3.addProperty("name", "foo3");
-    projectInfoJson3.addProperty("phid", "PHID-PROJ-bar3");
+    JsonObject projectSearchJson3 = new JsonObject();
+    projectSearchJson3.addProperty("name", "foo3");
+    projectSearchJson3.addProperty("phid", "PHID-PROJ-bar3");
 
     JsonObject queryDataJson = new JsonObject();
-    queryDataJson.add("PHID-PROJ-bar1", projectInfoJson1);
-    queryDataJson.add("PHID-PROJ-bar2", projectInfoJson2);
-    queryDataJson.add("PHID-PROJ-bar3", projectInfoJson3);
+    queryDataJson.add("PHID-PROJ-bar1", projectSearchJson1);
+    queryDataJson.add("PHID-PROJ-bar2", projectSearchJson2);
+    queryDataJson.add("PHID-PROJ-bar3", projectSearchJson3);
 
     JsonObject retRelevant = new JsonObject();
     retRelevant.add("data", queryDataJson);
 
     Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
 
-    expect(connection.call(eq("project.query"), capture(paramsCaptureRelevant)))
+    expect(connection.call(eq("project.search"), capture(paramsCaptureRelevant)))
     .andReturn(retRelevant)
     .once();
 
@@ -577,7 +577,7 @@ public class ConduitTest extends LoggingMockingTestCase {
 
     Conduit conduit = new Conduit(URL, USERNAME, CERTIFICATE);
 
-    ProjectInfo projectInfo = conduit.projectQuery("foo2");
+    ProjectSearch projectSearch = conduit.projectQuery("foo2");
 
     Map<String, Object> paramsConnect = paramsCaptureConnect.getValue();
     assertEquals("Usernames do not match", USERNAME, paramsConnect.get("user"));
@@ -587,7 +587,7 @@ public class ConduitTest extends LoggingMockingTestCase {
     assertEquals("Project name does not match", expectedNames,
         paramsRelevant.get("names"));
 
-    assertEquals("ProjectInfo's name does not match", "foo2", projectInfo.getName());
+    assertEquals("ProjectInfo's name does not match", "foo2", projectSearch.getName());
 
     assertLogMessageContains("Trying to start new session");
   }
