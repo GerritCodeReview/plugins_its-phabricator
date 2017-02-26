@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff3af449_570bc103",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/PhabricatorItsFacade.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1035318
+      },
+      "writtenOn": "2017-02-26T22:22:47Z",
+      "side": 1,
+      "message": "This will print with \u0027 + action + \u0027 literally in the output\n\nYou can\u0027t open with \" and break with \u0027",
+      "range": {
+        "startLine": 132,
+        "startChar": 42,
+        "endLine": 132,
+        "endChar": 56
+      },
+      "revId": "01c06aa97f0b22bef79c3fe98370d7413d0edcdc",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
