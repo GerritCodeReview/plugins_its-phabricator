@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "23925e05_2098255d",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/PhabricatorItsFacade.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1018237
+      },
+      "writtenOn": "2017-02-26T23:02:20Z",
+      "side": 1,
+      "message": "I would assume that these constants are in the Conduit class.\n\nAlso, I would suggest to name the constants:\nACTION_PROJECT_ADD\nACTION_PROJECT_REMOVE\n\nand (if you follow my idea in the Conduit class):\nACTION_COMMENT",
+      "range": {
+        "startLine": 40,
+        "startChar": 29,
+        "endLine": 40,
+        "endChar": 47
+      },
+      "revId": "8d5cdf799aa080c8ca5524f9ea922acff19e3d12",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0d34e4a6_e6f327fb",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/PhabricatorItsFacade.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1018237
+      },
+      "writtenOn": "2017-02-26T23:02:20Z",
+      "side": 1,
+      "message": "unused now.",
+      "range": {
+        "startLine": 129,
+        "startChar": 14,
+        "endLine": 129,
+        "endChar": 46
+      },
+      "revId": "8d5cdf799aa080c8ca5524f9ea922acff19e3d12",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a3df87c_f7e30f2b",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/PhabricatorItsFacade.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1018237
+      },
+      "writtenOn": "2017-02-26T23:02:20Z",
+      "side": 1,
+      "message": "unused",
+      "range": {
+        "startLine": 156,
+        "startChar": 14,
+        "endLine": 156,
+        "endChar": 49
+      },
+      "revId": "8d5cdf799aa080c8ca5524f9ea922acff19e3d12",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa8c5c9d_521d047e",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/conduit/Conduit.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1018237
+      },
+      "writtenOn": "2017-02-26T23:02:20Z",
+      "side": 1,
+      "message": "I\u0027m not sure, but this should be \"action\", only, as this could be not project specific.",
+      "range": {
+        "startLine": 194,
+        "startChar": 103,
+        "endLine": 194,
+        "endChar": 117
+      },
+      "revId": "8d5cdf799aa080c8ca5524f9ea922acff19e3d12",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "41e79ff5_f2267f4d",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/conduit/Conduit.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1018237
+      },
+      "writtenOn": "2017-02-26T23:02:20Z",
+      "side": 1,
+      "message": "If I understand the code correctly, the type of the api request can be either comment or projects.add or projects.remove, but not two of them. So I would suggest to move this \"comment\" string also to a constant and pass it using the now called project_action patrameter (which I would suggest to be \"action\" only). Then, you can put the value passed as project_action as the type to the params2 hash map.\n\nYou would also need to update the code where the comment is not null and update the overloaded functions above.",
+      "range": {
+        "startLine": 201,
+        "startChar": 4,
+        "endLine": 201,
+        "endChar": 32
+      },
+      "revId": "8d5cdf799aa080c8ca5524f9ea922acff19e3d12",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
