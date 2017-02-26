@@ -1,4 +1,4 @@
-//Copyright (C) 2015 The Android Open Source Project
+//Copyright (C) 2017 The Android Open Source Project
 //
 //Licensed under the Apache License, Version 2.0 (the "License");
 //you may not use this file except in compliance with the License.
@@ -22,29 +22,13 @@ import com.google.gson.JsonElement;
  * <pre>
  * {
  *   "data": { ... },
- *   "slugMap": [],
- *   "cursor": {
- *     "limit": 100,
- *     "after": null,
- *     "before": null
- *   }
  * }
    * </pre>
    */
 public class QueryResult {
   private JsonElement data;
-  private JsonElement slugMap;
-  private JsonElement cursor;
 
   public JsonElement getData() {
     return data;
-  }
-
-  public JsonElement getSlugMap() {
-    return slugMap;
-  }
-
-  public JsonElement getCursor() {
-    return cursor;
   }
 }

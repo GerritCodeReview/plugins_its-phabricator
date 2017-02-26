@@ -33,7 +33,7 @@ import com.googlesource.gerrit.plugins.its.phabricator.conduit.Conduit;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.ConduitErrorException;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.ConduitException;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestInfo;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectInfo;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectSearch;
 
 public class PhabricatorItsFacade implements ItsFacade {
   private static final Logger log = LoggerFactory.getLogger(PhabricatorItsFacade.class);
@@ -111,8 +111,8 @@ public class PhabricatorItsFacade implements ItsFacade {
             try {
               String projectName = chopped[1];
 
-              ProjectInfo projectInfo = conduit.projectQuery(projectName);
-              String projectPhid = projectInfo.getPhid();
+              ProjectSearch projectSearch = conduit.projectQuery(projectName);
+              String projectPhid = projectSearch.getPhid();
 
               Set<String> projectPhids = Sets.newHashSet(projectPhid);
 
