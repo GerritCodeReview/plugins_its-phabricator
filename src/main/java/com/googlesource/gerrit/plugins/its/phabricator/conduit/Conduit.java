@@ -14,6 +14,7 @@
 
 package com.googlesource.gerrit.plugins.its.phabricator.conduit;
 
+import com.google.gson.JsonArray;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -225,18 +226,20 @@ public class Conduit {
   public ProjectInfo projectQuery(String name) throws ConduitException {
     Map<String, Object> params = new HashMap<>();
     fillInSession(params);
-    params.put("names", Arrays.asList(name));
+    Map<String, Object> params2 = new HashMap<>();
 
-    JsonElement callResult = conduitConnection.call("project.query", params);
+    params2.put("name", name);
+
+    params.put("constraints", params2);
+
+    JsonElement callResult = conduitConnection.call("project.search", params);
     QueryResult queryResult = gson.fromJson(callResult, QueryResult.class);
-    JsonObject queryResultData = queryResult.getData().getAsJsonObject();
+    JsonArray queryResultData = queryResult.getData().getAsJsonArray();
 
     ProjectInfo result = null;
-    for (Entry<String, JsonElement> queryResultEntry:
-      queryResultData.entrySet()) {
-      JsonElement queryResultEntryValue = queryResultEntry.getValue();
+    for (queryResultEntry : queryResultData) {
       ProjectInfo queryResultProjectInfo =
-          gson.fromJson(queryResultEntryValue, ProjectInfo.class);
+          gson.fromJson(queryResultData, ProjectInfo.class);
       if (queryResultProjectInfo.getName().equals(name)) {
         result = queryResultProjectInfo;
       }

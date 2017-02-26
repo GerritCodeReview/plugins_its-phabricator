@@ -36,26 +36,39 @@ import com.google.gson.JsonElement;
  */
 public class ProjectInfo {
   private int id;
+  private String type;
   private String phid;
+  public JsonElement fields;
+  private JsonElement attachments;
   private String name;
+  /*
   private String profileImagePHID;
   private String icon;
   private String color;
   private JsonElement members;
   private JsonElement slugs;
   private String dateCreated;
-  private String dateModified;
+  private String dateModified;*/
 
   public int getId() {
     return id;
   }
+  public String getType() {
+    return type;
+  }
   public String getPhid() {
     return phid;
+  }
+  public JsonElement getFields() {
+    return fields;
+  }
+  public JsonElement getAttachments() {
+    return attachments;
   }
   public String getName() {
     return name;
   }
-  public String getProfileImagePHID() {
+  /*public String getProfileImagePHID() {
     return profileImagePHID;
   }
   public String getIcon() {
@@ -75,5 +88,5 @@ public class ProjectInfo {
   }
   public String getDateModified() {
     return dateModified;
-  }
+  }*/
 }
