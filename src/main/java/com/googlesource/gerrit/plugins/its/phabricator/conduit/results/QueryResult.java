@@ -33,18 +33,18 @@ import com.google.gson.JsonElement;
    */
 public class QueryResult {
   private JsonElement data;
-  private JsonElement slugMap;
-  private JsonElement cursor;
+  /*private JsonElement slugMap;
+  private JsonElement cursor;*/
 
   public JsonElement getData() {
     return data;
   }
 
-  public JsonElement getSlugMap() {
+  /*public JsonElement getSlugMap() {
     return slugMap;
   }
 
   public JsonElement getCursor() {
     return cursor;
-  }
+  }*/
 }
