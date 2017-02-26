@@ -225,9 +225,13 @@ public class Conduit {
   public ProjectInfo projectQuery(String name) throws ConduitException {
     Map<String, Object> params = new HashMap<>();
     fillInSession(params);
-    params.put("names", Arrays.asList(name));
+    Map<String, Object> params2 = new HashMap<>();
 
-    JsonElement callResult = conduitConnection.call("project.query", params);
+    params2.put("name", name);
+
+    params.put("constraints", params2);
+
+    JsonElement callResult = conduitConnection.call("project.search", params);
     QueryResult queryResult = gson.fromJson(callResult, QueryResult.class);
     JsonObject queryResultData = queryResult.getData().getAsJsonObject();
 
