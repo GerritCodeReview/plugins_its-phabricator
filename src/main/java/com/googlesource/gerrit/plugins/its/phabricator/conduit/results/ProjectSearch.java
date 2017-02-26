@@ -1,4 +1,4 @@
-//Copyright (C) 2015 The Android Open Source Project
+//Copyright (C) 2017 The Android Open Source Project
 //
 //Licensed under the Apache License, Version 2.0 (the "License");
 //you may not use this file except in compliance with the License.
@@ -34,46 +34,30 @@ import com.google.gson.JsonElement;
  * }
  * </pre>
  */
-public class ProjectInfo {
+public class ProjectSearch {
   private int id;
+  private String type;
   private String phid;
+  public JsonElement fields;
+  private JsonElement attachments;
   private String name;
-  private String profileImagePHID;
-  private String icon;
-  private String color;
-  private JsonElement members;
-  private JsonElement slugs;
-  private String dateCreated;
-  private String dateModified;
 
   public int getId() {
     return id;
   }
+  public String getType() {
+    return type;
+  }
   public String getPhid() {
     return phid;
   }
+  public JsonElement getFields() {
+    return fields;
+  }
+  public JsonElement getAttachments() {
+    return attachments;
+  }
   public String getName() {
     return name;
-  }
-  public String getProfileImagePHID() {
-    return profileImagePHID;
-  }
-  public String getIcon() {
-    return icon;
-  }
-  public String getColor() {
-    return color;
-  }
-  public JsonElement getMembers() {
-    return members;
-  }
-  public JsonElement getSlugs() {
-    return slugs;
-  }
-  public String getDateCreated() {
-    return dateCreated;
-  }
-  public String getDateModified() {
-    return dateModified;
   }
 }
