@@ -122,7 +122,36 @@ public class PhabricatorItsFacade implements ItsFacade {
                 projectPhids.add(jsonElement.getAsString());
               }
 
-              conduit.maniphestUpdate(taskId, projectPhids);
+              String project = "projects.add";
+
+              conduit.maniphestUpdate(taskId, projectPhids, project);
+            } catch (ConduitException e) {
+              throw new IOException("Error on conduit", e);
+            }
+          } else {
+            throw new IOException("Action ' + action + ' expects exactly "
+              + "1 parameter but " + (chopped.length - 1) + " given");
+          }
+          break;
+        case "remove-project":
+          if (chopped.length == 2) {
+            try {
+              String projectName = chopped[1];
+
+              ProjectInfo projectInfo = conduit.projectQuery(projectName);
+              String projectPhid = projectInfo.getPhid();
+
+              Set<String> projectPhids = Sets.newHashSet(projectPhid);
+
+              ManiphestInfo taskInfo = conduit.maniphestInfo(taskId);
+              for (JsonElement jsonElement :
+                taskInfo.getProjectPHIDs().getAsJsonArray()) {
+                projectPhids.add(jsonElement.getAsString());
+              }
+
+              String project = "projects.remove";
+
+              conduit.maniphestUpdate(taskId, projectPhids, project);
             } catch (ConduitException e) {
               throw new IOException("Error on conduit", e);
             }
