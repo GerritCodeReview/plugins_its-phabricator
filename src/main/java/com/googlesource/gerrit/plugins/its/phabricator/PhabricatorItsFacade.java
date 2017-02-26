@@ -36,6 +36,10 @@ import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.Maniphest
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectInfo;
 
 public class PhabricatorItsFacade implements ItsFacade {
+
+  public static final String ACTION_PROJECT_ADD = "projects.add";
+  public static final String ACTION_PROJECT_REMOVE = "projects.remove";
+
   private static final Logger log = LoggerFactory.getLogger(PhabricatorItsFacade.class);
 
   private static final String GERRIT_CONFIG_URL = "url";
@@ -122,20 +126,45 @@ public class PhabricatorItsFacade implements ItsFacade {
                 projectPhids.add(jsonElement.getAsString());
               }
 
-              conduit.maniphestUpdate(taskId, projectPhids);
+              conduit.maniphestUpdate(taskId, projectPhids, ACTION_PROJECT_ADD);
             } catch (ConduitException e) {
               throw new IOException("Error on conduit", e);
             }
           } else {
-            throw new IOException("Action ' + action + ' expects exactly "
+            throw new IOException("Action " + action + " expects exactly "
+              + "1 parameter but " + (chopped.length - 1) + " given");
+          }
+          break;
+        case "remove-project":
+          if (chopped.length == 2) {
+            try {
+              String projectName = chopped[1];
+
+              ProjectInfo projectInfo = conduit.projectQuery(projectName);
+              String projectPhid = projectInfo.getPhid();
+
+              Set<String> projectPhids = Sets.newHashSet(projectPhid);
+
+              ManiphestInfo taskInfo = conduit.maniphestInfo(taskId);
+              for (JsonElement jsonElement :
+                taskInfo.getProjectPHIDs().getAsJsonArray()) {
+                projectPhids.add(jsonElement.getAsString());
+              }
+
+              conduit.maniphestUpdate(taskId, projectPhids, ACTION_PROJECT_REMOVE);
+            } catch (ConduitException e) {
+              throw new IOException("Error on conduit", e);
+            }
+          } else {
+            throw new IOException("Action " + action + " expects exactly "
               + "1 parameter but " + (chopped.length - 1) + " given");
           }
           break;
         default:
-          throw new IOException("Unknown action ' + action + '");
+          throw new IOException("Unknown action " + action);
       }
     } else {
-      throw new IOException("Could not parse action ' + actionString + '");
+      throw new IOException("Could not parse action " + actionString);
     }
   }
 
