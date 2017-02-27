@@ -46,6 +46,30 @@
       "revId": "2b9bf34353b89eb626e4284341cf41414cc7a420",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f07dc09_1e294b6c",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/conduit/Conduit.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1018237
+      },
+      "writtenOn": "2017-02-27T13:58:11Z",
+      "side": 1,
+      "message": "äh, probably something like, that comment \u003d null is invalid, if the action is ACTION_COMMENT. If I\u0027ve to write anything in code to you, I probably would be faster doing it myself ;)",
+      "parentUuid": "560125c1_fe620079",
+      "range": {
+        "startLine": 208,
+        "startChar": 4,
+        "endLine": 210,
+        "endChar": 47
+      },
+      "revId": "2b9bf34353b89eb626e4284341cf41414cc7a420",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
