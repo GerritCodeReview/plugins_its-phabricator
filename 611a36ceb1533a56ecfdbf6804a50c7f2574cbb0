@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c16606be_31cb90c8",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/conduit/Conduit.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-02-27T13:23:40Z",
+      "side": 1,
+      "message": "Thanks I\u0027ve done that in patchset 14.",
+      "parentUuid": "da15eb8f_ad67e1a2",
+      "range": {
+        "startLine": 209,
+        "startChar": 27,
+        "endLine": 209,
+        "endChar": 34
+      },
+      "revId": "611a36ceb1533a56ecfdbf6804a50c7f2574cbb0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "906bf7bd_56e9fcdd",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/conduit/Conduit.java",
         "patchSetId": 13
@@ -36,6 +60,30 @@
       "writtenOn": "2017-02-27T13:19:14Z",
       "side": 1,
       "message": "if (action.equals(ACTION_PROJECT_ADD) || action.equals(ACTION_PROJECT_REMOVE)) {",
+      "range": {
+        "startLine": 212,
+        "startChar": 4,
+        "endLine": 212,
+        "endChar": 27
+      },
+      "revId": "611a36ceb1533a56ecfdbf6804a50c7f2574cbb0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5bb555cb_f850e84d",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/conduit/Conduit.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-02-27T13:23:40Z",
+      "side": 1,
+      "message": "Thanks, done.",
+      "parentUuid": "906bf7bd_56e9fcdd",
       "range": {
         "startLine": 212,
         "startChar": 4,
