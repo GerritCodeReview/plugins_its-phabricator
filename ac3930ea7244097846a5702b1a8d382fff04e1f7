@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e8a3711f_8a578dc7",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/PhabricatorItsFacade.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2017-02-28T02:04:52Z",
+      "side": 1,
+      "message": "There\u0027s a lot of repeated code here.  Consider refactoring it to smaller methods.",
+      "range": {
+        "startLine": 134,
+        "startChar": 8,
+        "endLine": 157,
+        "endChar": 11
+      },
+      "revId": "ac3930ea7244097846a5702b1a8d382fff04e1f7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
