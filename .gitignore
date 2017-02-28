@@ -4,4 +4,5 @@ target/
 .project
 /.settings/org.maven.ide.eclipse.prefs
 /.settings/org.eclipse.m2e.core.prefs
+.DS_Store
 
