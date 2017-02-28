@@ -47,6 +47,12 @@ import javax.xml.bind.DatatypeConverter;
  */
 public class Conduit {
 
+  public static final String ACTION_COMMENT = "comment";
+
+  public static final String ACTION_PROJECT_ADD = "projects.add";
+
+  public static final String ACTION_PROJECT_REMOVE = "projects.remove";
+
   private static final Logger log = LoggerFactory.getLogger(Conduit.class);
 
   public static final int CONDUIT_VERSION = 6;
@@ -178,33 +184,38 @@ public class Conduit {
    * Runs the API's 'maniphest.edit' method
    */
   public ManiphestEdit maniphestEdit(int taskId, String comment) throws ConduitException {
-    return maniphestEdit(taskId, comment, null);
+    return maniphestEdit(taskId, comment, null, ACTION_COMMENT);
   }
 
   /**
    * Runs the API's 'maniphest.edit' method
    */
-  public ManiphestEdit maniphestEdit(int taskId, Iterable<String> projects) throws ConduitException {
-    return maniphestEdit(taskId, null, projects);
+  public ManiphestEdit maniphestEdit(int taskId, Iterable<String> projects, String action) throws ConduitException {
+    return maniphestEdit(taskId, null, projects, action);
   }
 
   /**
    * Runs the API's 'maniphest.edit' method
    */
-  public ManiphestEdit maniphestEdit(int taskId, String comment, Iterable<String> projects) throws ConduitException {
+  public ManiphestEdit maniphestEdit(int taskId, String comment, Iterable<String> projects, String action) throws ConduitException {
     HashMap<String, Object> params = new HashMap<>();
     fillInSession(params);
     List<Object> list = new ArrayList<>();
     HashMap<String, Object> params2 = new HashMap<>();
-    if (comment != null) {
-      String comments = "comment";
-      params2.put("type", comments);
+    params2.put("type", action);
+    if(action.equals(ACTION_COMMENT)) {
+      if (comment == null) {
+        throw new IllegalArgumentException("The value of comment (null) is invalid for the action ACTION_COMMENT");
+      }
       params2.put("value", comment);
     }
 
-    if (projects != null) {
-      String project = "projects.add";
-      params2.put("type", project);
+    if(action.equals(ACTION_PROJECT_ADD) || action.equals(ACTION_PROJECT_REMOVE)) {
+      if (action.equals(ACTION_PROJECT_ADD) && projects == null) {
+        throw new IllegalArgumentException("The value of projects (null) is invalid for the action ACTION_PROJECT_ADD");
+      } else if (action.equals(ACTION_PROJECT_REMOVE) && projects == null) {
+        throw new IllegalArgumentException("The value of projects (null) is invalid for the action ACTION_PROJECT_REMOVE");
+      }
       params2.put("value", projects);
     }
 
