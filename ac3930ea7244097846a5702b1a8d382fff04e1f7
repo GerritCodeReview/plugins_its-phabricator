@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "de0b7753_c0b6b554",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/PhabricatorItsFacade.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2017-02-28T09:30:09Z",
+      "side": 1,
+      "message": "For a start, the check on parameters length can be factored out to something like:\n\n private void assertParameters(String action, String[] params, int length) throws IOException {\n   if (params.length -1 !\u003d length) {\n     throw new IOException(String.format(\"Action %s expects exactly %d parameter(s) but %d given\", action, length, params.length-1));\n   }\n }\n\nand then instead of a big if-else block, just call it at the beginning of each case:\n\n case \"remove-project\":\n   assertParameters(action, chopped, 1);\n\n\nthen the code inside the try-catch block can also be factored out.\n\nI\u0027m not sure what you mean by \"it would require a return\".",
+      "parentUuid": "ecbfd216_72a19983",
+      "range": {
+        "startLine": 134,
+        "startChar": 8,
+        "endLine": 157,
+        "endChar": 11
+      },
+      "revId": "ac3930ea7244097846a5702b1a8d382fff04e1f7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3600d640_cf5a308d",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/conduit/Conduit.java",
         "patchSetId": 17
