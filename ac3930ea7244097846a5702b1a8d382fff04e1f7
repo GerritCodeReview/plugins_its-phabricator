@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ecbfd216_72a19983",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/PhabricatorItsFacade.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-02-28T09:19:28Z",
+      "side": 1,
+      "message": "How would I do that please?\n\nAs it would require a return which I\u0027m unsure what to put in return?",
+      "parentUuid": "e8a3711f_8a578dc7",
+      "range": {
+        "startLine": 134,
+        "startChar": 8,
+        "endLine": 157,
+        "endChar": 11
+      },
+      "revId": "ac3930ea7244097846a5702b1a8d382fff04e1f7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3600d640_cf5a308d",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/conduit/Conduit.java",
         "patchSetId": 17
