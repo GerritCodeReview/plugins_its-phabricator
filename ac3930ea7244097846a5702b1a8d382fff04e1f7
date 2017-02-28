@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "7837a184_8952118b",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/PhabricatorItsFacade.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-02-28T11:15:51Z",
+      "side": 1,
+      "message": "Could I move all of this but into a method?\n\nSince I doint quite understand\n\n private void assertParameters(String action, String[] params, int length) throws IOException {\n   if (params.length -1 !\u003d length) {\n     throw new IOException(String.format(\"Action %s expects exactly %d parameter(s) but %d given\", action, length, params.length-1));\n   }\n }\n\nOr how the rest will work.\n\n?",
+      "parentUuid": "de0b7753_c0b6b554",
+      "range": {
+        "startLine": 134,
+        "startChar": 8,
+        "endLine": 157,
+        "endChar": 11
+      },
+      "revId": "ac3930ea7244097846a5702b1a8d382fff04e1f7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3600d640_cf5a308d",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/conduit/Conduit.java",
         "patchSetId": 17
