@@ -107,35 +107,45 @@ public class PhabricatorItsFacade implements ItsFacade {
       String action = chopped[0];
       switch (action) {
         case "add-project":
-          if (chopped.length == 2) {
-            try {
-              String projectName = chopped[1];
-
-              ProjectInfo projectInfo = conduit.projectQuery(projectName);
-              String projectPhid = projectInfo.getPhid();
-
-              Set<String> projectPhids = Sets.newHashSet(projectPhid);
-
-              ManiphestInfo taskInfo = conduit.maniphestInfo(taskId);
-              for (JsonElement jsonElement :
-                taskInfo.getProjectPHIDs().getAsJsonArray()) {
-                projectPhids.add(jsonElement.getAsString());
-              }
-
-              conduit.maniphestEdit(taskId, projectPhids);
-            } catch (ConduitException e) {
-              throw new IOException("Error on conduit", e);
-            }
-          } else {
-            throw new IOException("Action ' + action + ' expects exactly "
-              + "1 parameter but " + (chopped.length - 1) + " given");
-          }
+          assertParameters(action, chopped, 1);
+          assertManiphest(chopped, taskId, Conduit.ACTION_PROJECT_ADD);
+          break;
+        case "remove-project":
+          assertParameters(action, chopped, 1);
+          assertManiphest(chopped, taskId, Conduit.ACTION_PROJECT_REMOVE);
           break;
         default:
-          throw new IOException("Unknown action ' + action + '");
+          throw new IOException("Unknown action " + action);
       }
     } else {
-      throw new IOException("Could not parse action ' + actionString + '");
+      throw new IOException("Could not parse action " + actionString);
+    }
+  }
+
+  private void assertParameters(String action, String[] params, int length) throws IOException {
+    if (params.length -1 != length) {
+      throw new IOException(String.format("Action %s expects exactly %d parameter(s) but %d given", action, length, params.length-1));
+    }
+  }
+
+  private void assertManiphest(String[] chopped, Object taskId, Object actions) {
+    try {
+      String projectName = chopped[1];
+
+      ProjectInfo projectInfo = conduit.projectQuery(projectName);
+      String projectPhid = projectInfo.getPhid();
+
+      Set<String> projectPhids = Sets.newHashSet(projectPhid);
+
+      ManiphestInfo taskInfo = conduit.maniphestInfo(taskId);
+      for (JsonElement jsonElement :
+        taskInfo.getProjectPHIDs().getAsJsonArray()) {
+        projectPhids.add(jsonElement.getAsString());
+      }
+
+      conduit.maniphestEdit(taskId, projectPhids, actions);
+    } catch (ConduitException e) {
+      throw new IOException("Error on conduit", e);
     }
   }
 
