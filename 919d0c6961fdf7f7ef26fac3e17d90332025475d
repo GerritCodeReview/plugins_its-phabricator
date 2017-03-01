@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4c31f622_11b90f5e",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/conduit/Conduit.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-03-01T21:33:40Z",
+      "side": 1,
+      "message": "@mmodell said to do JsonArray here, but it fails with .entrySet does not exist because it is only in JsonObjects.",
+      "range": {
+        "startLine": 236,
+        "startChar": 4,
+        "endLine": 236,
+        "endChar": 73
+      },
+      "revId": "919d0c6961fdf7f7ef26fac3e17d90332025475d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
