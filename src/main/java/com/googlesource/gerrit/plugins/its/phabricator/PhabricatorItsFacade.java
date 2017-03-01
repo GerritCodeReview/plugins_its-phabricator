@@ -32,7 +32,7 @@ import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.Conduit;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.ConduitErrorException;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.ConduitException;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestInfo;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestSearch;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectInfo;
 
 public class PhabricatorItsFacade implements ItsFacade {
@@ -81,7 +81,7 @@ public class PhabricatorItsFacade implements ItsFacade {
     int task_id = Integer.parseInt(bugId);
     try {
       try {
-        conduit.maniphestInfo(task_id);
+        conduit.maniphestSearch(task_id);
         ret = true;
       } catch (ConduitErrorException e) {
         // An ERR_BAD_TASK just means that the task does not exist.
@@ -138,9 +138,9 @@ public class PhabricatorItsFacade implements ItsFacade {
 
       Set<String> projectPhids = Sets.newHashSet(projectPhid);
 
-      ManiphestInfo taskInfo = conduit.maniphestInfo(taskId);
+      ManiphestSearch taskInfo = conduit.maniphestSearch(taskId);
       for (JsonElement jsonElement :
-        taskInfo.getProjectPHIDs().getAsJsonArray()) {
+        taskInfo.getAttachments().getProjects().getProjectPHIDs().getAsJsonArray()) {
         projectPhids.add(jsonElement.getAsString());
       }
 
