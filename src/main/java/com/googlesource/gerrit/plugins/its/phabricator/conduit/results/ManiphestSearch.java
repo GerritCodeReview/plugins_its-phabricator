@@ -14,7 +14,7 @@
 package com.googlesource.gerrit.plugins.its.phabricator.conduit.results;
 
 /**
-* Models the result for a call to maniphest.info
+* Models the result for a call to maniphest.search
 * <p/>
 * JSON looks like:
 * <pre>
@@ -46,6 +46,6 @@ package com.googlesource.gerrit.plugins.its.phabricator.conduit.results;
 * }
 * </pre>
 */
-public class ManiphestInfo extends Task {
+public class ManiphestSearch extends Task {
 
 }
