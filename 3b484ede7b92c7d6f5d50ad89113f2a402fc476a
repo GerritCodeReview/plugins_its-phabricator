@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "711d7d98_6b84b936",
+        "filename": ".gitignore",
+        "patchSetId": 29
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-03-01T19:32:03Z",
+      "side": 1,
+      "message": "Thanks, Done",
+      "parentUuid": "f2cb67e0_c34585e3",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 9
+      },
+      "revId": "3b484ede7b92c7d6f5d50ad89113f2a402fc476a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3664c647_22bd1ce8",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/PhabricatorItsFacade.java",
         "patchSetId": 29
@@ -36,6 +60,30 @@
       "writtenOn": "2017-03-01T11:56:45Z",
       "side": 1,
       "message": "documentation?",
+      "range": {
+        "startLine": 125,
+        "startChar": 2,
+        "endLine": 125,
+        "endChar": 96
+      },
+      "revId": "3b484ede7b92c7d6f5d50ad89113f2a402fc476a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "264b3318_cbbd4350",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/PhabricatorItsFacade.java",
+        "patchSetId": 29
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-03-01T19:32:03Z",
+      "side": 1,
+      "message": "Thanks, done.",
+      "parentUuid": "3664c647_22bd1ce8",
       "range": {
         "startLine": 125,
         "startChar": 2,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "b4d53b88_304b1e04",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/PhabricatorItsFacade.java",
+        "patchSetId": 29
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-03-01T19:32:03Z",
+      "side": 1,
+      "message": "Thanks, done.",
+      "parentUuid": "264b9e77_b9a4c056",
+      "range": {
+        "startLine": 127,
+        "startChar": 129,
+        "endLine": 127,
+        "endChar": 130
+      },
+      "revId": "3b484ede7b92c7d6f5d50ad89113f2a402fc476a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "46c1f5a2_7d28a1c3",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/PhabricatorItsFacade.java",
         "patchSetId": 29
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "78cd524a_99b800e4",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/PhabricatorItsFacade.java",
+        "patchSetId": 29
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-03-01T19:32:03Z",
+      "side": 1,
+      "message": "Thanks, done.",
+      "parentUuid": "46c1f5a2_7d28a1c3",
+      "range": {
+        "startLine": 131,
+        "startChar": 2,
+        "endLine": 131,
+        "endChar": 97
+      },
+      "revId": "3b484ede7b92c7d6f5d50ad89113f2a402fc476a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "14d15ef9_3a1069f3",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/conduit/Conduit.java",
         "patchSetId": 29
@@ -105,6 +201,30 @@
       "writtenOn": "2017-03-01T11:56:45Z",
       "side": 1,
       "message": "I thought that\u0027s clear, if I write that an error message doesn\u0027t look good, I mean, that all error messages, which has the same structure, so please adapt the same structure and information from the ACTION_COMMENT exception to this one, too.",
+      "range": {
+        "startLine": 215,
+        "startChar": 43,
+        "endLine": 215,
+        "endChar": 71
+      },
+      "revId": "3b484ede7b92c7d6f5d50ad89113f2a402fc476a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9b849ae7_db3ddf04",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/conduit/Conduit.java",
+        "patchSetId": 29
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-03-01T19:32:03Z",
+      "side": 1,
+      "message": "Thanks, done.",
+      "parentUuid": "14d15ef9_3a1069f3",
       "range": {
         "startLine": 215,
         "startChar": 43,
