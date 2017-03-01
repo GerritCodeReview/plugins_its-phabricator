@@ -46,6 +46,30 @@
       "revId": "ea8fc8c61e397acd8f8cce58cf2603420a897686",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6c5a78bc_1124c599",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/conduit/Conduit.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-03-01T22:56:17Z",
+      "side": 1,
+      "message": "As soon as i remove the if and else here, it works. So im wondering how to fix it so we can use the if and else please?",
+      "parentUuid": "4c1790ee_a9fea5a5",
+      "range": {
+        "startLine": 240,
+        "startChar": 0,
+        "endLine": 246,
+        "endChar": 5
+      },
+      "revId": "ea8fc8c61e397acd8f8cce58cf2603420a897686",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
