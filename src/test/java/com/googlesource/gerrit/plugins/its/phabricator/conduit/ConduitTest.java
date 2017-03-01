@@ -34,9 +34,8 @@ import com.google.gson.JsonPrimitive;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitConnect;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitPing;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestInfo;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestSearch;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestEdit;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectInfo;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Conduit.class)
@@ -91,7 +90,7 @@ public class ConduitTest extends LoggingMockingTestCase {
     }
   }
 
-  public void testManiphestInfoPass() throws Exception {
+  public void testManiphestSearchPass() throws Exception {
     mockConnection();
 
     resetToStrict(connection);
@@ -101,7 +100,7 @@ public class ConduitTest extends LoggingMockingTestCase {
     JsonObject retRelevant = new JsonObject();
     retRelevant.add("id", new JsonPrimitive(42));
 
-    expect(connection.call(eq("maniphest.info"), capture(paramsCaptureRelevant), eq(TOKEN)))
+    expect(connection.call(eq("maniphest.search"), capture(paramsCaptureRelevant), eq(TOKEN)))
     .andReturn(retRelevant)
     .once();
 
@@ -109,15 +108,15 @@ public class ConduitTest extends LoggingMockingTestCase {
 
     Conduit conduit = new Conduit(URL, TOKEN);
 
-    ManiphestInfo maniphestInfo = conduit.maniphestInfo(42);
+    ManiphestSearch maniphestSearch = conduit.maniphestSearch(42);
 
     Map<String, Object> paramsRelevant = paramsCaptureRelevant.getValue();
-    assertEquals("Task id is not set", 42, paramsRelevant.get("task_id"));
+    assertEquals("Task id is not set", 42, paramsRelevant.get("ids"));
 
-    assertEquals("ManiphestInfo's id does not match", 42, maniphestInfo.getId());
+    assertEquals("ManiphestSearch's id does not match", 42, maniphestSearch.getId());
   }
 
-  public void testManiphestInfoFailConnect() throws Exception {
+  public void testManiphestSearchFailConnect() throws Exception {
     mockConnection();
 
     ConduitException conduitException = new ConduitException();
@@ -133,14 +132,14 @@ public class ConduitTest extends LoggingMockingTestCase {
     Conduit conduit = new Conduit(URL, TOKEN);
 
     try {
-      conduit.maniphestInfo(42);
+      conduit.maniphestSearch(42);
       fail("no exception got thrown");
     } catch (ConduitException e) {
       assertSame(conduitException, e);
     }
   }
 
-  public void testManiphestInfoFailRelevant() throws Exception {
+  public void testManiphestSearchFailRelevant() throws Exception {
     mockConnection();
 
     resetToStrict(connection);
@@ -149,7 +148,7 @@ public class ConduitTest extends LoggingMockingTestCase {
 
     Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
 
-    expect(connection.call(eq("maniphest.info"), capture(paramsCaptureRelevant), eq(TOKEN)))
+    expect(connection.call(eq("maniphest.search"), capture(paramsCaptureRelevant), eq(TOKEN)))
       .andThrow(conduitException)
       .once();
 
@@ -158,14 +157,14 @@ public class ConduitTest extends LoggingMockingTestCase {
     Conduit conduit = new Conduit(URL, TOKEN);
 
     try {
-      conduit.maniphestInfo(42);
+      conduit.maniphestSearch(42);
       fail("no exception got thrown");
     } catch (ConduitException e) {
       assertSame(conduitException, e);
     }
 
     Map<String, Object> paramsRelevant = paramsCaptureRelevant.getValue();
-    assertEquals("Task id is not set", 42, paramsRelevant.get("task_id"));
+    assertEquals("Task id is not set", 42, paramsRelevant.get("ids"));
   }
 
   public void testManiphestEditPassComment() throws Exception {
@@ -178,7 +177,7 @@ public class ConduitTest extends LoggingMockingTestCase {
 
     Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
 
-    expect(connection.call(eq("maniphest.update"), capture(paramsCaptureRelevant), eq(TOKEN)))
+    expect(connection.call(eq("maniphest.edit"), capture(paramsCaptureRelevant), eq(TOKEN)))
     .andReturn(retRelevant)
     .once();
 
@@ -191,7 +190,7 @@ public class ConduitTest extends LoggingMockingTestCase {
     Map<String, Object> paramsRelevant = paramsCaptureRelevant.getValue();
     assertEquals("Task id is not set", 42, paramsRelevant.get("id"));
 
-    assertEquals("ManiphestInfo's id does not match", 42, maniphestEdit.getId());
+    assertEquals("ManiphestEdit's id does not match", 42, maniphestEdit.getId());
   }
 
   public void testManiphestEditPassProjects() throws Exception {
@@ -213,7 +212,7 @@ public class ConduitTest extends LoggingMockingTestCase {
     Conduit conduit = new Conduit(URL, TOKEN);
 
     ManiphestEdit maniphestEdit = conduit.maniphestEdit(42,
-        Arrays.asList("foo", "bar"));
+        Arrays.asList("foo", "bar"), "project.add");
 
     Map<String, Object> paramsRelevant = paramsCaptureRelevant.getValue();
     assertEquals("Task id is not set", 42, paramsRelevant.get("id"));
@@ -242,7 +241,7 @@ public class ConduitTest extends LoggingMockingTestCase {
     Conduit conduit = new Conduit(URL, TOKEN);
 
     ManiphestEdit maniphestEdit = conduit.maniphestEdit(42, "baz",
-        Arrays.asList("foo", "bar"));
+        Arrays.asList("foo", "bar"), "project.add");
 
     Map<String, Object> paramsRelevant = paramsCaptureRelevant.getValue();
     assertEquals("Task id is not set", 42, paramsRelevant.get("id"));
@@ -250,7 +249,7 @@ public class ConduitTest extends LoggingMockingTestCase {
     assertEquals("Task projects are not set", Arrays.asList("foo", "bar"),
         paramsRelevant.get("projectPHIDs"));
 
-    assertEquals("ManiphestUpdate's id does not match", 42, maniphestEdit.getId());
+    assertEquals("ManiphestEdit's id does not match", 42, maniphestEdit.getId());
   }
 
 
@@ -315,7 +314,7 @@ public class ConduitTest extends LoggingMockingTestCase {
 
     Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
 
-    expect(connection.call(eq("maniphest.info"), capture(paramsCaptureRelevant), eq(TOKEN)))
+    expect(connection.call(eq("maniphest.search"), capture(paramsCaptureRelevant), eq(TOKEN)))
     .andReturn(retRelevant)
     .once();
 
@@ -323,92 +322,12 @@ public class ConduitTest extends LoggingMockingTestCase {
 
     Conduit conduit = new Conduit(URL, TOKEN);
 
-    ManiphestInfo maniphestInfo = conduit.maniphestInfo(42);
+    ManiphestSearch maniphestInfo = conduit.maniphestSearch(42);
 
     Map<String, Object> paramsRelevant = paramsCaptureRelevant.getValue();
     assertEquals("Task id is not set", 42, paramsRelevant.get("task_id"));
 
-    assertEquals("ManiphestInfo's id does not match", 42, maniphestInfo.getId());
-  }
-
-  public void testProjectQueryPass() throws Exception {
-    mockConnection();
-
-    resetToStrict(connection);
-
-    JsonObject projectInfoJson = new JsonObject();
-    projectInfoJson.addProperty("name", "foo");
-    projectInfoJson.addProperty("phid", "PHID-PROJ-bar");
-
-    JsonObject queryDataJson = new JsonObject();
-    queryDataJson.add("PHID-PROJ-bar", projectInfoJson);
-
-    JsonObject retRelevant = new JsonObject();
-    retRelevant.add("data", queryDataJson);
-
-    Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
-
-    expect(connection.call(eq("project.query"), capture(paramsCaptureRelevant), eq(TOKEN)))
-    .andReturn(retRelevant)
-    .once();
-
-    replayMocks();
-
-    Conduit conduit = new Conduit(URL, TOKEN);
-
-    ProjectInfo projectInfo = conduit.projectQuery("foo");
-
-    Map<String, Object> paramsRelevant = paramsCaptureRelevant.getValue();
-    List<String> expectedNames = Arrays.asList("foo");
-    assertEquals("Project name does not match", expectedNames,
-        paramsRelevant.get("names"));
-
-    assertEquals("ProjectInfo's name does not match", "foo", projectInfo.getName());
-  }
-
-  public void testProjectQueryPassMultipleResults() throws Exception {
-    mockConnection();
-
-    resetToStrict(connection);
-
-    JsonObject projectInfoJson1 = new JsonObject();
-    projectInfoJson1.addProperty("name", "foo1");
-    projectInfoJson1.addProperty("phid", "PHID-PROJ-bar1");
-
-    JsonObject projectInfoJson2 = new JsonObject();
-    projectInfoJson2.addProperty("name", "foo2");
-    projectInfoJson2.addProperty("phid", "PHID-PROJ-bar2");
-
-    JsonObject projectInfoJson3 = new JsonObject();
-    projectInfoJson3.addProperty("name", "foo3");
-    projectInfoJson3.addProperty("phid", "PHID-PROJ-bar3");
-
-    JsonObject queryDataJson = new JsonObject();
-    queryDataJson.add("PHID-PROJ-bar1", projectInfoJson1);
-    queryDataJson.add("PHID-PROJ-bar2", projectInfoJson2);
-    queryDataJson.add("PHID-PROJ-bar3", projectInfoJson3);
-
-    JsonObject retRelevant = new JsonObject();
-    retRelevant.add("data", queryDataJson);
-
-    Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
-
-    expect(connection.call(eq("project.query"), capture(paramsCaptureRelevant), eq(TOKEN)))
-    .andReturn(retRelevant)
-    .once();
-
-    replayMocks();
-
-    Conduit conduit = new Conduit(URL, TOKEN);
-
-    ProjectInfo projectInfo = conduit.projectQuery("foo2");
-
-    Map<String, Object> paramsRelevant = paramsCaptureRelevant.getValue();
-    List<String> expectedNames = Arrays.asList("foo2");
-    assertEquals("Project name does not match", expectedNames,
-        paramsRelevant.get("names"));
-
-    assertEquals("ProjectInfo's name does not match", "foo2", projectInfo.getName());
+    assertEquals("ManiphestSearch's id does not match", 42, maniphestSearch.getId());
   }
 
   private void mockConnection() throws Exception {
