@@ -34,7 +34,7 @@ import com.google.gson.JsonPrimitive;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitConnect;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitPing;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestInfo;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestSearch;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestEdit;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectInfo;
 
@@ -135,7 +135,7 @@ public class ConduitTest extends LoggingMockingTestCase {
     assertEquals("Usernames do not match", USERNAME, params.get("user"));
   }
 
-  public void testManiphestInfoPass() throws Exception {
+  public void testManiphestSearchPass() throws Exception {
     mockConnection();
 
     resetToStrict(connection);
@@ -154,7 +154,7 @@ public class ConduitTest extends LoggingMockingTestCase {
 
     Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
 
-    expect(connection.call(eq("maniphest.info"), capture(paramsCaptureRelevant)))
+    expect(connection.call(eq("maniphest.search"), capture(paramsCaptureRelevant)))
     .andReturn(retRelevant)
     .once();
 
@@ -162,7 +162,7 @@ public class ConduitTest extends LoggingMockingTestCase {
 
     Conduit conduit = new Conduit(URL, USERNAME, CERTIFICATE);
 
-    ManiphestInfo maniphestInfo = conduit.maniphestInfo(42);
+    ManiphestSearch maniphestSearch = conduit.maniphestSearch(42);
 
     Map<String, Object> paramsConnect = paramsCaptureConnect.getValue();
     assertEquals("Usernames do not match", USERNAME, paramsConnect.get("user"));
@@ -175,7 +175,7 @@ public class ConduitTest extends LoggingMockingTestCase {
     assertLogMessageContains("Trying to start new session");
   }
 
-  public void testManiphestInfoFailConnect() throws Exception {
+  public void testManiphestSearchFailConnect() throws Exception {
     mockConnection();
 
     ConduitException conduitException = new ConduitException();
@@ -191,7 +191,7 @@ public class ConduitTest extends LoggingMockingTestCase {
     Conduit conduit = new Conduit(URL, USERNAME, CERTIFICATE);
 
     try {
-      conduit.maniphestInfo(42);
+      conduit.maniphestSearch(42);
       fail("no exception got thrown");
     } catch (ConduitException e) {
       assertSame(conduitException, e);
@@ -203,7 +203,7 @@ public class ConduitTest extends LoggingMockingTestCase {
     assertLogMessageContains("Trying to start new session");
   }
 
-  public void testManiphestInfoFailRelevant() throws Exception {
+  public void testManiphestSearchFailRelevant() throws Exception {
     mockConnection();
 
     resetToStrict(connection);
@@ -221,7 +221,7 @@ public class ConduitTest extends LoggingMockingTestCase {
 
     Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
 
-    expect(connection.call(eq("maniphest.info"), capture(paramsCaptureRelevant)))
+    expect(connection.call(eq("maniphest.search"), capture(paramsCaptureRelevant)))
       .andThrow(conduitException)
       .once();
 
@@ -230,7 +230,7 @@ public class ConduitTest extends LoggingMockingTestCase {
     Conduit conduit = new Conduit(URL, USERNAME, CERTIFICATE);
 
     try {
-      conduit.maniphestInfo(42);
+      conduit.maniphestSearch(42);
       fail("no exception got thrown");
     } catch (ConduitException e) {
       assertSame(conduitException, e);
