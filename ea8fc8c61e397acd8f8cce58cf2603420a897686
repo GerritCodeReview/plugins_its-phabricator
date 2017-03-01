@@ -22,6 +22,30 @@
       "revId": "ea8fc8c61e397acd8f8cce58cf2603420a897686",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4c1790ee_a9fea5a5",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/conduit/Conduit.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-03-01T22:54:15Z",
+      "side": 1,
+      "message": "Thats the wrong conduit example, this ones the correct one\n\n{\n  \"data\": [\n    {\n      \"id\": 20,\n      \"type\": \"PROJ\",\n      \"phid\": \"PHID-PROJ-uier7rukzszoewbhj7ja\",\n      \"fields\": {\n        \"name\": \"Release-Engineering-Team\",\n        \"slug\": \"release-engineering-team\",\n        \"milestone\": null,\n        \"depth\": 0,\n        \"parent\": null,\n        \"icon\": {\n          \"key\": \"group\",\n          \"name\": \"Group\",\n          \"icon\": \"fa-users\"\n        },\n        \"color\": {\n          \"key\": \"violet\",\n          \"name\": \"Violet\"\n        },\n        \"dateCreated\": 1410486121,\n        \"dateModified\": 1486765638,\n        \"policy\": {\n          \"view\": \"public\",\n          \"edit\": \"users\",\n          \"join\": \"users\"\n        },\n        \"description\": \"\u003d\u003d Responsibilities \u003d\u003d\\n\\nThe WMF **Release Engineering Team** is responsible for Release Engineering/Management and Quality Assurance at the Wikimedia Foundation. \\n\\nhttps://www.mediawiki.org/wiki/Wikimedia_Release_Engineering_Team\\n\\n\u003d\u003d Software/tooling projects \u003d\u003d\\n\\n* CI Related\\n** #Continuous-Integration-Isolation (project)\\n** #Continuous-Integration-Infrastructure\\n** #Continuous-Integration-Config\\n* #Deployment-Systems\\n* #Beta-Cluster\\n* #MediaWiki-Vagrant\\n* #Differential\\n* #Diffusion\\n* #scap (and #scap3)\\nPlanning related:\\n* #releng-epics - for big long term things\\n\\nOur ACL (Access Control List) project: #acl*releng\\n\\n\u003d\u003d Team Skill Matrix \u003d\u003d\\n\\nLooking for someone to help you on a specific thing? Have a look at the [[ https://www.mediawiki.org/wiki/Wikimedia_Release_Engineering_Team/Skill_matrix | Release Engineering skill matrix ]].\\n\\n\u003d\u003d Deployments \u003d\u003d\\n\\n#releng is responsible for the weekly MediaWiki \\\"Train Deployments,\\\" scheduling of code deployments, deployment tooling, etc. Some helpful links below:\\n\\n* [[ https://wikitech.wikimedia.org/wiki/Deployments | Deployment Schedule ]]\\n* ((blockers)) - includes past releases\\n* ((openblockers)) - for current and future releases only)\\n\",\n        \"startdate\": null,\n        \"enddate\": null,\n        \"issprint\": false\n      },\n      \"attachments\": {}\n    }\n  ],\n  \"maps\": {\n    \"slugMap\": {}\n  },\n  \"query\": {\n    \"queryKey\": null\n  },\n  \"cursor\": {\n    \"limit\": 100,\n    \"after\": null,\n    \"before\": null,\n    \"order\": null\n  }\n}",
+      "parentUuid": "130b9a0d_467cdb8d",
+      "range": {
+        "startLine": 240,
+        "startChar": 0,
+        "endLine": 246,
+        "endChar": 5
+      },
+      "revId": "ea8fc8c61e397acd8f8cce58cf2603420a897686",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
