@@ -1,4 +1,4 @@
-//Copyright (C) 2014 The Android Open Source Project
+//Copyright (C) 2017 The Android Open Source Project
 //
 //Licensed under the Apache License, Version 2.0 (the "License");
 //you may not use this file except in compliance with the License.
@@ -15,15 +15,14 @@
 package com.googlesource.gerrit.plugins.its.phabricator.conduit;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitConnect;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitPing;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestInfo;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestSearch;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestEdit;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectInfo;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.QueryResult;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +54,7 @@ public class Conduit {
 
   private static final Logger log = LoggerFactory.getLogger(Conduit.class);
 
-  public static final int CONDUIT_VERSION = 6;
+  public static final int CONDUIT_VERSION = 7;
 
   private final ConduitConnection conduitConnection;
   private final Gson gson;
@@ -168,15 +167,26 @@ public class Conduit {
   }
 
   /**
-   * Runs the API's 'maniphest.Info' method
+   * Runs the API's 'maniphest.search' method
    */
-  public ManiphestInfo maniphestInfo(int taskId) throws ConduitException {
-    Map<String, Object> params = new HashMap<>();
+  public ManiphestSearch maniphestSearch(int taskId) throws ConduitException {
+    HashMap<String, Object> params = new HashMap<>();
     fillInSession(params);
-    params.put("task_id", taskId);
+    HashMap<String, Object> params2 = new HashMap<>();
+    HashMap<String, Object> params3 = new HashMap<>();
 
-    JsonElement callResult = conduitConnection.call("maniphest.info", params);
-    ManiphestInfo result = gson.fromJson(callResult, ManiphestInfo.class);
+    List<Object> list = new ArrayList<>();
+    list.add(taskId);
+
+    params2.put("ids", list);
+
+    params.put("constraints", params2);
+
+    params3.put("projects", true);
+    params.put("attachments", params3);
+
+    JsonElement callResult = conduitConnection.call("maniphest.search", params);
+    ManiphestSearch result = gson.fromJson(callResult, ManiphestSearch.class);
     return result;
   }
 
@@ -190,14 +200,14 @@ public class Conduit {
   /**
    * Runs the API's 'maniphest.edit' method
    */
-  public ManiphestEdit maniphestEdit(int taskId, Iterable<String> projects, String action) throws ConduitException {
+  public ManiphestEdit maniphestEdit(int taskId, List<Object> projects, String action) throws ConduitException {
     return maniphestEdit(taskId, null, projects, action);
   }
 
   /**
    * Runs the API's 'maniphest.edit' method
    */
-  public ManiphestEdit maniphestEdit(int taskId, String comment, Iterable<String> projects, String action) throws ConduitException {
+  public ManiphestEdit maniphestEdit(int taskId, String comment, List<Object> projects, String action) throws ConduitException {
     HashMap<String, Object> params = new HashMap<>();
     fillInSession(params);
     List<Object> list = new ArrayList<>();
@@ -225,31 +235,6 @@ public class Conduit {
 
     JsonElement callResult = conduitConnection.call("maniphest.edit", params);
     ManiphestEdit result = gson.fromJson(callResult, ManiphestEdit.class);
-    return result;
-  }
-
-  /**
-   * Runs the API's 'projectQuery' method to match exactly one project name
-   */
-  public ProjectInfo projectQuery(String name) throws ConduitException {
-    Map<String, Object> params = new HashMap<>();
-    fillInSession(params);
-    params.put("names", Arrays.asList(name));
-
-    JsonElement callResult = conduitConnection.call("project.query", params);
-    QueryResult queryResult = gson.fromJson(callResult, QueryResult.class);
-    JsonObject queryResultData = queryResult.getData().getAsJsonObject();
-
-    ProjectInfo result = null;
-    for (Entry<String, JsonElement> queryResultEntry:
-      queryResultData.entrySet()) {
-      JsonElement queryResultEntryValue = queryResultEntry.getValue();
-      ProjectInfo queryResultProjectInfo =
-          gson.fromJson(queryResultEntryValue, ProjectInfo.class);
-      if (queryResultProjectInfo.getName().equals(name)) {
-        result = queryResultProjectInfo;
-      }
-    }
     return result;
   }
 }

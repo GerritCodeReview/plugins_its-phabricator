@@ -1,4 +1,4 @@
-//Copyright (C) 2014 The Android Open Source Project
+//Copyright (C) 2017 The Android Open Source Project
 //
 //Licensed under the Apache License, Version 2.0 (the "License");
 //you may not use this file except in compliance with the License.
@@ -13,8 +13,11 @@
 //limitations under the License.
 package com.googlesource.gerrit.plugins.its.phabricator.conduit.results;
 
+import com.google.gson.JsonElement;
+import java.util.List;
+
 /**
-* Models the result for a call to maniphest.info
+* Models the result for a call to maniphest.search
 * <p/>
 * JSON looks like:
 * <pre>
@@ -46,6 +49,36 @@ package com.googlesource.gerrit.plugins.its.phabricator.conduit.results;
 * }
 * </pre>
 */
-public class ManiphestInfo extends Task {
+public class ManiphestSearch {
+  private int id;
+  private JsonElement fields;
+  private Attachments attachments;
 
+  public int getId() {
+    return id;
+  }
+
+  public JsonElement getFields() {
+    return fields;
+  }
+
+  public Attachments getAttachments() {
+    return attachments;
+  }
+
+  public class Attachments {
+    private Projects projects;
+
+    public Projects getProjects() {
+      return projects;
+    }
+  }
+
+  public class Projects {
+    private JsonElement projectPHIDs;
+
+    public JsonElement getProjectPHIDs() {
+      return projectPHIDs;
+    }
+  }
 }

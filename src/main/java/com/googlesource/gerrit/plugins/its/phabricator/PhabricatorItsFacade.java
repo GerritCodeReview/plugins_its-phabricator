@@ -1,4 +1,4 @@
-// Copyright (C) 2013 The Android Open Source Project
+// Copyright (C) 2017 The Android Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -32,8 +32,11 @@ import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.Conduit;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.ConduitErrorException;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.ConduitException;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestInfo;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectInfo;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestSearch;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class PhabricatorItsFacade implements ItsFacade {
   private static final Logger log = LoggerFactory.getLogger(PhabricatorItsFacade.class);
@@ -81,7 +84,7 @@ public class PhabricatorItsFacade implements ItsFacade {
     int task_id = Integer.parseInt(bugId);
     try {
       try {
-        conduit.maniphestInfo(task_id);
+        conduit.maniphestSearch(task_id);
         ret = true;
       } catch (ConduitErrorException e) {
         // An ERR_BAD_TASK just means that the task does not exist.
@@ -133,18 +136,9 @@ public class PhabricatorItsFacade implements ItsFacade {
 
   private void maniphestEdit(String projectName, int taskId, String actions) throws IOException {
     try {
-      ProjectInfo projectInfo = conduit.projectQuery(projectName);
-      String projectPhid = projectInfo.getPhid();
-
-      Set<String> projectPhids = Sets.newHashSet(projectPhid);
-
-      ManiphestInfo taskInfo = conduit.maniphestInfo(taskId);
-      for (JsonElement jsonElement :
-        taskInfo.getProjectPHIDs().getAsJsonArray()) {
-        projectPhids.add(jsonElement.getAsString());
-      }
-
-      conduit.maniphestEdit(taskId, projectPhids, actions);
+      List<Object> list = new ArrayList<>();
+      list.add(projectName);
+      conduit.maniphestEdit(taskId, list, actions);
     } catch (ConduitException e) {
       throw new IOException("Error on conduit", e);
     }
