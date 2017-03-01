@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "130b9a0d_467cdb8d",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/conduit/Conduit.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-03-01T22:49:04Z",
+      "side": 1,
+      "message": "@David Pursehouse Hi, would you know how i can look for fields please?\n\nFor example the json is like\n\n{\n  \"data\": [\n    {\n      \"id\": 159003,\n      \"type\": \"TASK\",\n      \"phid\": \"PHID-TASK-dvyzyw2uifp2ckjx4jfr\",\n      \"fields\": {\n        \"name\": \"Test1234\",\n        \"authorPHID\": \"PHID-USER-bxp7xrbobtrp5o3q3swv\",\n        \"ownerPHID\": null,\n        \"status\": {\n          \"value\": \"invalid\",\n          \"name\": \"Invalid\",\n          \"color\": null\n        },\n        \"priority\": {\n          \"value\": 90,\n          \"subpriority\": 0,\n          \"name\": \"Needs Triage\",\n          \"color\": \"violet\"\n        },\n        \"points\": null,\n        \"spacePHID\": \"PHID-SPCE-6l6g5p53yi3mypnlpxjw\",\n        \"dateCreated\": 1487973478,\n        \"dateModified\": 1487973506,\n        \"policy\": {\n          \"view\": \"public\",\n          \"edit\": \"users\"\n        },\n        \"custom.security_topic\": null,\n        \"custom.external_reference\": null\n      },\n      \"attachments\": {}\n    }\n  ],\n  \"maps\": {},\n  \"query\": {\n    \"queryKey\": null\n  },\n  \"cursor\": {\n    \"limit\": 100,\n    \"after\": null,\n    \"before\": null,\n    \"order\": null\n  }\n}\n\nBut i need to get name, which is under fields. But project.query didn\u0027t have to look deeper for projects.",
+      "range": {
+        "startLine": 240,
+        "startChar": 0,
+        "endLine": 246,
+        "endChar": 5
+      },
+      "revId": "ea8fc8c61e397acd8f8cce58cf2603420a897686",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
