@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "70ecbc3c_22ce15a5",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/PhabricatorItsFacade.java",
+        "patchSetId": 32
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-03-02T21:54:25Z",
+      "side": 1,
+      "message": "Thanks, done.",
+      "parentUuid": "7126f8a7_7a4a18ba",
+      "range": {
+        "startLine": 138,
+        "startChar": 2,
+        "endLine": 142,
+        "endChar": 5
+      },
+      "revId": "797b59bb908fed8307ee8b6a6e7535f92c34126c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fe9eb0fc_a84677cc",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/conduit/Conduit.java",
         "patchSetId": 32
@@ -36,6 +60,30 @@
       "writtenOn": "2017-03-02T17:11:26Z",
       "side": 1,
       "message": "ehhh... What about:\n\nif ((action.equals(ACTION_PROJECT_ADD) || action.equals(ACTION_PROJECT_REMOVE)) \u0026\u0026 projects \u003d\u003d null) {\n        throw new IllegalArgumentException(\"The value of projects (null) is invalid for the action \" + action);\n      }\n\nA developer, who usually takes a look to this message, should know, what the action string itself is and where it\u0027s used. If you do that (to reduce the code duplication) you should change the IllegalArgumentException for the ACTION_COMMENT, too, to not give the constant, but the actual value as a part of the message.",
+      "range": {
+        "startLine": 214,
+        "startChar": 6,
+        "endLine": 218,
+        "endChar": 7
+      },
+      "revId": "797b59bb908fed8307ee8b6a6e7535f92c34126c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d7149226_6cfb8d85",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/conduit/Conduit.java",
+        "patchSetId": 32
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-03-02T21:54:25Z",
+      "side": 1,
+      "message": "Thanks, done.",
+      "parentUuid": "fe9eb0fc_a84677cc",
       "range": {
         "startLine": 214,
         "startChar": 6,
