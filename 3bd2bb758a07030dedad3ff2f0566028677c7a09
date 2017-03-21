@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b5166c6d_6667ac8d",
+        "filename": "groups",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2017-03-21T09:00:34Z",
+      "side": 1,
+      "message": "What has gerrit-installer to do with this plugin?",
+      "revId": "3bd2bb758a07030dedad3ff2f0566028677c7a09",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
