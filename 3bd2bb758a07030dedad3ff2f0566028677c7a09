@@ -34,6 +34,24 @@
       "revId": "3bd2bb758a07030dedad3ff2f0566028677c7a09",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0883a5f1_fa53fb98",
+        "filename": "groups",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2017-03-21T09:04:25Z",
+      "side": 1,
+      "message": "Let\u0027s abandon this change altogether: we would need *first* an its-phabricator group to be created by a maintainer.",
+      "parentUuid": "c5438c12_acd6daca",
+      "revId": "3bd2bb758a07030dedad3ff2f0566028677c7a09",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
