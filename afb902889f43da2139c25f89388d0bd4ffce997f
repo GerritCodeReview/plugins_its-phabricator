@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb0989c2_12fa16cc",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/conduit/Conduit.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2017-06-04T22:07:30Z",
+      "side": 1,
+      "message": "projectQuery -\u003e project.search",
+      "range": {
+        "startLine": 224,
+        "startChar": 21,
+        "endLine": 224,
+        "endChar": 33
+      },
+      "revId": "afb902889f43da2139c25f89388d0bd4ffce997f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9137a84e_cb58f241",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/conduit/Conduit.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2017-06-04T22:07:30Z",
+      "side": 1,
+      "message": "`params2` is not a very descriptive name.\n\nThe HashMap is used for the query\u0027s contraints.\nSo calling it `constraints` would better express what it\nis used for.",
+      "range": {
+        "startLine": 229,
+        "startChar": 24,
+        "endLine": 229,
+        "endChar": 31
+      },
+      "revId": "afb902889f43da2139c25f89388d0bd4ffce997f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "86e9d3a6_c8397387",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/conduit/results/ProjectInfo.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2017-06-04T22:07:30Z",
+      "side": 1,
+      "message": "Since you\u0027re switching to `project.search` the returned\nobject should be of class ProjectSearch. So you should move\nProjectInfo to ProjectSearch.",
+      "revId": "afb902889f43da2139c25f89388d0bd4ffce997f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "43fa231d_1b20b3a3",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/conduit/results/QueryResult.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2017-06-04T22:07:30Z",
+      "side": 1,
+      "message": "If slugMap etc are gone, please also update this comment.",
+      "revId": "afb902889f43da2139c25f89388d0bd4ffce997f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a5e1be5c_dfbe46b1",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/conduit/results/QueryResult.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2017-06-04T22:07:30Z",
+      "side": 1,
+      "message": "Let\u0027s remove code instead of commenting it out.\n\nIf we want some code back, we can grab it from git\u0027s history :-)",
+      "revId": "afb902889f43da2139c25f89388d0bd4ffce997f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a8bb481_857fc2f2",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/conduit/results/QueryResult.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2017-06-04T22:07:30Z",
+      "side": 1,
+      "message": "See comment on line 36",
+      "revId": "afb902889f43da2139c25f89388d0bd4ffce997f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
