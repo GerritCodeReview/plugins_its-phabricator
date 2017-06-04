@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "68272dd0_e19e0318",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/PhabricatorItsFacade.java",
+        "patchSetId": 35
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2017-06-04T21:52:48Z",
+      "side": 1,
+      "message": "Keep lines \u003c100 chars\n\nhttps://google.github.io/styleguide/javaguide.html#s4.4-column-limit",
+      "revId": "88a183222d63d27bd3002c89cc86e06ffe516ce2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fd3c97df_b0847b2d",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/PhabricatorItsFacade.java",
+        "patchSetId": 35
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2017-06-04T21:52:48Z",
+      "side": 1,
+      "message": "Since the check if chopped[1] exists is happening in the\nassertParameters method, the checking and the usage of\nchopped[1] is spread around the place.\n\nEither inline the assertParameters part here, or change\nthe `String[] chopped` parameter to `String projectName`\nand call it with chopped[1]",
+      "revId": "88a183222d63d27bd3002c89cc86e06ffe516ce2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6e5a74bb_ef19cd3c",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/conduit/Conduit.java",
+        "patchSetId": 35
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2017-06-04T21:52:48Z",
+      "side": 1,
+      "message": "action here should either be ACTION_PROJECT_ADD or\nACTION_PROJECT_REMOVE. So it\u0027s a boolean value.\n\nIf we use a plain Java boolean here (say `add`), we could use\nthat in line 206 to say\n\n  String project \u003d \"projects.\" + (add ? \"add\" : \"remove\");\n\nand be done with the changes, and avoid the action parameter\nin maniphestEdit altogether.\n\nThis would also pave the way to allow adding a comment and\nadding/removing projects in one go.\n\nAlternatively, you could make the maniphestEdit have a\nsignature like\n\n  public ManiphestEdit maniphestEdit(int taskId, String comment, Iterable\u003cString\u003e projectsToAdd, Iterable\u003cString\u003e projectsToRemove) throws ConduitException.\n\nto avoid the action String.",
+      "revId": "88a183222d63d27bd3002c89cc86e06ffe516ce2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
