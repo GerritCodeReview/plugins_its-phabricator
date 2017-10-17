@@ -1,4 +1,4 @@
-// Copyright (C) 2014 The Android Open Source Project
+// Copyright (C) 2017 The Android Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -80,9 +80,7 @@ public class PhabricatorItsFacadeTest extends LoggingMockingTestCase {
   private void mockUnconnectablePhabricator() {
     expect(serverConfig.getString("its-phabricator",  null, "url"))
     .andReturn("<no-url>").anyTimes();
-    expect(serverConfig.getString("its-phabricator",  null, "username"))
-    .andReturn("none").anyTimes();
-    expect(serverConfig.getString("its-phabricator",  null, "certificate"))
+    expect(serverConfig.getString("its-phabricator",  null, "token"))
     .andReturn("none").anyTimes();
   }
 
