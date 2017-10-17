@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1460925c_9c88b85e",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/phabricator/conduit/results/ProjectSearch.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1035373
+      },
+      "writtenOn": "2017-10-17T21:54:53Z",
+      "side": 1,
+      "message": "This could mention the API is documented at phab.url/conduit/method/project.search/\ne.g. https://secure.phabricator.com/conduit/method/project.search/\n\nThe result json looks different from project.query results. E.g.:\n\n{\n  \"data\": [\n    {\n      \"id\": 1410,\n      \"type\": \"PROJ\",\n      \"phid\": \"PHID-PROJ-s4jupdh6bmbmgqyugcmo\",\n      \"fields\": {\n        \"name\": \"Abuse\",\n        \"slug\": \"abuse\",\n        \"milestone\": null,\n        \"depth\": 0,\n        \"parent\": null,\n        \"icon\": {\n          \"key\": \"tag\",\n          \"name\": \"Tag\",\n          \"icon\": \"fa-tags\"\n        },\n        \"color\": {\n          \"key\": \"yellow\",\n          \"name\": \"Yellow\"\n        },\n        \"dateCreated\": 1453719471,\n        \"dateModified\": 1499628054,\n        \"policy\": {\n          \"view\": \"public\",\n          \"edit\": \"PHID-PROJ-ycm4xipi3tdsdgnuqoeg\",\n          \"join\": \"no-one\"\n        },\n        \"description\": \"Users using the software to be jerks.\"\n      },\n      \"attachments\": {}\n    }\n  ]\n}",
+      "revId": "346f1c9a271a366a1e3cf90f7fa6c5e5be5e004a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
