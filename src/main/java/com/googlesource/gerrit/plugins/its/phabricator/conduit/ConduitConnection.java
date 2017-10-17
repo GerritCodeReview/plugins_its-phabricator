@@ -1,4 +1,4 @@
-//Copyright (C) 2014 The Android Open Source Project
+//Copyright (C) 2017 The Android Open Source Project
 //
 //Licensed under the Apache License, Version 2.0 (the "License");
 //you may not use this file except in compliance with the License.
@@ -33,7 +33,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-
 
 /**
  * Abstracts the connection to Conduit API
@@ -74,8 +73,8 @@ class ConduitConnection {
    * @return The call's result, if there has been no error
    * @throws ConduitException
    */
-  JsonElement call(String method) throws ConduitException {
-    return call(method, new HashMap<String, Object>());
+  JsonElement call(String method, String token) throws ConduitException {
+    return call(method, new HashMap<String, Object>(), token);
   }
 
   /**
@@ -86,11 +85,17 @@ class ConduitConnection {
    * @return The call's result, if there has been no error
    * @throws ConduitException
    */
-  JsonElement call(String method, Map<String, Object> params) throws ConduitException {
+  JsonElement call(String method, Map<String, Object> params, String token) throws ConduitException {
     String methodUrl = apiUrlBase + method;
 
     HttpPost httppost = new HttpPost(methodUrl);
 
+
+    if (token != null) {
+      Map<String, Object> conduitParams = new HashMap<>();
+      conduitParams.put("token", token);
+      params.put("__conduit__", conduitParams);
+    }
 
     String json = gson.toJson(params);
 
