@@ -49,13 +49,14 @@ public class Conduit {
 
   private static final Logger log = LoggerFactory.getLogger(Conduit.class);
 
-  public static final int CONDUIT_VERSION = 6;
+  public static final int CONDUIT_VERSION = 7;
 
   private final ConduitConnection conduitConnection;
   private final Gson gson;
 
   private String username;
   private String certificate;
+  private String token;
 
   private String sessionKey;
 
@@ -63,10 +64,11 @@ public class Conduit {
     this(baseUrl, null, null);
   }
 
-  public Conduit(final String baseUrl, final String username, final String certificate) {
+  public Conduit(final String baseUrl, final String username, final String certificate, final String token) {
     this.conduitConnection = new ConduitConnection(baseUrl);
     this.username = username;
     this.certificate = certificate;
+    this.token = token;
     this.gson = new Gson();
     resetSession();
   }
@@ -82,6 +84,11 @@ public class Conduit {
 
   public void setCertificate(String certificate) {
     this.certificate = certificate;
+    resetSession();
+  }
+
+  public void setToekn(String token) {
+    this.token = token;
     resetSession();
   }
 
