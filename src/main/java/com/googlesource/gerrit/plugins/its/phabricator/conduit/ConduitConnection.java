@@ -1,4 +1,4 @@
-//Copyright (C) 2014 The Android Open Source Project
+//Copyright (C) 2017 The Android Open Source Project
 //
 //Licensed under the Apache License, Version 2.0 (the "License");
 //you may not use this file except in compliance with the License.
@@ -34,12 +34,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
  * Abstracts the connection to Conduit API
  */
 class ConduitConnection {
   private static final Logger log = LoggerFactory.getLogger(Conduit.class);
+
+  private static final String API_TOKEN_KEY = "token";
+  private static final String CONDUIT_METADATA_KEY = "__conduit__";
 
   private final String apiUrlBase;
   private final Gson gson;
@@ -91,6 +93,10 @@ class ConduitConnection {
 
     HttpPost httppost = new HttpPost(methodUrl);
 
+
+    /*Map<String, Object> conduitToken;
+    conduitToken.put(API_TOKEN_KEY, token);
+    params.put(CONDUIT_METADATA_KEY, conduitToken);*/
 
     String json = gson.toJson(params);
 
