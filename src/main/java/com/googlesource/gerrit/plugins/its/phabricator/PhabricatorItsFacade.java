@@ -1,4 +1,4 @@
-// Copyright (C) 2013 The Android Open Source Project
+// Copyright (C) 2017 The Android Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -39,21 +39,18 @@ public class PhabricatorItsFacade implements ItsFacade {
   private static final Logger log = LoggerFactory.getLogger(PhabricatorItsFacade.class);
 
   private static final String GERRIT_CONFIG_URL = "url";
-  private static final String GERRIT_CONFIG_USERNAME = "username";
-  private static final String GERRIT_CONFIG_CERTIFICATE = "certificate";
+  private static final String GERRIT_CONFIG_TOKEN = "token";
 
   private final Conduit conduit;
 
   @Inject
   public PhabricatorItsFacade(@PluginName String pluginName,
       @GerritServerConfig Config cfg) {
-    final String url = cfg.getString(pluginName, null, GERRIT_CONFIG_URL);
-    final String username = cfg.getString(pluginName, null,
-            GERRIT_CONFIG_USERNAME);
-    final String certificate = cfg.getString(pluginName, null,
-            GERRIT_CONFIG_CERTIFICATE);
+    String url = cfg.getString(pluginName, null, GERRIT_CONFIG_URL);
+    String token = cfg.getString(pluginName, null,
+            GERRIT_CONFIG_TOKEN);
 
-    this.conduit = new Conduit(url, username, certificate);
+    this.conduit = new Conduit(url, token);
   }
 
   @Override

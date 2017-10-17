@@ -42,8 +42,7 @@ import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectIn
 @PrepareForTest(Conduit.class)
 public class ConduitTest extends LoggingMockingTestCase {
   private final static String URL = "urlFoo";
-  private final static String USERNAME = "usernameFoo";
-  private final static String CERTIFICATE = "certificateFoo";
+  private final static String TOKEN = "tokenFoo";
 
   private ConduitConnection connection;
 
@@ -98,7 +97,7 @@ public class ConduitTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    Conduit conduit = new Conduit(URL, USERNAME, CERTIFICATE);
+    Conduit conduit = new Conduit(URL, TOKEN);
 
     ConduitConnect conduitConnect = conduit.conduitConnect();
 
