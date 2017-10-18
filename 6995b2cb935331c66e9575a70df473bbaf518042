@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "68aa1e3f_8f0e5592",
+        "filename": "src/main/resources/Documentation/config-connectivity.md",
+        "patchSetId": 10
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1035373
+      },
+      "writtenOn": "2017-10-18T03:07:26Z",
+      "side": 1,
+      "message": "Probably should just remove mention of the certificate entirely as that method has been deprecated for a long time.",
+      "revId": "6995b2cb935331c66e9575a70df473bbaf518042",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
