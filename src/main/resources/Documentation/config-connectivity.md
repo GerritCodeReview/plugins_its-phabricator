@@ -11,7 +11,7 @@ Example:
 ```
 [@PLUGIN@]
   url = http://my.phabricator.instance.example.org
-  token = TOKEN_FOR_ABOVE_USERNAME
+  token = TOKEN_FOR_ABOVE_URL_FOR_USERNAME_YOU_WILL_BE_USING
 ```
 
 You can get your token by going to http://my.phabricator.instance.example.org/conduit/login/
