@@ -73,8 +73,8 @@ class ConduitConnection {
    * @return The call's result, if there has been no error
    * @throws ConduitException
    */
-  JsonElement call(String method, String token) throws ConduitException {
-    return call(method, new HashMap<String, Object>(), token);
+  JsonElement call(String method) throws ConduitException {
+    return call(method, new HashMap<String, Object>());
   }
 
   /**
@@ -85,17 +85,10 @@ class ConduitConnection {
    * @return The call's result, if there has been no error
    * @throws ConduitException
    */
-  JsonElement call(String method, Map<String, Object> params, String token) throws ConduitException {
+  JsonElement call(String method, Map<String, Object> params) throws ConduitException {
     String methodUrl = apiUrlBase + method;
 
     HttpPost httppost = new HttpPost(methodUrl);
-
-
-    if (token != null) {
-      Map<String, Object> conduitParams = new HashMap<>();
-      conduitParams.put("token", token);
-      params.put("__conduit__", conduitParams);
-    }
 
     String json = gson.toJson(params);
 
