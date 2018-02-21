@@ -41,16 +41,21 @@ class ConduitConnection {
   private static final Logger log = LoggerFactory.getLogger(Conduit.class);
 
   private final String apiUrlBase;
+  private final String conduitToken;
   private final Gson gson;
 
   private CloseableHttpClient client;
 
   ConduitConnection(final String baseUrl) {
+    this(baseUrl, null);
+  }
+  
+  ConduitConnection(final String baseUrl, final String token) {
     apiUrlBase = baseUrl.replaceAll("/+$", "") + "/api/";
     gson = new Gson();
     client = null;
+    conduitToken = token;
   }
-
   /**
    * Gives a cached HttpClient
    * <p/>
@@ -73,8 +78,8 @@ class ConduitConnection {
    * @return The call's result, if there has been no error
    * @throws ConduitException
    */
-  JsonElement call(String method, String token) throws ConduitException {
-    return call(method, new HashMap<String, Object>(), token);
+  JsonElement call(String method) throws ConduitException {
+    return call(method, new HashMap<String, Object>());
   }
 
   /**
@@ -85,20 +90,19 @@ class ConduitConnection {
    * @return The call's result, if there has been no error
    * @throws ConduitException
    */
-  JsonElement call(String method, Map<String, Object> params, String token) throws ConduitException {
+  JsonElement call(String method, Map<String, Object> params) throws ConduitException {
     String methodUrl = apiUrlBase + method;
 
     HttpPost httppost = new HttpPost(methodUrl);
 
-
-    if (token != null) {
-      Map<String, Object> conduitParams = new HashMap<>();
-      conduitParams.put("token", token);
-      params.put("__conduit__", conduitParams);
-    }
-
     String json = gson.toJson(params);
 
+    if (conduitToken != null) {
+      Map<String, Object> conduitParams = new HashMap<>();
+      conduitParams.put("token", conduitToken);
+      params.put("__conduit__", conduitParams);
+    }
+    
     log.trace("Calling phabricator method " + method
         + " with the parameters " + json );
     httppost.setEntity(new StringEntity("params=" + json, StandardCharsets.UTF_8));
