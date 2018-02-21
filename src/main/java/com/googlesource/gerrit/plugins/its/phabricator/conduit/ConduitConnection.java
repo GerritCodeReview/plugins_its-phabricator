@@ -90,13 +90,6 @@ class ConduitConnection {
 
     HttpPost httppost = new HttpPost(methodUrl);
 
-
-    if (token != null) {
-      Map<String, Object> conduitParams = new HashMap<>();
-      conduitParams.put("token", token);
-      params.put("__conduit__", conduitParams);
-    }
-
     String json = gson.toJson(params);
 
     log.trace("Calling phabricator method " + method

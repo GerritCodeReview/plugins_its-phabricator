@@ -72,7 +72,7 @@ public class Conduit {
     this.gson = new Gson();
   }
 
-  public void setToekn(String token) {
+  public void setToken(String token) {
     this.token = token;
   }
 
@@ -81,6 +81,11 @@ public class Conduit {
    */
   public ConduitPing conduitPing() throws ConduitException {
     Map<String, Object> params = new HashMap<>();
+    if (token != null) {
+      Map<String, Object> conduitParams = new HashMap<>();
+      conduitParams.put("token", token);
+      params.put("__conduit__", conduitParams);
+    }
     JsonElement callResult = conduitConnection.call("conduit.ping", params, token);
     JsonObject callResultWrapper = new JsonObject();
     callResultWrapper.add("hostname", callResult);
@@ -93,6 +98,11 @@ public class Conduit {
    */
   public ManiphestInfo maniphestInfo(int taskId) throws ConduitException {
     Map<String, Object> params = new HashMap<>();
+    if (token != null) {
+      Map<String, Object> conduitParams = new HashMap<>();
+      conduitParams.put("token", token);
+      params.put("__conduit__", conduitParams);
+    }
     params.put("task_id", taskId);
 
     JsonElement callResult = conduitConnection.call("maniphest.info", params, token);
@@ -136,6 +146,12 @@ public class Conduit {
       params2.put("value", projects);
     }
 
+    if (token != null) {
+      Map<String, Object> conduitParams = new HashMap<>();
+      conduitParams.put("token", token);
+      params.put("__conduit__", conduitParams);
+    }
+
     if (!params2.isEmpty()) {
       list.add(params2);
       params.put("transactions", list);
@@ -152,6 +168,11 @@ public class Conduit {
    */
   public ProjectInfo projectQuery(String name) throws ConduitException {
     Map<String, Object> params = new HashMap<>();
+    if (token != null) {
+      Map<String, Object> conduitParams = new HashMap<>();
+      conduitParams.put("token", token);
+      params.put("__conduit__", conduitParams);
+    }
     params.put("names", Arrays.asList(name));
 
     JsonElement callResult = conduitConnection.call("project.query", params, token);
