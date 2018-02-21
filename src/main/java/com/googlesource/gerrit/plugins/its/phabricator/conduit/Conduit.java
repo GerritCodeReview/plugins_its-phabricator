@@ -60,20 +60,13 @@ public class Conduit {
   private final ConduitConnection conduitConnection;
   private final Gson gson;
 
-  private String token;
-
   public Conduit(final String baseUrl) {
     this(baseUrl, null);
   }
 
   public Conduit(final String baseUrl, final String token) {
-    this.conduitConnection = new ConduitConnection(baseUrl);
-    this.token = token;
+    this.conduitConnection = new ConduitConnection(baseUrl, token);
     this.gson = new Gson();
-  }
-
-  public void setToekn(String token) {
-    this.token = token;
   }
 
   /**
@@ -81,7 +74,7 @@ public class Conduit {
    */
   public ConduitPing conduitPing() throws ConduitException {
     Map<String, Object> params = new HashMap<>();
-    JsonElement callResult = conduitConnection.call("conduit.ping", params, token);
+    JsonElement callResult = conduitConnection.call("conduit.ping", params);
     JsonObject callResultWrapper = new JsonObject();
     callResultWrapper.add("hostname", callResult);
     ConduitPing result = gson.fromJson(callResultWrapper, ConduitPing.class);
@@ -95,7 +88,7 @@ public class Conduit {
     Map<String, Object> params = new HashMap<>();
     params.put("task_id", taskId);
 
-    JsonElement callResult = conduitConnection.call("maniphest.info", params, token);
+    JsonElement callResult = conduitConnection.call("maniphest.info", params);
     ManiphestInfo result = gson.fromJson(callResult, ManiphestInfo.class);
     return result;
   }
@@ -142,7 +135,7 @@ public class Conduit {
     }
     params.put("objectIdentifier", taskId);
 
-    JsonElement callResult = conduitConnection.call("maniphest.edit", params, token);
+    JsonElement callResult = conduitConnection.call("maniphest.edit", params);
     ManiphestEdit result = gson.fromJson(callResult, ManiphestEdit.class);
     return result;
   }
@@ -154,7 +147,7 @@ public class Conduit {
     Map<String, Object> params = new HashMap<>();
     params.put("names", Arrays.asList(name));
 
-    JsonElement callResult = conduitConnection.call("project.query", params, token);
+    JsonElement callResult = conduitConnection.call("project.query", params);
     QueryResult queryResult = gson.fromJson(callResult, QueryResult.class);
     JsonObject queryResultData = queryResult.getData().getAsJsonObject();
 
