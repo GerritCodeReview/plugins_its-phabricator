@@ -23,9 +23,19 @@ gerrit_plugin(
 
 junit_tests(
     name = "its_phabricator_tests",
+    testonly = 1,
     srcs = glob(["src/test/java/**/*.java"]),
     tags = ["its-phabricator"],
-    deps = PLUGIN_DEPS + PLUGIN_TEST_DEPS + [
+    deps = [
+        ":its-phabricator__plugin_test_deps",
+    ],
+)
+
+java_library(
+    name = "its-phabricator__plugin_test_deps",
+    testonly = 1,
+    visibility = ["//visibility:public"],
+    exports = PLUGIN_DEPS + PLUGIN_TEST_DEPS + [
         ":its-phabricator__plugin",
         "//plugins/its-base:its-base",
         "//plugins/its-base:its-base_tests-utils",
