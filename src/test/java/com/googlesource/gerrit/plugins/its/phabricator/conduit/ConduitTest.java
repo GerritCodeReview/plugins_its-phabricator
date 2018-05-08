@@ -32,7 +32,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitConnect;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.Conduit;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitPing;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestInfo;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestEdit;
@@ -213,7 +213,7 @@ public class ConduitTest extends LoggingMockingTestCase {
     Conduit conduit = new Conduit(URL, TOKEN);
 
     ManiphestEdit maniphestEdit = conduit.maniphestEdit(42,
-        Arrays.asList("foo", "bar"));
+        Arrays.asList("foo", "bar"), Conduit.ACTION_PROJECT_ADD);
 
     Map<String, Object> paramsRelevant = paramsCaptureRelevant.getValue();
     assertEquals("Task id is not set", 42, paramsRelevant.get("id"));
@@ -242,7 +242,7 @@ public class ConduitTest extends LoggingMockingTestCase {
     Conduit conduit = new Conduit(URL, TOKEN);
 
     ManiphestEdit maniphestEdit = conduit.maniphestEdit(42, "baz",
-        Arrays.asList("foo", "bar"));
+        Arrays.asList("foo", "bar"), Conduit.ACTION_PROJECT_REMOVE);
 
     Map<String, Object> paramsRelevant = paramsCaptureRelevant.getValue();
     assertEquals("Task id is not set", 42, paramsRelevant.get("id"));
