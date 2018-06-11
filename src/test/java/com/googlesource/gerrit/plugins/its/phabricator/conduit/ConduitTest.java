@@ -1,16 +1,16 @@
-//Copyright (C) 2017 The Android Open Source Project
+// Copyright (C) 2017 The Android Open Source Project
 //
-//Licensed under the Apache License, Version 2.0 (the "License");
-//you may not use this file except in compliance with the License.
-//You may obtain a copy of the License at
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
 //
-//http://www.apache.org/licenses/LICENSE-2.0
+// http://www.apache.org/licenses/LICENSE-2.0
 //
-//Unless required by applicable law or agreed to in writing, software
-//distributed under the License is distributed on an "AS IS" BASIS,
-//WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//See the License for the specific language governing permissions and
-//limitations under the License.
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 package com.googlesource.gerrit.plugins.its.phabricator.conduit;
 
 import static org.easymock.EasyMock.capture;
@@ -19,30 +19,26 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.resetToStrict;
 import static org.powermock.api.easymock.PowerMock.expectNew;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitPing;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestEdit;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestInfo;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectInfo;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import org.easymock.Capture;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-
-import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.Conduit;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitPing;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestInfo;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestEdit;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectInfo;
-
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Conduit.class)
 public class ConduitTest extends LoggingMockingTestCase {
-  private final static String URL = "urlFoo";
-  private final static String TOKEN = "tokenFoo";
+  private static final String URL = "urlFoo";
+  private static final String TOKEN = "tokenFoo";
 
   private ConduitConnection connection;
 
@@ -54,8 +50,8 @@ public class ConduitTest extends LoggingMockingTestCase {
     Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
 
     expect(connection.call(eq("conduit.ping"), capture(paramsCaptureRelevant), eq(TOKEN)))
-      .andReturn(new JsonPrimitive("foo"))
-      .once();
+        .andReturn(new JsonPrimitive("foo"))
+        .once();
 
     replayMocks();
 
@@ -76,8 +72,8 @@ public class ConduitTest extends LoggingMockingTestCase {
     Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
 
     expect(connection.call(eq("conduit.ping"), capture(paramsCaptureRelevant), eq(TOKEN)))
-      .andThrow(conduitException)
-      .once();
+        .andThrow(conduitException)
+        .once();
 
     replayMocks();
 
@@ -102,8 +98,8 @@ public class ConduitTest extends LoggingMockingTestCase {
     retRelevant.add("id", new JsonPrimitive(42));
 
     expect(connection.call(eq("maniphest.info"), capture(paramsCaptureRelevant), eq(TOKEN)))
-    .andReturn(retRelevant)
-    .once();
+        .andReturn(retRelevant)
+        .once();
 
     replayMocks();
 
@@ -125,8 +121,8 @@ public class ConduitTest extends LoggingMockingTestCase {
     Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
 
     expect(connection.call(eq("maniphest.info"), capture(paramsCaptureRelevant), eq(TOKEN)))
-      .andThrow(conduitException)
-      .once();
+        .andThrow(conduitException)
+        .once();
 
     replayMocks();
 
@@ -150,8 +146,8 @@ public class ConduitTest extends LoggingMockingTestCase {
     Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
 
     expect(connection.call(eq("maniphest.info"), capture(paramsCaptureRelevant), eq(TOKEN)))
-      .andThrow(conduitException)
-      .once();
+        .andThrow(conduitException)
+        .once();
 
     replayMocks();
 
@@ -179,8 +175,8 @@ public class ConduitTest extends LoggingMockingTestCase {
     Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
 
     expect(connection.call(eq("maniphest.update"), capture(paramsCaptureRelevant), eq(TOKEN)))
-    .andReturn(retRelevant)
-    .once();
+        .andReturn(retRelevant)
+        .once();
 
     replayMocks();
 
@@ -205,19 +201,21 @@ public class ConduitTest extends LoggingMockingTestCase {
     Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
 
     expect(connection.call(eq("maniphest.edit"), capture(paramsCaptureRelevant), eq(TOKEN)))
-    .andReturn(retRelevant)
-    .once();
+        .andReturn(retRelevant)
+        .once();
 
     replayMocks();
 
     Conduit conduit = new Conduit(URL, TOKEN);
 
-    ManiphestEdit maniphestEdit = conduit.maniphestEdit(42,
-        Arrays.asList("foo", "bar"), Conduit.ACTION_PROJECT_ADD);
+    ManiphestEdit maniphestEdit =
+        conduit.maniphestEdit(42, Arrays.asList("foo", "bar"), Conduit.ACTION_PROJECT_ADD);
 
     Map<String, Object> paramsRelevant = paramsCaptureRelevant.getValue();
     assertEquals("Task id is not set", 42, paramsRelevant.get("id"));
-    assertEquals("Task projects are not set", Arrays.asList("foo", "bar"),
+    assertEquals(
+        "Task projects are not set",
+        Arrays.asList("foo", "bar"),
         paramsRelevant.get("projectPHIDs"));
 
     assertEquals("ManiphestEdit's id does not match", 42, maniphestEdit.getId());
@@ -234,25 +232,27 @@ public class ConduitTest extends LoggingMockingTestCase {
     Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
 
     expect(connection.call(eq("maniphest.edit"), capture(paramsCaptureRelevant), eq(TOKEN)))
-    .andReturn(retRelevant)
-    .once();
+        .andReturn(retRelevant)
+        .once();
 
     replayMocks();
 
     Conduit conduit = new Conduit(URL, TOKEN);
 
-    ManiphestEdit maniphestEdit = conduit.maniphestEdit(42, "baz",
-        Arrays.asList("foo", "bar"), Conduit.ACTION_PROJECT_REMOVE);
+    ManiphestEdit maniphestEdit =
+        conduit.maniphestEdit(
+            42, "baz", Arrays.asList("foo", "bar"), Conduit.ACTION_PROJECT_REMOVE);
 
     Map<String, Object> paramsRelevant = paramsCaptureRelevant.getValue();
     assertEquals("Task id is not set", 42, paramsRelevant.get("id"));
     assertEquals("Task comment is not set", "baz", paramsRelevant.get("comments"));
-    assertEquals("Task projects are not set", Arrays.asList("foo", "bar"),
+    assertEquals(
+        "Task projects are not set",
+        Arrays.asList("foo", "bar"),
         paramsRelevant.get("projectPHIDs"));
 
     assertEquals("ManiphestUpdate's id does not match", 42, maniphestEdit.getId());
   }
-
 
   public void testManiphestEditFailConnect() throws Exception {
     mockConnection();
@@ -262,8 +262,8 @@ public class ConduitTest extends LoggingMockingTestCase {
     Capture<Map<String, Object>> paramsCapture = new Capture<>();
 
     expect(connection.call(eq("conduit.connect"), capture(paramsCapture), eq(TOKEN)))
-      .andThrow(conduitException)
-      .once();
+        .andThrow(conduitException)
+        .once();
 
     replayMocks();
 
@@ -287,8 +287,8 @@ public class ConduitTest extends LoggingMockingTestCase {
     Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
 
     expect(connection.call(eq("maniphest.edit"), capture(paramsCaptureRelevant), eq(TOKEN)))
-      .andThrow(conduitException)
-      .once();
+        .andThrow(conduitException)
+        .once();
 
     replayMocks();
 
@@ -316,8 +316,8 @@ public class ConduitTest extends LoggingMockingTestCase {
     Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
 
     expect(connection.call(eq("maniphest.info"), capture(paramsCaptureRelevant), eq(TOKEN)))
-    .andReturn(retRelevant)
-    .once();
+        .andReturn(retRelevant)
+        .once();
 
     replayMocks();
 
@@ -349,8 +349,8 @@ public class ConduitTest extends LoggingMockingTestCase {
     Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
 
     expect(connection.call(eq("project.query"), capture(paramsCaptureRelevant), eq(TOKEN)))
-    .andReturn(retRelevant)
-    .once();
+        .andReturn(retRelevant)
+        .once();
 
     replayMocks();
 
@@ -360,8 +360,7 @@ public class ConduitTest extends LoggingMockingTestCase {
 
     Map<String, Object> paramsRelevant = paramsCaptureRelevant.getValue();
     List<String> expectedNames = Arrays.asList("foo");
-    assertEquals("Project name does not match", expectedNames,
-        paramsRelevant.get("names"));
+    assertEquals("Project name does not match", expectedNames, paramsRelevant.get("names"));
 
     assertEquals("ProjectInfo's name does not match", "foo", projectInfo.getName());
   }
@@ -394,8 +393,8 @@ public class ConduitTest extends LoggingMockingTestCase {
     Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
 
     expect(connection.call(eq("project.query"), capture(paramsCaptureRelevant), eq(TOKEN)))
-    .andReturn(retRelevant)
-    .once();
+        .andReturn(retRelevant)
+        .once();
 
     replayMocks();
 
@@ -405,16 +404,13 @@ public class ConduitTest extends LoggingMockingTestCase {
 
     Map<String, Object> paramsRelevant = paramsCaptureRelevant.getValue();
     List<String> expectedNames = Arrays.asList("foo2");
-    assertEquals("Project name does not match", expectedNames,
-        paramsRelevant.get("names"));
+    assertEquals("Project name does not match", expectedNames, paramsRelevant.get("names"));
 
     assertEquals("ProjectInfo's name does not match", "foo2", projectInfo.getName());
   }
 
   private void mockConnection() throws Exception {
     connection = createMock(ConduitConnection.class);
-    expectNew(ConduitConnection.class, URL)
-      .andReturn(connection)
-      .once();
+    expectNew(ConduitConnection.class, URL).andReturn(connection).once();
   }
 }

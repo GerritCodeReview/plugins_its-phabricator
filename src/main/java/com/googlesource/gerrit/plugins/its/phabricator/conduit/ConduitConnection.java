@@ -1,24 +1,26 @@
-//Copyright (C) 2017 The Android Open Source Project
+// Copyright (C) 2017 The Android Open Source Project
 //
-//Licensed under the Apache License, Version 2.0 (the "License");
-//you may not use this file except in compliance with the License.
-//You may obtain a copy of the License at
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
 //
-//http://www.apache.org/licenses/LICENSE-2.0
+// http://www.apache.org/licenses/LICENSE-2.0
 //
-//Unless required by applicable law or agreed to in writing, software
-//distributed under the License is distributed on an "AS IS" BASIS,
-//WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//See the License for the specific language governing permissions and
-//limitations under the License.
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 package com.googlesource.gerrit.plugins.its.phabricator.conduit;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.CallCapsule;
-
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -29,14 +31,7 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
-
-/**
- * Abstracts the connection to Conduit API
- */
+/** Abstracts the connection to Conduit API */
 class ConduitConnection {
   private static final Logger log = LoggerFactory.getLogger(Conduit.class);
 
@@ -53,8 +48,8 @@ class ConduitConnection {
 
   /**
    * Gives a cached HttpClient
-   * <p/>
-   * If  no cached HttpClient exists, a new one is spawned.
+   *
+   * <p>If no cached HttpClient exists, a new one is spawned.
    *
    * @return the cached CloseableHttpClient
    */
@@ -85,11 +80,11 @@ class ConduitConnection {
    * @return The call's result, if there has been no error
    * @throws ConduitException
    */
-  JsonElement call(String method, Map<String, Object> params, String token) throws ConduitException {
+  JsonElement call(String method, Map<String, Object> params, String token)
+      throws ConduitException {
     String methodUrl = apiUrlBase + method;
 
     HttpPost httppost = new HttpPost(methodUrl);
-
 
     if (token != null) {
       Map<String, Object> conduitParams = new HashMap<>();
@@ -99,8 +94,7 @@ class ConduitConnection {
 
     String json = gson.toJson(params);
 
-    log.trace("Calling phabricator method " + method
-        + " with the parameters " + json );
+    log.trace("Calling phabricator method " + method + " with the parameters " + json);
     httppost.setEntity(new StringEntity("params=" + json, StandardCharsets.UTF_8));
 
     CloseableHttpResponse response;
@@ -124,10 +118,9 @@ class ConduitConnection {
       log.trace("callCapsule.result: " + callCapsule.getResult());
       log.trace("callCapsule.error_code: " + callCapsule.getErrorCode());
       log.trace("callCapsule.error_info: " + callCapsule.getErrorInfo());
-      if (callCapsule.getErrorCode() != null
-          || callCapsule.getErrorInfo() != null) {
-        throw new ConduitErrorException(method, callCapsule.getErrorCode(),
-            callCapsule.getErrorInfo());
+      if (callCapsule.getErrorCode() != null || callCapsule.getErrorInfo() != null) {
+        throw new ConduitErrorException(
+            method, callCapsule.getErrorCode(), callCapsule.getErrorInfo());
       }
       return callCapsule.getResult();
     } finally {

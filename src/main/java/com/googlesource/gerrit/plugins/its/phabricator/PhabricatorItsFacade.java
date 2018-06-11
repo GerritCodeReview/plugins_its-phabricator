@@ -14,26 +14,23 @@
 
 package com.googlesource.gerrit.plugins.its.phabricator;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.Set;
-
-import org.eclipse.jgit.lib.Config;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.collect.Sets;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gson.JsonElement;
 import com.google.inject.Inject;
-
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.Conduit;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.ConduitErrorException;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.ConduitException;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestInfo;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectInfo;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Set;
+import org.eclipse.jgit.lib.Config;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PhabricatorItsFacade implements ItsFacade {
   private static final Logger log = LoggerFactory.getLogger(PhabricatorItsFacade.class);
@@ -44,18 +41,15 @@ public class PhabricatorItsFacade implements ItsFacade {
   private final Conduit conduit;
 
   @Inject
-  public PhabricatorItsFacade(@PluginName String pluginName,
-      @GerritServerConfig Config cfg) {
+  public PhabricatorItsFacade(@PluginName String pluginName, @GerritServerConfig Config cfg) {
     String url = cfg.getString(pluginName, null, GERRIT_CONFIG_URL);
-    String token = cfg.getString(pluginName, null,
-            GERRIT_CONFIG_TOKEN);
+    String token = cfg.getString(pluginName, null, GERRIT_CONFIG_TOKEN);
 
     this.conduit = new Conduit(url, token);
   }
 
   @Override
-  public void addComment(final String bugId, final String comment)
-      throws IOException {
+  public void addComment(final String bugId, final String comment) throws IOException {
     int task_id = Integer.parseInt(bugId);
     try {
       conduit.maniphestEdit(task_id, comment);
@@ -66,10 +60,10 @@ public class PhabricatorItsFacade implements ItsFacade {
   }
 
   @Override
-  public void addRelatedLink(final String issueKey, final URL relatedUrl,
-      String description) throws IOException {
-    addComment(issueKey, "Related URL: " + createLinkForWebui(
-        relatedUrl.toExternalForm(), description));
+  public void addRelatedLink(final String issueKey, final URL relatedUrl, String description)
+      throws IOException {
+    addComment(
+        issueKey, "Related URL: " + createLinkForWebui(relatedUrl.toExternalForm(), description));
   }
 
   @Override
@@ -83,7 +77,7 @@ public class PhabricatorItsFacade implements ItsFacade {
       } catch (ConduitErrorException e) {
         // An ERR_BAD_TASK just means that the task does not exist.
         // So the default value of ret would be ok
-        if (! ("ERR_BAD_TASK".equals(e.getErrorCode()))) {
+        if (!("ERR_BAD_TASK".equals(e.getErrorCode()))) {
           // So we had an exception that is /not/ ERR_BAD_TASK.
           // We have to relay that to the caller.
           throw e;
@@ -122,9 +116,11 @@ public class PhabricatorItsFacade implements ItsFacade {
   }
 
   private void assertParameters(String action, String[] params, int length) throws IOException {
-    if (params.length -1 != length) {
-      throw new IOException(String.format("Action %s expects exactly %d parameter(s) but %d given",
-                                          action, length, params.length -1));
+    if (params.length - 1 != length) {
+      throw new IOException(
+          String.format(
+              "Action %s expects exactly %d parameter(s) but %d given",
+              action, length, params.length - 1));
     }
   }
 
@@ -136,8 +132,7 @@ public class PhabricatorItsFacade implements ItsFacade {
       Set<String> projectPhids = Sets.newHashSet(projectPhid);
 
       ManiphestInfo taskInfo = conduit.maniphestInfo(taskId);
-      for (JsonElement jsonElement :
-        taskInfo.getProjectPHIDs().getAsJsonArray()) {
+      for (JsonElement jsonElement : taskInfo.getProjectPHIDs().getAsJsonArray()) {
         projectPhids.add(jsonElement.getAsString());
       }
 
