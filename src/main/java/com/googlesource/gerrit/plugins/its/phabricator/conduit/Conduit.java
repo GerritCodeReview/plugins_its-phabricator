@@ -1,43 +1,40 @@
-//Copyright (C) 2017 The Android Open Source Project
+// Copyright (C) 2017 The Android Open Source Project
 //
-//Licensed under the Apache License, Version 2.0 (the "License");
-//you may not use this file except in compliance with the License.
-//You may obtain a copy of the License at
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
 //
-//http://www.apache.org/licenses/LICENSE-2.0
+// http://www.apache.org/licenses/LICENSE-2.0
 //
-//Unless required by applicable law or agreed to in writing, software
-//distributed under the License is distributed on an "AS IS" BASIS,
-//WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//See the License for the specific language governing permissions and
-//limitations under the License.
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 package com.googlesource.gerrit.plugins.its.phabricator.conduit;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitPing;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestInfo;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestEdit;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestInfo;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectInfo;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.QueryResult;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Bindings for Phabricator's Conduit API
- * <p/>
- * This class is not thread-safe.
+ *
+ * <p>This class is not thread-safe.
  */
 public class Conduit {
 
@@ -70,9 +67,7 @@ public class Conduit {
     this.token = token;
   }
 
-  /**
-   * Runs the API's 'conduit.ping' method
-   */
+  /** Runs the API's 'conduit.ping' method */
   public ConduitPing conduitPing() throws ConduitException {
     Map<String, Object> params = new HashMap<>();
     JsonElement callResult = conduitConnection.call("conduit.ping", params, token);
@@ -82,9 +77,7 @@ public class Conduit {
     return result;
   }
 
-  /**
-   * Runs the API's 'maniphest.Info' method
-   */
+  /** Runs the API's 'maniphest.Info' method */
   public ManiphestInfo maniphestInfo(int taskId) throws ConduitException {
     Map<String, Object> params = new HashMap<>();
     params.put("task_id", taskId);
@@ -94,38 +87,38 @@ public class Conduit {
     return result;
   }
 
-  /**
-   * Runs the API's 'maniphest.edit' method
-   */
+  /** Runs the API's 'maniphest.edit' method */
   public ManiphestEdit maniphestEdit(int taskId, String comment) throws ConduitException {
     return maniphestEdit(taskId, comment, null, ACTION_COMMENT);
   }
 
-  /**
-   * Runs the API's 'maniphest.edit' method
-   */
-  public ManiphestEdit maniphestEdit(int taskId, Iterable<String> projects, String action) throws ConduitException {
+  /** Runs the API's 'maniphest.edit' method */
+  public ManiphestEdit maniphestEdit(int taskId, Iterable<String> projects, String action)
+      throws ConduitException {
     return maniphestEdit(taskId, null, projects, action);
   }
 
-  /**
-   * Runs the API's 'maniphest.edit' method
-   */
-  public ManiphestEdit maniphestEdit(int taskId, String comment, Iterable<String> projects, String action) throws ConduitException {
+  /** Runs the API's 'maniphest.edit' method */
+  public ManiphestEdit maniphestEdit(
+      int taskId, String comment, Iterable<String> projects, String action)
+      throws ConduitException {
     HashMap<String, Object> params = new HashMap<>();
     List<Object> list = new ArrayList<>();
     HashMap<String, Object> params2 = new HashMap<>();
     params2.put("type", action);
-    if(action.equals(ACTION_COMMENT)) {
+    if (action.equals(ACTION_COMMENT)) {
       if (comment == null) {
-        throw new IllegalArgumentException("The value of comment (null) is invalid for the action" + action);
+        throw new IllegalArgumentException(
+            "The value of comment (null) is invalid for the action" + action);
       }
       params2.put("value", comment);
     }
 
-    if(action.equals(ACTION_PROJECT_ADD) || action.equals(ACTION_PROJECT_REMOVE)) {
-      if ((action.equals(ACTION_PROJECT_ADD) || action.equals(ACTION_PROJECT_REMOVE)) && projects == null) {
-          throw new IllegalArgumentException("The value of projects (null) is invalid for the action " + action);
+    if (action.equals(ACTION_PROJECT_ADD) || action.equals(ACTION_PROJECT_REMOVE)) {
+      if ((action.equals(ACTION_PROJECT_ADD) || action.equals(ACTION_PROJECT_REMOVE))
+          && projects == null) {
+        throw new IllegalArgumentException(
+            "The value of projects (null) is invalid for the action " + action);
       }
       params2.put("value", projects);
     }
@@ -141,9 +134,7 @@ public class Conduit {
     return result;
   }
 
-  /**
-   * Runs the API's 'projectQuery' method to match exactly one project name
-   */
+  /** Runs the API's 'projectQuery' method to match exactly one project name */
   public ProjectInfo projectQuery(String name) throws ConduitException {
     Map<String, Object> params = new HashMap<>();
     params.put("names", Arrays.asList(name));
@@ -153,11 +144,9 @@ public class Conduit {
     JsonObject queryResultData = queryResult.getData().getAsJsonObject();
 
     ProjectInfo result = null;
-    for (Entry<String, JsonElement> queryResultEntry:
-      queryResultData.entrySet()) {
+    for (Entry<String, JsonElement> queryResultEntry : queryResultData.entrySet()) {
       JsonElement queryResultEntryValue = queryResultEntry.getValue();
-      ProjectInfo queryResultProjectInfo =
-          gson.fromJson(queryResultEntryValue, ProjectInfo.class);
+      ProjectInfo queryResultProjectInfo = gson.fromJson(queryResultEntryValue, ProjectInfo.class);
       if (queryResultProjectInfo.getName().equals(name)) {
         result = queryResultProjectInfo;
       }

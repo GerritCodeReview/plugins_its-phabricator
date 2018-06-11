@@ -14,18 +14,16 @@
 
 package com.googlesource.gerrit.plugins.its.phabricator;
 
-import org.eclipse.jgit.lib.Config;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
-
 import com.googlesource.gerrit.plugins.its.base.ItsHookModule;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+import org.eclipse.jgit.lib.Config;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PhabricatorModule extends AbstractModule {
 
@@ -36,7 +34,8 @@ public class PhabricatorModule extends AbstractModule {
   private final PluginConfigFactory pluginCfgFactory;
 
   @Inject
-  public PhabricatorModule(@PluginName final String pluginName,
+  public PhabricatorModule(
+      @PluginName final String pluginName,
       @GerritServerConfig final Config config,
       PluginConfigFactory pluginCfgFactory) {
     this.pluginName = pluginName;
