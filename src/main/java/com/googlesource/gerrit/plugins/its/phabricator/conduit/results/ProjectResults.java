@@ -1,4 +1,4 @@
-// Copyright (C) 2015 The Android Open Source Project
+// Copyright (C) 2018 The Android Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,41 +11,38 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
 package com.googlesource.gerrit.plugins.its.phabricator.conduit.results;
 
 import com.google.gson.JsonElement;
 
 /**
- * Models the result for API methods returning a (possible paged) QueryResult
+ * Models the result for API methods
  *
  * <p>JSON looks like:
  *
  * <pre>
  * {
- *   "data": { ... },
- *   "slugMap": [],
+ *   "data": [
+ *     { ... }
+ *   ],
+ *   "maps": {},
+ *   "query": {
+ *     "queryKey": null
+ *   },
  *   "cursor": {
  *     "limit": 100,
  *     "after": null,
- *     "before": null
+ *     "before": null,
+ *     "order": null
  *   }
  * }
  * </pre>
  */
-public class QueryResult {
+public class ProjectResults {
   private JsonElement data;
-  private JsonElement slugMap;
-  private JsonElement cursor;
 
   public JsonElement getData() {
     return data;
-  }
-
-  public JsonElement getSlugMap() {
-    return slugMap;
-  }
-
-  public JsonElement getCursor() {
-    return cursor;
   }
 }

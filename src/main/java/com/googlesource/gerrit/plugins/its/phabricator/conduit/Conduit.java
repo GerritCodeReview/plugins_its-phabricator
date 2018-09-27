@@ -15,14 +15,15 @@
 package com.googlesource.gerrit.plugins.its.phabricator.conduit;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitPing;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestEdit;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestSearch;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestResults;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectInfo;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.QueryResult;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestSearch;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectResults;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectSearch;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -148,21 +149,24 @@ public class Conduit {
     return result;
   }
 
-  /** Runs the API's 'projectQuery' method to match exactly one project name */
-  public ProjectInfo projectQuery(String name) throws ConduitException {
-    Map<String, Object> params = new HashMap<>();
-    params.put("names", Arrays.asList(name));
+  /** Runs the API's 'projectSearch' method to match exactly one project name */
+  public ProjectSearch projectSearch(String name) throws ConduitException {
+    HashMap<String, Object> params = new HashMap<>();
+    HashMap<String, Object> params2 = new HashMap<>();
 
-    JsonElement callResult = conduitConnection.call("project.query", params, token);
-    QueryResult queryResult = gson.fromJson(callResult, QueryResult.class);
-    JsonObject queryResultData = queryResult.getData().getAsJsonObject();
+    params2.put("query", name);
 
-    ProjectInfo result = null;
-    for (Entry<String, JsonElement> queryResultEntry : queryResultData.entrySet()) {
-      JsonElement queryResultEntryValue = queryResultEntry.getValue();
-      ProjectInfo queryResultProjectInfo = gson.fromJson(queryResultEntryValue, ProjectInfo.class);
-      if (queryResultProjectInfo.getName().equals(name)) {
-        result = queryResultProjectInfo;
+    params.put("constraints", params2);
+
+    JsonElement callResult = conduitConnection.call("project.search", params, token);
+    ProjectResults projectResult = gson.fromJson(callResult, ProjectResults.class);
+    JsonArray projectResultData = projectResult.getData().getAsJsonArray();
+
+    ProjectSearch result = null;
+    for (JsonElement jsonElement : projectResultData) {
+      ProjectSearch projectResultSearch = gson.fromJson(jsonElement, ProjectSearch.class);
+      if (projectResultSearch.getFields().getName().equals(name)) {
+        result = projectResultSearch;
       }
     }
     return result;
