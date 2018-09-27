@@ -19,7 +19,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitPing;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestEdit;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestInfo;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestSearch;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestResults;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectInfo;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.QueryResult;
 import java.util.ArrayList;
@@ -77,13 +78,26 @@ public class Conduit {
     return result;
   }
 
-  /** Runs the API's 'maniphest.Info' method */
-  public ManiphestInfo maniphestInfo(int taskId) throws ConduitException {
-    Map<String, Object> params = new HashMap<>();
-    params.put("task_id", taskId);
+  /**
+   * Runs the API's 'maniphest.search' method
+   */
+  public ManiphestResults maniphestSearch(int taskId) throws ConduitException {
+    HashMap<String, Object> params = new HashMap<>();
+    HashMap<String, Object> params2 = new HashMap<>();
+    HashMap<String, Object> params3 = new HashMap<>();
 
-    JsonElement callResult = conduitConnection.call("maniphest.info", params, token);
-    ManiphestInfo result = gson.fromJson(callResult, ManiphestInfo.class);
+    List<Object> list = new ArrayList<>();
+    list.add(taskId);
+
+    params2.put("ids", list);
+
+    params.put("constraints", params2);
+
+    params3.put("projects", true);
+    params.put("attachments", params3);
+
+    JsonElement callResult = conduitConnection.call("maniphest.search", params, token);
+    ManiphestResults result = gson.fromJson(callResult, ManiphestResults.class);
     return result;
   }
 
