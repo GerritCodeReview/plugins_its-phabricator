@@ -11,7 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
 package com.googlesource.gerrit.plugins.its.phabricator.conduit.results;
+
+import com.google.gson.JsonElement;
 
 /**
  * Models the result for a call to maniphest.info
@@ -47,4 +50,36 @@ package com.googlesource.gerrit.plugins.its.phabricator.conduit.results;
  * }
  * </pre>
  */
-public class ManiphestInfo extends Task {}
+public class ManiphestSearch {
+  private int id;
+  private JsonElement fields;
+  private Attachments attachments;
+
+  public int getId() {
+    return id;
+  }
+
+  public JsonElement getFields() {
+    return fields;
+  }
+
+  public Attachments getAttachments() {
+    return attachments;
+  }
+
+  public class Attachments {
+    private Projects projects;
+
+    public Projects getProjects() {
+      return projects;
+    }
+  }
+
+  public class Projects {
+    private JsonElement projectPHIDs;
+
+    public JsonElement getProjectPHIDs() {
+      return projectPHIDs;
+    }
+  }
+}
