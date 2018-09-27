@@ -1,4 +1,4 @@
-// Copyright (C) 2015 The Android Open Source Project
+// Copyright (C) 2018 The Android Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,6 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
 package com.googlesource.gerrit.plugins.its.phabricator.conduit.results;
 
 import com.google.gson.JsonElement;
@@ -35,55 +36,33 @@ import com.google.gson.JsonElement;
  * }
  * </pre>
  */
-public class ProjectInfo {
+public class ProjectSearch {
   private int id;
+  private String type;
   private String phid;
-  private String name;
-  private String profileImagePHID;
-  private String icon;
-  private String color;
-  private JsonElement members;
-  private JsonElement slugs;
-  private String dateCreated;
-  private String dateModified;
+  private Fields fields;
 
   public int getId() {
     return id;
+  }
+
+  public String getType() {
+    return type;
   }
 
   public String getPhid() {
     return phid;
   }
 
-  public String getName() {
-    return name;
+  public Fields getFields() {
+    return fields;
   }
 
-  public String getProfileImagePHID() {
-    return profileImagePHID;
-  }
+  public class Fields {
+    private String name;
 
-  public String getIcon() {
-    return icon;
-  }
-
-  public String getColor() {
-    return color;
-  }
-
-  public JsonElement getMembers() {
-    return members;
-  }
-
-  public JsonElement getSlugs() {
-    return slugs;
-  }
-
-  public String getDateCreated() {
-    return dateCreated;
-  }
-
-  public String getDateModified() {
-    return dateModified;
+    public String getName() {
+      return name;
+    }
   }
 }
