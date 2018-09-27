@@ -71,6 +71,7 @@ public class Task {
   private JsonElement dependsOnTaskPHIDs;
   private JsonElement objectIdentifier;
   private JsonElement transactions;
+  private JsonElement attachments;
 
   public int getId() {
     return id;
@@ -154,5 +155,9 @@ public class Task {
 
   public JsonElement getTransactions() {
     return transactions;
+  }
+
+  public JsonElement getAttachments() {
+    return attachments;
   }
 }
