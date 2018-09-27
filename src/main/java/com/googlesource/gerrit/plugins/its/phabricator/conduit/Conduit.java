@@ -77,13 +77,26 @@ public class Conduit {
     return result;
   }
 
-  /** Runs the API's 'maniphest.Info' method */
-  public ManiphestInfo maniphestInfo(int taskId) throws ConduitException {
-    Map<String, Object> params = new HashMap<>();
-    params.put("task_id", taskId);
+  /**
+   * Runs the API's 'maniphest.search' method
+   */
+  public ManiphestSearch maniphestSearch(int taskId) throws ConduitException {
+    HashMap<String, Object> params = new HashMap<>();
+    HashMap<String, Object> params2 = new HashMap<>();
+    HashMap<String, Object> params3 = new HashMap<>();
 
-    JsonElement callResult = conduitConnection.call("maniphest.info", params, token);
-    ManiphestInfo result = gson.fromJson(callResult, ManiphestInfo.class);
+    List<Object> list = new ArrayList<>();
+    list.add(taskId);
+
+    params2.put("ids", list);
+
+    params.put("constraints", params2);
+
+    params3.put("projects", true);
+    params.put("attachments", params3);
+
+    JsonElement callResult = conduitConnection.call("maniphest.search", params, token);
+    ManiphestSearch result = gson.fromJson(callResult, ManiphestSearch.class);
     return result;
   }
 
