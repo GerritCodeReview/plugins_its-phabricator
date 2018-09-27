@@ -27,7 +27,7 @@ import com.googlesource.gerrit.plugins.its.phabricator.conduit.ConduitErrorExcep
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.ConduitException;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestSearch;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestResults;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectInfo;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectSearch;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Set;
@@ -131,7 +131,7 @@ public class PhabricatorItsFacade implements ItsFacade {
 
   private void maniphestEdit(String projectName, int taskId, String actions) throws IOException {
     try {
-      ProjectInfo projectInfo = conduit.projectQuery(projectName);
+      ProjectSearch projectSearch = conduit.projectSearch(projectName);
       String projectPhid = projectInfo.getPhid();
 
       Set<String> projectPhids = Sets.newHashSet(projectPhid);
