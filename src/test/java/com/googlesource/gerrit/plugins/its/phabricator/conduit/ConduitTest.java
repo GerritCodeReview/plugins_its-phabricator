@@ -87,7 +87,7 @@ public class ConduitTest extends LoggingMockingTestCase {
     }
   }
 
-  public void testManiphestInfoPass() throws Exception {
+  public void testManiphestSearchPass() throws Exception {
     mockConnection();
 
     resetToStrict(connection);
@@ -97,7 +97,7 @@ public class ConduitTest extends LoggingMockingTestCase {
     JsonObject retRelevant = new JsonObject();
     retRelevant.add("id", new JsonPrimitive(42));
 
-    expect(connection.call(eq("maniphest.info"), capture(paramsCaptureRelevant), eq(TOKEN)))
+    expect(connection.call(eq("maniphest.search"), capture(paramsCaptureRelevant), eq(TOKEN)))
         .andReturn(retRelevant)
         .once();
 
@@ -105,12 +105,12 @@ public class ConduitTest extends LoggingMockingTestCase {
 
     Conduit conduit = new Conduit(URL, TOKEN);
 
-    ManiphestInfo maniphestInfo = conduit.maniphestInfo(42);
+    ManiphestSearch maniphestSearch = conduit.maniphestSearch(42);
 
     Map<String, Object> paramsRelevant = paramsCaptureRelevant.getValue();
     assertEquals("Task id is not set", 42, paramsRelevant.get("task_id"));
 
-    assertEquals("ManiphestInfo's id does not match", 42, maniphestInfo.getId());
+    assertEquals("ManiphestSearch's id does not match", 42, maniphestSearch.getId());
   }
 
   public void testManiphestInfoFailConnect() throws Exception {
