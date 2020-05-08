@@ -21,15 +21,12 @@ import com.google.gson.JsonObject;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitPing;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestEdit;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestResults;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestSearch;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectResults;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectSearch;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,9 +76,7 @@ public class Conduit {
     return result;
   }
 
-  /**
-   * Runs the API's 'maniphest.search' method
-   */
+  /** Runs the API's 'maniphest.search' method */
   public ManiphestResults maniphestSearch(int taskId) throws ConduitException {
     HashMap<String, Object> params = new HashMap<>();
     HashMap<String, Object> params2 = new HashMap<>();

@@ -14,12 +14,11 @@
 
 package com.googlesource.gerrit.plugins.its.phabricator.conduit.results;
 
-import com.google.gson.JsonElement;
 
 /**
  * Models the result for API methods returning Project searches.
  *
- * <p>JSON looks like:</p>
+ * <p>JSON looks like:
  *
  * <pre>
  * {

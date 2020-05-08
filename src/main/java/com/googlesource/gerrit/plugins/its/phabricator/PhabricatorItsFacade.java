@@ -25,8 +25,8 @@ import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.Conduit;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.ConduitErrorException;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.ConduitException;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestSearch;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestResults;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestSearch;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectSearch;
 import java.io.IOException;
 import java.net.URL;
@@ -140,8 +140,14 @@ public class PhabricatorItsFacade implements ItsFacade {
       JsonArray maniphestResultEntryValue = taskSearch.getData().getAsJsonArray();
 
       for (JsonElement jsonElement : maniphestResultEntryValue) {
-        ManiphestSearch maniphestResultManiphestSearch = gson.fromJson(jsonElement, ManiphestSearch.class);
-        for (JsonElement jsonElement2 : maniphestResultManiphestSearch.getAttachments().getProjects().getProjectPHIDs().getAsJsonArray()) {
+        ManiphestSearch maniphestResultManiphestSearch =
+            gson.fromJson(jsonElement, ManiphestSearch.class);
+        for (JsonElement jsonElement2 :
+            maniphestResultManiphestSearch
+                .getAttachments()
+                .getProjects()
+                .getProjectPHIDs()
+                .getAsJsonArray()) {
           projectPhids.add(jsonElement2.getAsString());
         }
       }
