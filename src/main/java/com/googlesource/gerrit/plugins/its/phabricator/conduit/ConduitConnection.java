@@ -14,6 +14,7 @@
 
 package com.googlesource.gerrit.plugins.its.phabricator.conduit;
 
+import com.google.common.flogger.FluentLogger;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.CallCapsule;
@@ -28,12 +29,10 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /** Abstracts the connection to Conduit API */
 class ConduitConnection {
-  private static final Logger log = LoggerFactory.getLogger(Conduit.class);
+  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   private final String apiUrlBase;
   private final Gson gson;
@@ -55,7 +54,7 @@ class ConduitConnection {
    */
   private CloseableHttpClient getClient() {
     if (client == null) {
-      log.trace("Creating new client connection");
+      logger.atFinest().log("Creating new client connection");
       client = HttpClients.createDefault();
     }
     return client;
@@ -94,7 +93,7 @@ class ConduitConnection {
 
     String json = gson.toJson(params);
 
-    log.trace("Calling phabricator method " + method + " with the parameters " + json);
+    logger.atFinest().log("Calling phabricator method %s with the parameters %s", method, json);
     httppost.setEntity(new StringEntity("params=" + json, StandardCharsets.UTF_8));
 
     CloseableHttpResponse response;
@@ -104,7 +103,7 @@ class ConduitConnection {
       throw new ConduitException("Could not execute Phabricator API call", e);
     }
     try {
-      log.trace("Phabricator HTTP response status: " + response.getStatusLine());
+      logger.atFinest().log("Phabricator HTTP response status: %s", response.getStatusLine());
       HttpEntity entity = response.getEntity();
       String entityString;
       try {
@@ -113,11 +112,11 @@ class ConduitConnection {
         throw new ConduitException("Could not read the API response", e);
       }
 
-      log.trace("Phabricator response " + entityString);
+      logger.atFinest().log("Phabricator response: %s", entityString);
       CallCapsule callCapsule = gson.fromJson(entityString, CallCapsule.class);
-      log.trace("callCapsule.result: " + callCapsule.getResult());
-      log.trace("callCapsule.error_code: " + callCapsule.getErrorCode());
-      log.trace("callCapsule.error_info: " + callCapsule.getErrorInfo());
+      logger.atFinest().log("callCapsule.result: %s", callCapsule.getResult());
+      logger.atFinest().log("callCapsule.error_code: %s", callCapsule.getErrorCode());
+      logger.atFinest().log("callCapsule.error_info: %s", callCapsule.getErrorInfo());
       if (callCapsule.getErrorCode() != null || callCapsule.getErrorInfo() != null) {
         throw new ConduitErrorException(
             method, callCapsule.getErrorCode(), callCapsule.getErrorInfo());

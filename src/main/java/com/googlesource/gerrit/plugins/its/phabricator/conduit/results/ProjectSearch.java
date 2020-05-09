@@ -14,7 +14,6 @@
 
 package com.googlesource.gerrit.plugins.its.phabricator.conduit.results;
 
-
 /**
  * Models the result for API methods returning Project searches.
  *

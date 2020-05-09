@@ -27,8 +27,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Bindings for Phabricator's Conduit API
@@ -42,8 +40,6 @@ public class Conduit {
   public static final String ACTION_PROJECT_ADD = "projects.add";
 
   public static final String ACTION_PROJECT_REMOVE = "projects.remove";
-
-  private static final Logger log = LoggerFactory.getLogger(Conduit.class);
 
   public static final int CONDUIT_VERSION = 7;
 

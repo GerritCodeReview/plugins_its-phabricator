@@ -14,6 +14,7 @@
 
 package com.googlesource.gerrit.plugins.its.phabricator;
 
+import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
@@ -24,12 +25,10 @@ import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacadeFactory;
 import com.googlesource.gerrit.plugins.its.base.its.SingleItsServer;
 import org.eclipse.jgit.lib.Config;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class PhabricatorModule extends AbstractModule {
 
-  private static final Logger log = LoggerFactory.getLogger(PhabricatorModule.class);
+  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   private final String pluginName;
   private final Config gerritConfig;
@@ -48,7 +47,7 @@ public class PhabricatorModule extends AbstractModule {
   @Override
   protected void configure() {
     if (gerritConfig.getString(pluginName, null, "url") != null) {
-      log.info("Phabricator is configured as ITS");
+      logger.atInfo().log("Phabricator is configured as ITS");
       bind(ItsFacade.class).toInstance(new PhabricatorItsFacade(pluginName, gerritConfig));
       bind(ItsFacadeFactory.class).to(SingleItsServer.class);
 

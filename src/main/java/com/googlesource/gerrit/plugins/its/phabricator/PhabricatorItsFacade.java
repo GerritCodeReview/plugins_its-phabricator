@@ -15,6 +15,7 @@
 package com.googlesource.gerrit.plugins.its.phabricator;
 
 import com.google.common.collect.Sets;
+import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gson.Gson;
@@ -32,11 +33,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Set;
 import org.eclipse.jgit.lib.Config;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class PhabricatorItsFacade implements ItsFacade {
-  private static final Logger log = LoggerFactory.getLogger(PhabricatorItsFacade.class);
+  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   private static final String GERRIT_CONFIG_URL = "url";
   private static final String GERRIT_CONFIG_TOKEN = "token";
@@ -61,7 +60,7 @@ public class PhabricatorItsFacade implements ItsFacade {
     } catch (ConduitException e) {
       throw new IOException("Could not update message for task " + task_id, e);
     }
-    log.debug("Added comment " + comment + " to bug " + task_id);
+    logger.atFine().log("Added comment %s to bug %s", comment, task_id);
   }
 
   @Override
