@@ -50,8 +50,7 @@ public class Conduit {
 
   private final ConduitConnection conduitConnection;
   private final Gson gson;
-
-  private String token;
+  private final String token;
 
   @Inject
   public Conduit(
@@ -61,10 +60,6 @@ public class Conduit {
     this.conduitConnection = conduitConnectionFactory.create(baseUrl);
     this.token = token;
     this.gson = new Gson();
-  }
-
-  public void setToekn(String token) {
-    this.token = token;
   }
 
   /** Runs the API's 'conduit.ping' method */
