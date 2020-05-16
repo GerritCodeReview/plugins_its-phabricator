@@ -14,24 +14,16 @@
 
 package com.googlesource.gerrit.plugins.its.phabricator;
 
-import com.google.common.collect.Sets;
 import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.server.config.GerritServerConfig;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.Conduit;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.ConduitErrorException;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.ConduitException;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestResults;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestSearch;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectSearch;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Set;
 import org.eclipse.jgit.lib.Config;
 
 public class PhabricatorItsFacade implements ItsFacade {
@@ -41,7 +33,6 @@ public class PhabricatorItsFacade implements ItsFacade {
   private static final String GERRIT_CONFIG_TOKEN = "token";
 
   private final Conduit conduit;
-  private final Gson gson;
 
   @Inject
   public PhabricatorItsFacade(
@@ -52,7 +43,6 @@ public class PhabricatorItsFacade implements ItsFacade {
     String token = cfg.getString(pluginName, null, GERRIT_CONFIG_TOKEN);
 
     this.conduit = conduitFactory.create(url, token);
-    this.gson = new Gson();
   }
 
   @Override
@@ -107,12 +97,12 @@ public class PhabricatorItsFacade implements ItsFacade {
         case "add-project":
           assertParameters(action, chopped, 1);
 
-          maniphestEdit(chopped[1], taskId, Conduit.ACTION_PROJECT_ADD);
+          conduit.maniphestEdit(chopped[1], taskId, Conduit.ACTION_PROJECT_ADD);
           break;
         case "remove-project":
           assertParameters(action, chopped, 1);
 
-          maniphestEdit(chopped[1], taskId, Conduit.ACTION_PROJECT_REMOVE);
+          conduit.maniphestEdit(chopped[1], taskId, Conduit.ACTION_PROJECT_REMOVE);
           break;
         default:
           throw new IOException("Unknown action " + action);
@@ -128,35 +118,6 @@ public class PhabricatorItsFacade implements ItsFacade {
           String.format(
               "Action %s expects exactly %d parameter(s) but %d given",
               action, length, params.length - 1));
-    }
-  }
-
-  private void maniphestEdit(String projectName, int taskId, String actions) throws IOException {
-    try {
-      ProjectSearch projectSearch = conduit.projectSearch(projectName);
-      String projectPhid = projectSearch.getPhid();
-
-      Set<String> projectPhids = Sets.newHashSet(projectPhid);
-
-      ManiphestResults taskSearch = conduit.maniphestSearch(taskId);
-      JsonArray maniphestResultEntryValue = taskSearch.getData().getAsJsonArray();
-
-      for (JsonElement jsonElement : maniphestResultEntryValue) {
-        ManiphestSearch maniphestResultManiphestSearch =
-            gson.fromJson(jsonElement, ManiphestSearch.class);
-        for (JsonElement jsonElement2 :
-            maniphestResultManiphestSearch
-                .getAttachments()
-                .getProjects()
-                .getProjectPHIDs()
-                .getAsJsonArray()) {
-          projectPhids.add(jsonElement2.getAsString());
-        }
-      }
-
-      conduit.maniphestEdit(taskId, projectPhids, actions);
-    } catch (ConduitException e) {
-      throw new IOException("Error on conduit", e);
     }
   }
 

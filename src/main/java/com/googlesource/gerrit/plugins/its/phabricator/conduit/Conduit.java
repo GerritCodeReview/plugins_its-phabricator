@@ -14,6 +14,7 @@
 
 package com.googlesource.gerrit.plugins.its.phabricator.conduit;
 
+import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -23,12 +24,15 @@ import com.google.inject.assistedinject.Assisted;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitPing;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestEdit;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestResults;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestSearch;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectResults;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectSearch;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Bindings for Phabricator's Conduit API
@@ -102,6 +106,35 @@ public class Conduit {
   public ManiphestEdit maniphestEdit(int taskId, Iterable<String> projects, String action)
       throws ConduitException {
     return maniphestEdit(taskId, null, projects, action);
+  }
+
+  public void maniphestEdit(String projectName, int taskId, String actions) throws IOException {
+    try {
+      ProjectSearch projectSearch = projectSearch(projectName);
+      String projectPhid = projectSearch.getPhid();
+
+      Set<String> projectPhids = Sets.newHashSet(projectPhid);
+
+      ManiphestResults taskSearch = maniphestSearch(taskId);
+      JsonArray maniphestResultEntryValue = taskSearch.getData().getAsJsonArray();
+
+      for (JsonElement jsonElement : maniphestResultEntryValue) {
+        ManiphestSearch maniphestResultManiphestSearch =
+            gson.fromJson(jsonElement, ManiphestSearch.class);
+        for (JsonElement jsonElement2 :
+            maniphestResultManiphestSearch
+                .getAttachments()
+                .getProjects()
+                .getProjectPHIDs()
+                .getAsJsonArray()) {
+          projectPhids.add(jsonElement2.getAsString());
+        }
+      }
+
+      maniphestEdit(taskId, projectPhids, actions);
+    } catch (ConduitException e) {
+      throw new IOException("Error on conduit", e);
+    }
   }
 
   /** Runs the API's 'maniphest.edit' method */
