@@ -13,7 +13,8 @@
 // limitations under the License.
 package com.googlesource.gerrit.plugins.its.phabricator;
 
-import static org.easymock.EasyMock.expect;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.config.FactoryModule;
@@ -21,16 +22,18 @@ import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.Conduit;
 import org.eclipse.jgit.lib.Config;
+import org.junit.Test;
 
 public class PhabricatorItsFacadeTest extends LoggingMockingTestCase {
   private Injector injector;
   private Config serverConfig;
+  private Conduit.Factory conduitFactory;
 
+  @Test
   public void testCreateLinkForWebUiDifferentUrlAndText() {
     mockUnconnectablePhabricator();
-
-    replayMocks();
 
     PhabricatorItsFacade itsFacade = createPhabricatorItsFacade();
     String actual = itsFacade.createLinkForWebui("Test-Url", "Test-Text");
@@ -38,10 +41,9 @@ public class PhabricatorItsFacadeTest extends LoggingMockingTestCase {
     assertEquals("[[Test-Url|Test-Text]]", actual);
   }
 
+  @Test
   public void testCreateLinkForWebUiSameUrlAndText() {
     mockUnconnectablePhabricator();
-
-    replayMocks();
 
     PhabricatorItsFacade itsFacade = createPhabricatorItsFacade();
     String actual = itsFacade.createLinkForWebui("Test-Url", "Test-Url");
@@ -49,10 +51,9 @@ public class PhabricatorItsFacadeTest extends LoggingMockingTestCase {
     assertEquals("[[Test-Url]]", actual);
   }
 
+  @Test
   public void testCreateLinkForWebUiNullText() {
     mockUnconnectablePhabricator();
-
-    replayMocks();
 
     PhabricatorItsFacade itsFacade = createPhabricatorItsFacade();
     String actual = itsFacade.createLinkForWebui("Test-Url", null);
@@ -60,10 +61,9 @@ public class PhabricatorItsFacadeTest extends LoggingMockingTestCase {
     assertEquals("[[Test-Url]]", actual);
   }
 
+  @Test
   public void testCreateLinkForWebUiEmptyText() {
     mockUnconnectablePhabricator();
-
-    replayMocks();
 
     PhabricatorItsFacade itsFacade = createPhabricatorItsFacade();
     String actual = itsFacade.createLinkForWebui("Test-Url", "");
@@ -76,8 +76,8 @@ public class PhabricatorItsFacadeTest extends LoggingMockingTestCase {
   }
 
   private void mockUnconnectablePhabricator() {
-    expect(serverConfig.getString("its-phabricator", null, "url")).andReturn("<no-url>").anyTimes();
-    expect(serverConfig.getString("its-phabricator", null, "token")).andReturn("none").anyTimes();
+    when(serverConfig.getString("its-phabricator", null, "url")).thenReturn("<no-url>");
+    when(serverConfig.getString("its-phabricator", null, "token")).thenReturn("none");
   }
 
   @Override
@@ -90,9 +90,11 @@ public class PhabricatorItsFacadeTest extends LoggingMockingTestCase {
   private class TestModule extends FactoryModule {
     @Override
     protected void configure() {
-      serverConfig = createMock(Config.class);
+      serverConfig = mock(Config.class);
+      conduitFactory = mock(Conduit.Factory.class);
       bind(Config.class).annotatedWith(GerritServerConfig.class).toInstance(serverConfig);
       bind(String.class).annotatedWith(PluginName.class).toInstance("its-phabricator");
+      bind(Conduit.Factory.class).toInstance(conduitFactory);
     }
   }
 }
