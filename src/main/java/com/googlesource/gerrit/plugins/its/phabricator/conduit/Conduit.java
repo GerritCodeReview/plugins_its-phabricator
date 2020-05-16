@@ -16,13 +16,11 @@ package com.googlesource.gerrit.plugins.its.phabricator.conduit;
 
 import com.google.common.collect.Sets;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitPing;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.GenericSearch;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestEdit;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestSearch;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectSearch;
@@ -51,6 +49,7 @@ public class Conduit {
 
   public static final int CONDUIT_VERSION = 7;
 
+  private final SearchUtils searchUtils;
   private final ConduitConnection conduitConnection;
   private final Gson gson;
   private final String token;
@@ -58,8 +57,10 @@ public class Conduit {
   @Inject
   public Conduit(
       ConduitConnection.Factory conduitConnectionFactory,
+      SearchUtils searchUtils,
       @Assisted("baseUrl") String baseUrl,
       @Assisted("token") String token) {
+    this.searchUtils = searchUtils;
     this.conduitConnection = conduitConnectionFactory.create(baseUrl);
     this.token = token;
     this.gson = new Gson();
@@ -76,7 +77,7 @@ public class Conduit {
   }
 
   /** Runs the API's 'maniphest.search' method */
-  public GenericSearch maniphestSearch(int taskId) throws ConduitException {
+  public ManiphestSearch maniphestSearch(int taskId) throws ConduitException {
     HashMap<String, Object> params = new HashMap<>();
     HashMap<String, Object> params2 = new HashMap<>();
     HashMap<String, Object> params3 = new HashMap<>();
@@ -92,8 +93,10 @@ public class Conduit {
     params.put("attachments", params3);
 
     JsonElement callResult = conduitConnection.call("maniphest.search", params, token);
-    GenericSearch result = gson.fromJson(callResult, GenericSearch.class);
-    return result;
+    return searchUtils.stream(callResult, ManiphestSearch.class)
+        .filter((r) -> r.getId() == taskId)
+        .findFirst()
+        .orElse(null);
   }
 
   /** Runs the API's 'maniphest.edit' method */
@@ -114,20 +117,10 @@ public class Conduit {
 
       Set<String> projectPhids = Sets.newHashSet(projectPhid);
 
-      GenericSearch taskSearch = maniphestSearch(taskId);
-      JsonArray maniphestResultEntryValue = taskSearch.getData().getAsJsonArray();
-
-      for (JsonElement jsonElement : maniphestResultEntryValue) {
-        ManiphestSearch maniphestResultManiphestSearch =
-            gson.fromJson(jsonElement, ManiphestSearch.class);
-        for (JsonElement jsonElement2 :
-            maniphestResultManiphestSearch
-                .getAttachments()
-                .getProjects()
-                .getProjectPHIDs()
-                .getAsJsonArray()) {
-          projectPhids.add(jsonElement2.getAsString());
-        }
+      ManiphestSearch taskSearch = maniphestSearch(taskId);
+      for (JsonElement jsonElement2 :
+          taskSearch.getAttachments().getProjects().getProjectPHIDs().getAsJsonArray()) {
+        projectPhids.add(jsonElement2.getAsString());
       }
 
       maniphestEdit(taskId, projectPhids, actions);
@@ -182,16 +175,9 @@ public class Conduit {
     params.put("constraints", params2);
 
     JsonElement callResult = conduitConnection.call("project.search", params, token);
-    GenericSearch projectResult = gson.fromJson(callResult, GenericSearch.class);
-    JsonArray projectResultData = projectResult.getData().getAsJsonArray();
-
-    ProjectSearch result = null;
-    for (JsonElement jsonElement : projectResultData) {
-      ProjectSearch projectResultSearch = gson.fromJson(jsonElement, ProjectSearch.class);
-      if (projectResultSearch.getFields().getName().equals(name)) {
-        result = projectResultSearch;
-      }
-    }
-    return result;
+    return searchUtils.stream(callResult, ProjectSearch.class)
+        .filter((r) -> r.getFields().getName().equals(name))
+        .findFirst()
+        .orElse(null);
   }
 }

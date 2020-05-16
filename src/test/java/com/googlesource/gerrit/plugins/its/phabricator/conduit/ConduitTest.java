@@ -146,6 +146,6 @@ public class ConduitTest extends LoggingMockingTestCase {
   }
 
   private Conduit createConduit() {
-    return new Conduit(conduitConnectionFactory, URL, TOKEN);
+    return new Conduit(conduitConnectionFactory, new SearchUtils(), URL, TOKEN);
   }
 }

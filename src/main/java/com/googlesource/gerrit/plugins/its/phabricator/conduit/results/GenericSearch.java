@@ -14,7 +14,7 @@
 
 package com.googlesource.gerrit.plugins.its.phabricator.conduit.results;
 
-import com.google.gson.JsonElement;
+import com.google.gson.JsonArray;
 
 /**
  * Models the result for API methods
@@ -40,9 +40,9 @@ import com.google.gson.JsonElement;
  * </pre>
  */
 public class GenericSearch {
-  private JsonElement data;
+  private JsonArray data;
 
-  public JsonElement getData() {
+  public JsonArray getData() {
     return data;
   }
 }
