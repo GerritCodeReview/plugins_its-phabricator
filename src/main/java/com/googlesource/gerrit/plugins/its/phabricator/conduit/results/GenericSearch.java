@@ -39,7 +39,7 @@ import com.google.gson.JsonElement;
  * }
  * </pre>
  */
-public class ManiphestResults {
+public class GenericSearch {
   private JsonElement data;
 
   public JsonElement getData() {

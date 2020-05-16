@@ -22,10 +22,9 @@ import com.google.gson.JsonObject;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitPing;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.GenericSearch;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestEdit;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestResults;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestSearch;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectResults;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectSearch;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -77,7 +76,7 @@ public class Conduit {
   }
 
   /** Runs the API's 'maniphest.search' method */
-  public ManiphestResults maniphestSearch(int taskId) throws ConduitException {
+  public GenericSearch maniphestSearch(int taskId) throws ConduitException {
     HashMap<String, Object> params = new HashMap<>();
     HashMap<String, Object> params2 = new HashMap<>();
     HashMap<String, Object> params3 = new HashMap<>();
@@ -93,7 +92,7 @@ public class Conduit {
     params.put("attachments", params3);
 
     JsonElement callResult = conduitConnection.call("maniphest.search", params, token);
-    ManiphestResults result = gson.fromJson(callResult, ManiphestResults.class);
+    GenericSearch result = gson.fromJson(callResult, GenericSearch.class);
     return result;
   }
 
@@ -115,7 +114,7 @@ public class Conduit {
 
       Set<String> projectPhids = Sets.newHashSet(projectPhid);
 
-      ManiphestResults taskSearch = maniphestSearch(taskId);
+      GenericSearch taskSearch = maniphestSearch(taskId);
       JsonArray maniphestResultEntryValue = taskSearch.getData().getAsJsonArray();
 
       for (JsonElement jsonElement : maniphestResultEntryValue) {
@@ -183,7 +182,7 @@ public class Conduit {
     params.put("constraints", params2);
 
     JsonElement callResult = conduitConnection.call("project.search", params, token);
-    ProjectResults projectResult = gson.fromJson(callResult, ProjectResults.class);
+    GenericSearch projectResult = gson.fromJson(callResult, GenericSearch.class);
     JsonArray projectResultData = projectResult.getData().getAsJsonArray();
 
     ProjectSearch result = null;
