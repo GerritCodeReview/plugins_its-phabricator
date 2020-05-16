@@ -20,7 +20,6 @@ import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.Conduit;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.ConduitErrorException;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.ConduitException;
 import java.io.IOException;
 import java.net.URL;
@@ -68,18 +67,7 @@ public class PhabricatorItsFacade implements ItsFacade {
     Boolean ret = false;
     int task_id = Integer.parseInt(bugId);
     try {
-      try {
-        conduit.maniphestSearch(task_id);
-        ret = true;
-      } catch (ConduitErrorException e) {
-        // An ERR_BAD_TASK just means that the task does not exist.
-        // So the default value of ret would be ok
-        if (!("ERR_BAD_TASK".equals(e.getErrorCode()))) {
-          // So we had an exception that is /not/ ERR_BAD_TASK.
-          // We have to relay that to the caller.
-          throw e;
-        }
-      }
+      ret = (conduit.maniphestSearch(task_id) != null);
     } catch (ConduitException e) {
       throw new IOException("Could not check existence of task " + task_id, e);
     }
