@@ -140,7 +140,7 @@ public class Conduit {
     return result;
   }
 
-  /** Runs the API's 'projectSearch' method to match exactly one project name */
+  /** Runs the API's 'project.search' method to match exactly one project name */
   public ProjectSearch projectSearch(String name) throws ConduitException {
     HashMap<String, Object> params = new HashMap<>();
     HashMap<String, Object> params2 = new HashMap<>();
