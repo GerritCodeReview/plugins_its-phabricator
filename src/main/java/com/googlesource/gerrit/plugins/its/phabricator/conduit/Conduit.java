@@ -18,6 +18,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitPing;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestEdit;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestResults;
@@ -34,6 +36,9 @@ import java.util.Map;
  * <p>This class is not thread-safe.
  */
 public class Conduit {
+  public interface Factory {
+    Conduit create(@Assisted("baseUrl") String baseUrl, @Assisted("token") String token);
+  }
 
   public static final String ACTION_COMMENT = "comment";
 
@@ -48,12 +53,12 @@ public class Conduit {
 
   private String token;
 
-  public Conduit(final String baseUrl) {
-    this(baseUrl, null);
-  }
-
-  public Conduit(final String baseUrl, final String token) {
-    this.conduitConnection = new ConduitConnection(baseUrl);
+  @Inject
+  public Conduit(
+      ConduitConnection.Factory conduitConnectionFactory,
+      @Assisted("baseUrl") String baseUrl,
+      @Assisted("token") String token) {
+    this.conduitConnection = conduitConnectionFactory.create(baseUrl);
     this.token = token;
     this.gson = new Gson();
   }

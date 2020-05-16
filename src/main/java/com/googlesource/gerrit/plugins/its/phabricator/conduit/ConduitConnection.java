@@ -17,6 +17,8 @@ package com.googlesource.gerrit.plugins.its.phabricator.conduit;
 import com.google.common.flogger.FluentLogger;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.CallCapsule;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -31,15 +33,20 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 /** Abstracts the connection to Conduit API */
-class ConduitConnection {
+public class ConduitConnection {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
+
+  public interface Factory {
+    ConduitConnection create(String baseUrl);
+  }
 
   private final String apiUrlBase;
   private final Gson gson;
 
   private CloseableHttpClient client;
 
-  ConduitConnection(final String baseUrl) {
+  @Inject
+  ConduitConnection(@Assisted String baseUrl) {
     apiUrlBase = baseUrl.replaceAll("/+$", "") + "/api/";
     gson = new Gson();
     client = null;

@@ -16,17 +16,20 @@ package com.googlesource.gerrit.plugins.its.phabricator;
 
 import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.extensions.annotations.PluginName;
+import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
-import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
+import com.google.inject.Scopes;
 import com.googlesource.gerrit.plugins.its.base.ItsHookModule;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacadeFactory;
 import com.googlesource.gerrit.plugins.its.base.its.SingleItsServer;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.Conduit;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.ConduitConnection;
 import org.eclipse.jgit.lib.Config;
 
-public class PhabricatorModule extends AbstractModule {
+public class PhabricatorModule extends FactoryModule {
 
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
@@ -48,7 +51,9 @@ public class PhabricatorModule extends AbstractModule {
   protected void configure() {
     if (gerritConfig.getString(pluginName, null, "url") != null) {
       logger.atInfo().log("Phabricator is configured as ITS");
-      bind(ItsFacade.class).toInstance(new PhabricatorItsFacade(pluginName, gerritConfig));
+      factory(ConduitConnection.Factory.class);
+      factory(Conduit.Factory.class);
+      bind(ItsFacade.class).to(PhabricatorItsFacade.class).in(Scopes.SINGLETON);
       bind(ItsFacadeFactory.class).to(SingleItsServer.class);
 
       install(new ItsHookModule(pluginName, pluginCfgFactory));

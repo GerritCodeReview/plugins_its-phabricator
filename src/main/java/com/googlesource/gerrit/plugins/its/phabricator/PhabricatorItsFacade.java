@@ -44,11 +44,14 @@ public class PhabricatorItsFacade implements ItsFacade {
   private final Gson gson;
 
   @Inject
-  public PhabricatorItsFacade(@PluginName String pluginName, @GerritServerConfig Config cfg) {
+  public PhabricatorItsFacade(
+      @PluginName String pluginName,
+      @GerritServerConfig Config cfg,
+      Conduit.Factory conduitFactory) {
     String url = cfg.getString(pluginName, null, GERRIT_CONFIG_URL);
     String token = cfg.getString(pluginName, null, GERRIT_CONFIG_TOKEN);
 
-    this.conduit = new Conduit(url, token);
+    this.conduit = conduitFactory.create(url, token);
     this.gson = new Gson();
   }
 
