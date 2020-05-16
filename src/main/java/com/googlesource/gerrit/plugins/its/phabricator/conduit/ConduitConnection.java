@@ -96,13 +96,7 @@ class ConduitConnection {
     logger.atFinest().log("Calling phabricator method %s with the parameters %s", method, json);
     httppost.setEntity(new StringEntity("params=" + json, StandardCharsets.UTF_8));
 
-    CloseableHttpResponse response;
-    try {
-      response = getClient().execute(httppost);
-    } catch (IOException e) {
-      throw new ConduitException("Could not execute Phabricator API call", e);
-    }
-    try {
+    try (CloseableHttpResponse response = getClient().execute(httppost)) {
       logger.atFinest().log("Phabricator HTTP response status: %s", response.getStatusLine());
       HttpEntity entity = response.getEntity();
       String entityString;
@@ -122,12 +116,8 @@ class ConduitConnection {
             method, callCapsule.getErrorCode(), callCapsule.getErrorInfo());
       }
       return callCapsule.getResult();
-    } finally {
-      try {
-        response.close();
-      } catch (IOException e) {
-        throw new ConduitException("Could not close API response", e);
-      }
+    } catch (IOException e) {
+      throw new ConduitException("Could not execute Phabricator API call", e);
     }
   }
 }
