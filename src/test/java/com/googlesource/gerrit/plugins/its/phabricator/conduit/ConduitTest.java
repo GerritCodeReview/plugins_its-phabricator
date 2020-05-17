@@ -91,33 +91,12 @@ public class ConduitTest extends LoggingMockingTestCase {
   }
 
   @Test
-  public void testProjectSearchPassSimple() throws Exception {
+  public void testProjectSearchPass() throws Exception {
     Map<String, Object> params = new HashMap<>();
     params.put("constraints", ImmutableMap.of("query", "foo"));
 
     JsonArray data = new JsonArray();
     data.add(createProjectJson(2, "foo"));
-
-    JsonObject result = new JsonObject();
-    result.add("data", data);
-
-    when(conduitConnection.call("project.search", params, TOKEN)).thenReturn(result);
-
-    Conduit conduit = createConduit();
-
-    ProjectSearch actual = conduit.projectSearch("foo");
-    assertThat(actual.getPhid()).isEqualTo("PHID-PROJ-foo");
-  }
-
-  @Test
-  public void testProjectSearchPassMultiple() throws Exception {
-    Map<String, Object> params = new HashMap<>();
-    params.put("constraints", ImmutableMap.of("query", "foo"));
-
-    JsonArray data = new JsonArray();
-    data.add(createProjectJson(2, "fooBar"));
-    data.add(createProjectJson(3, "foo"));
-    data.add(createProjectJson(4, "BazFoo"));
 
     JsonObject result = new JsonObject();
     result.add("data", data);

@@ -163,9 +163,6 @@ public class Conduit {
     params.put("constraints", ImmutableMap.of("query", name));
 
     JsonElement callResult = conduitConnection.call("project.search", params, token);
-    return searchUtils.stream(callResult, ProjectSearch.class)
-        .filter((r) -> r.getFields().getName().equals(name))
-        .findFirst()
-        .orElse(null);
+    return searchUtils.stream(callResult, ProjectSearch.class).findFirst().orElse(null);
   }
 }
