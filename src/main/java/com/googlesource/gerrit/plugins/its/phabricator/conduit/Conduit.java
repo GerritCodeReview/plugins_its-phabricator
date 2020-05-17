@@ -79,18 +79,18 @@ public class Conduit {
   /** Runs the API's 'maniphest.search' method */
   public ManiphestSearch maniphestSearch(int taskId) throws ConduitException {
     HashMap<String, Object> params = new HashMap<>();
-    HashMap<String, Object> params2 = new HashMap<>();
-    HashMap<String, Object> params3 = new HashMap<>();
+    HashMap<String, Object> constraints = new HashMap<>();
+    HashMap<String, Object> attachments = new HashMap<>();
 
     List<Object> list = new ArrayList<>();
     list.add(taskId);
 
-    params2.put("ids", list);
+    constraints.put("ids", list);
 
-    params.put("constraints", params2);
+    params.put("constraints", constraints);
 
-    params3.put("projects", true);
-    params.put("attachments", params3);
+    attachments.put("projects", true);
+    params.put("attachments", attachments);
 
     JsonElement callResult = conduitConnection.call("maniphest.search", params, token);
     return searchUtils.stream(callResult, ManiphestSearch.class)
@@ -134,15 +134,15 @@ public class Conduit {
       int taskId, String comment, Iterable<String> projects, String action)
       throws ConduitException {
     HashMap<String, Object> params = new HashMap<>();
-    List<Object> list = new ArrayList<>();
-    HashMap<String, Object> params2 = new HashMap<>();
-    params2.put("type", action);
+    HashMap<String, Object> transaction = new HashMap<>();
+    List<Object> transactions = new ArrayList<>();
+    transaction.put("type", action);
     if (action.equals(ACTION_COMMENT)) {
       if (comment == null) {
         throw new IllegalArgumentException(
             "The value of comment (null) is invalid for the action" + action);
       }
-      params2.put("value", comment);
+      transaction.put("value", comment);
     }
 
     if (action.equals(ACTION_PROJECT_ADD) || action.equals(ACTION_PROJECT_REMOVE)) {
@@ -151,12 +151,12 @@ public class Conduit {
         throw new IllegalArgumentException(
             "The value of projects (null) is invalid for the action " + action);
       }
-      params2.put("value", projects);
+      transaction.put("value", projects);
     }
 
-    if (!params2.isEmpty()) {
-      list.add(params2);
-      params.put("transactions", list);
+    if (!transaction.isEmpty()) {
+      transactions.add(transaction);
+      params.put("transactions", transactions);
     }
     params.put("objectIdentifier", taskId);
 
@@ -168,11 +168,11 @@ public class Conduit {
   /** Runs the API's 'project.search' method to match exactly one project name */
   public ProjectSearch projectSearch(String name) throws ConduitException {
     HashMap<String, Object> params = new HashMap<>();
-    HashMap<String, Object> params2 = new HashMap<>();
+    HashMap<String, Object> constraints = new HashMap<>();
 
-    params2.put("query", name);
+    constraints.put("query", name);
 
-    params.put("constraints", params2);
+    params.put("constraints", constraints);
 
     JsonElement callResult = conduitConnection.call("project.search", params, token);
     return searchUtils.stream(callResult, ProjectSearch.class)
