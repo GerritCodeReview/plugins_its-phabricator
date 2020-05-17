@@ -48,7 +48,7 @@ public class PhabricatorItsFacade implements ItsFacade {
   public void addComment(final String bugId, final String comment) throws IOException {
     int task_id = Integer.parseInt(bugId);
     try {
-      conduit.maniphestEdit(task_id, comment);
+      conduit.maniphestEdit(task_id, comment, null, null);
     } catch (ConduitException e) {
       throw new IOException("Could not update message for task " + task_id, e);
     }
@@ -81,19 +81,21 @@ public class PhabricatorItsFacade implements ItsFacade {
     String chopped[] = actionString.split(" ");
     if (chopped.length >= 1) {
       String action = chopped[0];
-      switch (action) {
-        case "add-project":
-          assertParameters(action, chopped, 1);
-
-          conduit.maniphestEdit(chopped[1], taskId, Conduit.ACTION_PROJECT_ADD);
-          break;
-        case "remove-project":
-          assertParameters(action, chopped, 1);
-
-          conduit.maniphestEdit(chopped[1], taskId, Conduit.ACTION_PROJECT_REMOVE);
-          break;
-        default:
-          throw new IOException("Unknown action " + action);
+      try {
+        switch (action) {
+          case "add-project":
+            assertParameters(action, chopped, 1);
+            conduit.maniphestEdit(taskId, null, chopped[1], null);
+            break;
+          case "remove-project":
+            assertParameters(action, chopped, 1);
+            conduit.maniphestEdit(taskId, null, null, chopped[1]);
+            break;
+          default:
+            throw new IOException("Unknown action " + action);
+        }
+      } catch (ConduitException e) {
+        throw new IOException("Could not perform action " + action, e);
       }
     } else {
       throw new IOException("Could not parse action " + actionString);

@@ -14,9 +14,9 @@
 
 package com.googlesource.gerrit.plugins.its.phabricator.conduit;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -26,12 +26,10 @@ import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitPi
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestEdit;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestSearch;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectSearch;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Bindings for Phabricator's Conduit API
@@ -92,68 +90,44 @@ public class Conduit {
   }
 
   /** Runs the API's 'maniphest.edit' method */
-  public ManiphestEdit maniphestEdit(int taskId, String comment) throws ConduitException {
-    return maniphestEdit(taskId, comment, null, ACTION_COMMENT);
-  }
-
-  /** Runs the API's 'maniphest.edit' method */
-  public ManiphestEdit maniphestEdit(int taskId, Iterable<String> projects, String action)
-      throws ConduitException {
-    return maniphestEdit(taskId, null, projects, action);
-  }
-
-  public void maniphestEdit(String projectName, int taskId, String actions) throws IOException {
-    try {
-      ProjectSearch projectSearch = projectSearch(projectName);
-      String projectPhid = projectSearch.getPhid();
-
-      Set<String> projectPhids = Sets.newHashSet(projectPhid);
-
-      ManiphestSearch taskSearch = maniphestSearch(taskId);
-      for (JsonElement jsonElement2 :
-          taskSearch.getAttachments().getProjects().getProjectPHIDs().getAsJsonArray()) {
-        projectPhids.add(jsonElement2.getAsString());
-      }
-
-      maniphestEdit(taskId, projectPhids, actions);
-    } catch (ConduitException e) {
-      throw new IOException("Error on conduit", e);
-    }
-  }
-
-  /** Runs the API's 'maniphest.edit' method */
   public ManiphestEdit maniphestEdit(
-      int taskId, String comment, Iterable<String> projects, String action)
+      int taskId, String comment, String projectNameToAdd, String projectNameToRemove)
       throws ConduitException {
-    HashMap<String, Object> params = new HashMap<>();
-    HashMap<String, Object> transaction = new HashMap<>();
+    ManiphestEdit result = null;
     List<Object> transactions = new ArrayList<>();
-    transaction.put("type", action);
-    if (action.equals(ACTION_COMMENT)) {
-      if (comment == null) {
-        throw new IllegalArgumentException(
-            "The value of comment (null) is invalid for the action" + action);
-      }
+
+    if (!Strings.isNullOrEmpty(comment)) {
+      HashMap<String, Object> transaction = new HashMap<>();
+      transaction.put("type", ACTION_COMMENT);
       transaction.put("value", comment);
-    }
 
-    if (action.equals(ACTION_PROJECT_ADD) || action.equals(ACTION_PROJECT_REMOVE)) {
-      if ((action.equals(ACTION_PROJECT_ADD) || action.equals(ACTION_PROJECT_REMOVE))
-          && projects == null) {
-        throw new IllegalArgumentException(
-            "The value of projects (null) is invalid for the action " + action);
-      }
-      transaction.put("value", projects);
-    }
-
-    if (!transaction.isEmpty()) {
       transactions.add(transaction);
-      params.put("transactions", transactions);
     }
-    params.put("objectIdentifier", taskId);
 
-    JsonElement callResult = conduitConnection.call("maniphest.edit", params, token);
-    ManiphestEdit result = gson.fromJson(callResult, ManiphestEdit.class);
+    if (!Strings.isNullOrEmpty(projectNameToAdd)) {
+      HashMap<String, Object> transaction = new HashMap<>();
+      transaction.put("type", ACTION_PROJECT_ADD);
+      transaction.put("value", ImmutableList.of(projectSearch(projectNameToAdd).getPhid()));
+
+      transactions.add(transaction);
+    }
+
+    if (!Strings.isNullOrEmpty(projectNameToRemove)) {
+      HashMap<String, Object> transaction = new HashMap<>();
+      transaction.put("type", ACTION_PROJECT_REMOVE);
+      transaction.put("value", ImmutableList.of(projectSearch(projectNameToRemove).getPhid()));
+
+      transactions.add(transaction);
+    }
+
+    if (!transactions.isEmpty()) {
+      HashMap<String, Object> params = new HashMap<>();
+      params.put("objectIdentifier", taskId);
+      params.put("transactions", transactions);
+      JsonElement callResult = conduitConnection.call("maniphest.edit", params, token);
+      result = gson.fromJson(callResult, ManiphestEdit.class);
+    }
+
     return result;
   }
 

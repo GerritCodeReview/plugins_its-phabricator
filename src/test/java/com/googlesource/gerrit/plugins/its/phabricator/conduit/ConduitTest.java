@@ -15,11 +15,15 @@ package com.googlesource.gerrit.plugins.its.phabricator.conduit;
 
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.gerrit.testing.GerritJUnit.assertThrows;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -27,6 +31,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitPing;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestEdit;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectSearch;
 import java.util.HashMap;
 import java.util.Map;
@@ -109,7 +114,166 @@ public class ConduitTest extends LoggingMockingTestCase {
     assertThat(actual.getPhid()).isEqualTo("PHID-PROJ-foo");
   }
 
-  // TODO: Add tests for maniphestEdit
+  @Test
+  public void testManiphestEditNoop() throws Exception {
+    Conduit conduit = createConduit();
+    ManiphestEdit actual = conduit.maniphestEdit(4711, null, null, null);
+
+    verifyZeroInteractions(conduitConnection);
+    assertThat(actual).isNull();
+  }
+
+  @Test
+  public void testManiphestEditEmpty() throws Exception {
+    Conduit conduit = createConduit();
+    ManiphestEdit actual = conduit.maniphestEdit(4711, "", "", "");
+
+    verifyZeroInteractions(conduitConnection);
+    assertThat(actual).isNull();
+  }
+
+  @Test
+  public void testManiphestEditAddComment() throws Exception {
+    Map<String, Object> transaction = new HashMap<>();
+    transaction.put("type", "comment");
+    transaction.put("value", "foo");
+
+    Map<String, Object> params = new HashMap<>();
+    params.put("objectIdentifier", 4711);
+    params.put("transactions", ImmutableList.of(transaction));
+
+    JsonArray data = new JsonArray();
+    data.add(createProjectJson(2, "foo"));
+
+    JsonObject response = createEditResponse(1);
+    when(conduitConnection.call("maniphest.edit", params, TOKEN)).thenReturn(response);
+
+    Conduit conduit = createConduit();
+
+    ManiphestEdit actual = conduit.maniphestEdit(4711, "foo", null, null);
+
+    assertThat(actual.getObject().getId()).isEqualTo(4712);
+    assertThat(actual.getObject().getPhid()).isEqualTo("PHID-foo");
+    assertThat(actual.getTransactions()).hasSize(1);
+    assertThat(actual.getTransactions().get(0).getPhid()).isEqualTo("trans@0");
+  }
+
+  @Test
+  public void testManiphestEditAddProject() throws Exception {
+    Map<String, Object> transaction = new HashMap<>();
+    transaction.put("type", "projects.add");
+    transaction.put("value", ImmutableList.of("PHID-bar"));
+
+    Map<String, Object> params = new HashMap<>();
+    params.put("objectIdentifier", 4711);
+    params.put("transactions", ImmutableList.of(transaction));
+
+    JsonArray data = new JsonArray();
+    data.add(createProjectJson(2, "foo"));
+
+    JsonObject response = createEditResponse(1);
+    when(conduitConnection.call("maniphest.edit", params, TOKEN)).thenReturn(response);
+
+    Conduit conduit = spy(createConduit());
+
+    // shortcut the needed project search
+    doReturn(new ProjectSearch(12, "PHID-bar")).when(conduit).projectSearch("foo");
+
+    ManiphestEdit actual = conduit.maniphestEdit(4711, null, "foo", null);
+
+    assertThat(actual.getObject().getId()).isEqualTo(4712);
+    assertThat(actual.getObject().getPhid()).isEqualTo("PHID-foo");
+    assertThat(actual.getTransactions()).hasSize(1);
+    assertThat(actual.getTransactions().get(0).getPhid()).isEqualTo("trans@0");
+  }
+
+  @Test
+  public void testManiphestEditRemoveProject() throws Exception {
+    Map<String, Object> transaction = new HashMap<>();
+    transaction.put("type", "projects.remove");
+    transaction.put("value", ImmutableList.of("PHID-bar"));
+
+    Map<String, Object> params = new HashMap<>();
+    params.put("objectIdentifier", 4711);
+    params.put("transactions", ImmutableList.of(transaction));
+
+    JsonArray data = new JsonArray();
+    data.add(createProjectJson(2, "foo"));
+
+    JsonObject response = createEditResponse(1);
+    when(conduitConnection.call("maniphest.edit", params, TOKEN)).thenReturn(response);
+
+    Conduit conduit = spy(createConduit());
+
+    // shortcut the needed project search
+    doReturn(new ProjectSearch(12, "PHID-bar")).when(conduit).projectSearch("foo");
+
+    ManiphestEdit actual = conduit.maniphestEdit(4711, null, null, "foo");
+
+    assertThat(actual.getObject().getId()).isEqualTo(4712);
+    assertThat(actual.getObject().getPhid()).isEqualTo("PHID-foo");
+    assertThat(actual.getTransactions()).hasSize(1);
+    assertThat(actual.getTransactions().get(0).getPhid()).isEqualTo("trans@0");
+  }
+
+  @Test
+  public void testManiphestEditAllParams() throws Exception {
+    Map<String, Object> transaction1 = new HashMap<>();
+    transaction1.put("type", "comment");
+    transaction1.put("value", "foo");
+
+    Map<String, Object> transaction2 = new HashMap<>();
+    transaction2.put("type", "projects.add");
+    transaction2.put("value", ImmutableList.of("PHID-bar"));
+
+    Map<String, Object> transaction3 = new HashMap<>();
+    transaction3.put("type", "projects.remove");
+    transaction3.put("value", ImmutableList.of("PHID-baz"));
+
+    Map<String, Object> params = new HashMap<>();
+    params.put("objectIdentifier", 4711);
+    params.put("transactions", ImmutableList.of(transaction1, transaction2, transaction3));
+
+    JsonArray data = new JsonArray();
+    data.add(createProjectJson(2, "foo"));
+
+    JsonObject response = createEditResponse(3);
+    when(conduitConnection.call("maniphest.edit", params, TOKEN)).thenReturn(response);
+
+    Conduit conduit = spy(createConduit());
+
+    // shortcut the needed project searches
+    doReturn(new ProjectSearch(12, "PHID-bar")).when(conduit).projectSearch("bar");
+    doReturn(new ProjectSearch(12, "PHID-baz")).when(conduit).projectSearch("baz");
+
+    ManiphestEdit actual = conduit.maniphestEdit(4711, "foo", "bar", "baz");
+
+    assertThat(actual.getObject().getId()).isEqualTo(4712);
+    assertThat(actual.getObject().getPhid()).isEqualTo("PHID-foo");
+    assertThat(actual.getTransactions()).hasSize(3);
+    assertThat(actual.getTransactions().get(0).getPhid()).isEqualTo("trans@0");
+    assertThat(actual.getTransactions().get(1).getPhid()).isEqualTo("trans@1");
+    assertThat(actual.getTransactions().get(2).getPhid()).isEqualTo("trans@2");
+  }
+
+  private JsonObject createEditResponse(int transactions) {
+    JsonObject resultObject = new JsonObject();
+    resultObject.addProperty("id", 4712);
+    resultObject.addProperty("phid", "PHID-foo");
+
+    JsonArray transactionArray = new JsonArray();
+    for (int i = 0; i < transactions; i++) {
+      JsonObject transaction = new JsonObject();
+      transaction.addProperty("phid", "trans@" + i);
+      transactionArray.add(transaction);
+    }
+
+    JsonObject response = new JsonObject();
+    response.add("object", resultObject);
+    response.add("transactions", transactionArray);
+
+    return response;
+  }
 
   private JsonObject createProjectJson(int id, String name) {
     JsonObject fields = new JsonObject();
