@@ -14,6 +14,8 @@
 
 package com.googlesource.gerrit.plugins.its.phabricator.conduit;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -79,18 +81,8 @@ public class Conduit {
   /** Runs the API's 'maniphest.search' method */
   public ManiphestSearch maniphestSearch(int taskId) throws ConduitException {
     HashMap<String, Object> params = new HashMap<>();
-    HashMap<String, Object> constraints = new HashMap<>();
-    HashMap<String, Object> attachments = new HashMap<>();
-
-    List<Object> list = new ArrayList<>();
-    list.add(taskId);
-
-    constraints.put("ids", list);
-
-    params.put("constraints", constraints);
-
-    attachments.put("projects", true);
-    params.put("attachments", attachments);
+    params.put("constraints", ImmutableMap.of("ids", ImmutableList.of(taskId)));
+    params.put("attachments", ImmutableMap.of("projects", true));
 
     JsonElement callResult = conduitConnection.call("maniphest.search", params, token);
     return searchUtils.stream(callResult, ManiphestSearch.class)
@@ -168,11 +160,7 @@ public class Conduit {
   /** Runs the API's 'project.search' method to match exactly one project name */
   public ProjectSearch projectSearch(String name) throws ConduitException {
     HashMap<String, Object> params = new HashMap<>();
-    HashMap<String, Object> constraints = new HashMap<>();
-
-    constraints.put("query", name);
-
-    params.put("constraints", constraints);
+    params.put("constraints", ImmutableMap.of("query", name));
 
     JsonElement callResult = conduitConnection.call("project.search", params, token);
     return searchUtils.stream(callResult, ProjectSearch.class)
