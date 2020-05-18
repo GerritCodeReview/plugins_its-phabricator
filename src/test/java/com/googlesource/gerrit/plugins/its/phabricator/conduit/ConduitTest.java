@@ -116,6 +116,22 @@ public class ConduitTest extends LoggingMockingTestCase {
   }
 
   @Test
+  public void testProjectSearchNotFound() throws Exception {
+    Map<String, Object> params = new HashMap<>();
+    params.put("constraints", ImmutableMap.of("query", "foo"));
+
+    JsonObject result = new JsonObject();
+    result.add("data", new JsonArray());
+
+    when(conduitConnection.call("project.search", params, TOKEN)).thenReturn(result);
+
+    Conduit conduit = createConduit();
+
+    ProjectSearch actual = conduit.projectSearch("foo");
+    assertThat(actual).isNull();
+  }
+
+  @Test
   public void testManiphestEditNoop() throws Exception {
     Conduit conduit = createConduit();
     ManiphestEdit actual = conduit.maniphestEdit(4711, null, null, null);
