@@ -56,24 +56,8 @@ package com.googlesource.gerrit.plugins.its.phabricator.conduit.results;
  * }
  * </pre>
  */
-public class ProjectSearch {
-  private int id;
-  private String phid;
-
-  public ProjectSearch(int id, String phid) {
-    this.id = id;
-    this.phid = phid;
-  }
-
-  public ProjectSearch() {
-    this(0, null);
-  }
-
-  public int getId() {
-    return id;
-  }
-
-  public String getPhid() {
-    return phid;
+public class ProjectSearch extends PhabObjectWithId {
+  public ProjectSearch(String phid, int id) {
+    super(phid, id);
   }
 }

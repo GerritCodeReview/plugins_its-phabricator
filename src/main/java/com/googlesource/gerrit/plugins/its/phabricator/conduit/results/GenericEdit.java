@@ -47,11 +47,5 @@ public class GenericEdit {
 
   public class Transaction extends PhabObject {}
 
-  public class ResultObject extends PhabObject {
-    private int id;
-
-    public int getId() {
-      return id;
-    }
-  }
+  public class ResultObject extends PhabObjectWithId {}
 }

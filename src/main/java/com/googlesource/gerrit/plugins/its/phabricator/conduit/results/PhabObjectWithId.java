@@ -14,18 +14,19 @@
 
 package com.googlesource.gerrit.plugins.its.phabricator.conduit.results;
 
-public class PhabObject {
-  private String phid;
+public class PhabObjectWithId extends PhabObject {
+  private int id;
 
-  public PhabObject() {
-    this(null);
+  public PhabObjectWithId() {
+    super();
   }
 
-  public PhabObject(String phid) {
-    this.phid = phid;
+  public PhabObjectWithId(String phid, int id) {
+    super(phid);
+    this.id = id;
   }
 
-  public String getPhid() {
-    return phid;
+  public int getId() {
+    return id;
   }
 }

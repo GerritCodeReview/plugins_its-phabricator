@@ -177,7 +177,7 @@ public class ConduitTest extends LoggingMockingTestCase {
     Conduit conduit = spy(createConduit());
 
     // shortcut the needed project search
-    doReturn(new ProjectSearch(12, "PHID-bar")).when(conduit).projectSearch("foo");
+    doReturn(new ProjectSearch("PHID-bar", 12)).when(conduit).projectSearch("foo");
 
     ManiphestEdit actual = conduit.maniphestEdit(4711, null, "foo", null);
 
@@ -206,7 +206,7 @@ public class ConduitTest extends LoggingMockingTestCase {
     Conduit conduit = spy(createConduit());
 
     // shortcut the needed project search
-    doReturn(new ProjectSearch(12, "PHID-bar")).when(conduit).projectSearch("foo");
+    doReturn(new ProjectSearch("PHID-bar", 12)).when(conduit).projectSearch("foo");
 
     ManiphestEdit actual = conduit.maniphestEdit(4711, null, null, "foo");
 
@@ -243,8 +243,8 @@ public class ConduitTest extends LoggingMockingTestCase {
     Conduit conduit = spy(createConduit());
 
     // shortcut the needed project searches
-    doReturn(new ProjectSearch(12, "PHID-bar")).when(conduit).projectSearch("bar");
-    doReturn(new ProjectSearch(12, "PHID-baz")).when(conduit).projectSearch("baz");
+    doReturn(new ProjectSearch("PHID-bar", 12)).when(conduit).projectSearch("bar");
+    doReturn(new ProjectSearch("PHID-baz", 13)).when(conduit).projectSearch("baz");
 
     ManiphestEdit actual = conduit.maniphestEdit(4711, "foo", "bar", "baz");
 

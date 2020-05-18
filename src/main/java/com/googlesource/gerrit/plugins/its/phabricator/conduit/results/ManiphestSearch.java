@@ -65,10 +65,4 @@ package com.googlesource.gerrit.plugins.its.phabricator.conduit.results;
  * }
  * </pre>
  */
-public class ManiphestSearch {
-  private int id;
-
-  public int getId() {
-    return id;
-  }
-}
+public class ManiphestSearch extends PhabObjectWithId {}
