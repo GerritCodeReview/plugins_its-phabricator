@@ -32,6 +32,7 @@ import com.google.gson.JsonPrimitive;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitPing;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestEdit;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestSearch;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectSearch;
 import java.util.HashMap;
 import java.util.Map;
@@ -254,6 +255,43 @@ public class ConduitTest extends LoggingMockingTestCase {
     assertThat(actual.getTransactions().get(0).getPhid()).isEqualTo("trans@0");
     assertThat(actual.getTransactions().get(1).getPhid()).isEqualTo("trans@1");
     assertThat(actual.getTransactions().get(2).getPhid()).isEqualTo("trans@2");
+  }
+
+  @Test
+  public void testManiphestSearchNotFound() throws Exception {
+    Map<String, Object> params = new HashMap<>();
+    params.put("constraints", ImmutableMap.of("ids", ImmutableList.of(4711)));
+
+    JsonObject result = new JsonObject();
+    result.add("data", new JsonArray());
+
+    when(conduitConnection.call("maniphest.search", params, TOKEN)).thenReturn(result);
+    Conduit conduit = createConduit();
+
+    verifyNoMoreInteractions(conduitConnection);
+    ManiphestSearch actual = conduit.maniphestSearch(4711);
+    assertThat(actual).isNull();
+  }
+
+  @Test
+  public void testManiphestSearchPass() throws Exception {
+    Map<String, Object> params = new HashMap<>();
+    params.put("constraints", ImmutableMap.of("ids", ImmutableList.of(4711)));
+
+    JsonObject needle = new JsonObject();
+    needle.addProperty("id", 23);
+
+    JsonArray data = new JsonArray();
+    data.add(needle);
+
+    JsonObject result = new JsonObject();
+    result.add("data", data);
+
+    when(conduitConnection.call("maniphest.search", params, TOKEN)).thenReturn(result);
+    Conduit conduit = createConduit();
+
+    ManiphestSearch actual = conduit.maniphestSearch(4711);
+    assertThat(actual.getId()).isEqualTo(23);
   }
 
   private JsonObject createEditResponse(int transactions) {
