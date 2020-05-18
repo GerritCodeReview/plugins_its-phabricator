@@ -82,10 +82,7 @@ public class Conduit {
     params.put("constraints", ImmutableMap.of("ids", ImmutableList.of(taskId)));
 
     JsonElement callResult = conduitConnection.call("maniphest.search", params, token);
-    return searchUtils.stream(callResult, ManiphestSearch.class)
-        .filter((r) -> r.getId() == taskId)
-        .findFirst()
-        .orElse(null);
+    return searchUtils.stream(callResult, ManiphestSearch.class).findFirst().orElse(null);
   }
 
   /** Runs the API's 'maniphest.edit' method */
