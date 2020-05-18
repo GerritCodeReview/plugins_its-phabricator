@@ -80,7 +80,6 @@ public class Conduit {
   public ManiphestSearch maniphestSearch(int taskId) throws ConduitException {
     HashMap<String, Object> params = new HashMap<>();
     params.put("constraints", ImmutableMap.of("ids", ImmutableList.of(taskId)));
-    params.put("attachments", ImmutableMap.of("projects", true));
 
     JsonElement callResult = conduitConnection.call("maniphest.search", params, token);
     return searchUtils.stream(callResult, ManiphestSearch.class)
