@@ -14,7 +14,14 @@
 package com.googlesource.gerrit.plugins.its.phabricator;
 
 import static com.google.common.truth.Truth.assertThat;
+import static com.google.gerrit.testing.GerritJUnit.assertThrows;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
@@ -25,8 +32,14 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.Conduit;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.ConduitException;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestEdit;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestSearch;
+import java.io.IOException;
+import java.net.URL;
 import org.eclipse.jgit.lib.Config;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 
 public class PhabricatorItsFacadeTest extends LoggingMockingTestCase {
   private Injector injector;
@@ -72,6 +85,153 @@ public class PhabricatorItsFacadeTest extends LoggingMockingTestCase {
     assertThat(actual).isEqualTo("[[Test-Url]]");
 
     verifyZeroInteractions(conduit);
+  }
+
+  @Test
+  public void testAddCommentPlain() throws Exception {
+    ManiphestEdit result = new ManiphestEdit();
+    when(conduit.maniphestEdit(4711, "bar", null, null)).thenReturn(result);
+
+    PhabricatorItsFacade itsFacade = createPhabricatorItsFacade();
+    itsFacade.addComment("4711", "bar");
+
+    verify(conduit).maniphestEdit(4711, "bar", null, null);
+    verifyNoMoreInteractions(conduit);
+
+    assertLogMessageContains("comment");
+  }
+
+  @Test
+  public void testAddCommentPlainNoNumber() throws Exception {
+    PhabricatorItsFacade itsFacade = createPhabricatorItsFacade();
+    assertThrows(RuntimeException.class, () -> itsFacade.addComment("foo", "bar"));
+
+    verifyZeroInteractions(conduit);
+  }
+
+  @Test
+  public void testAddCommentConduitException() throws Exception {
+    when(conduit.maniphestEdit(4711, "bar", null, null)).thenThrow(new ConduitException());
+
+    PhabricatorItsFacade itsFacade = createPhabricatorItsFacade();
+    assertThrows(IOException.class, () -> itsFacade.addComment("4711", "bar"));
+
+    verify(conduit).maniphestEdit(4711, "bar", null, null);
+    verifyNoMoreInteractions(conduit);
+  }
+
+  @Test
+  public void testAddRelatedLinkPlain() throws Exception {
+    ManiphestEdit result = new ManiphestEdit();
+    when(conduit.maniphestEdit(anyInt(), anyString(), isNull(), isNull())).thenReturn(result);
+
+    PhabricatorItsFacade itsFacade = createPhabricatorItsFacade();
+    itsFacade.addRelatedLink("4711", new URL("http://related.example.org"), "description");
+
+    ArgumentCaptor<String> commentCapture = ArgumentCaptor.forClass(String.class);
+    verify(conduit).maniphestEdit(eq(4711), commentCapture.capture(), isNull(), isNull());
+    verifyNoMoreInteractions(conduit);
+
+    assertThat(commentCapture.getValue()).contains("[[http://related.example.org|description]]");
+
+    assertLogMessageContains("comment");
+  }
+
+  @Test
+  public void testExistsNumberExists() throws Exception {
+    when(conduit.maniphestSearch(4711)).thenReturn(new ManiphestSearch());
+
+    PhabricatorItsFacade itsFacade = createPhabricatorItsFacade();
+    Boolean actual = itsFacade.exists("4711");
+
+    assertThat(actual).isTrue();
+
+    verify(conduit).maniphestSearch(4711);
+    verifyNoMoreInteractions(conduit);
+  }
+
+  @Test
+  public void testExistsNumberDoesNotExist() throws Exception {
+    when(conduit.maniphestSearch(4711)).thenReturn(null);
+
+    PhabricatorItsFacade itsFacade = createPhabricatorItsFacade();
+    Boolean actual = itsFacade.exists("4711");
+
+    assertThat(actual).isFalse();
+
+    verify(conduit).maniphestSearch(4711);
+    verifyNoMoreInteractions(conduit);
+  }
+
+  @Test
+  public void testExistsNumberConduitException() throws Exception {
+    when(conduit.maniphestSearch(4711)).thenThrow(new ConduitException());
+
+    PhabricatorItsFacade itsFacade = createPhabricatorItsFacade();
+    assertThrows(IOException.class, () -> itsFacade.exists("4711"));
+
+    verify(conduit).maniphestSearch(4711);
+    verifyNoMoreInteractions(conduit);
+  }
+
+  @Test
+  public void testExistsNoNumber() throws Exception {
+    PhabricatorItsFacade itsFacade = createPhabricatorItsFacade();
+    assertThrows(RuntimeException.class, () -> itsFacade.exists("foo"));
+
+    verifyZeroInteractions(conduit);
+  }
+
+  @Test
+  public void testPerformActionNoNumber() throws Exception {
+    PhabricatorItsFacade itsFacade = createPhabricatorItsFacade();
+    assertThrows(RuntimeException.class, () -> itsFacade.performAction("Foo", "add-project bar"));
+
+    verifyZeroInteractions(conduit);
+  }
+
+  @Test
+  public void testPerformActionAddProjectPlain() throws Exception {
+    when(conduit.maniphestEdit(4711, null, "bar", null)).thenReturn(new ManiphestEdit());
+
+    PhabricatorItsFacade itsFacade = createPhabricatorItsFacade();
+    itsFacade.performAction("4711", "add-project bar");
+
+    verify(conduit).maniphestEdit(4711, null, "bar", null);
+    verifyNoMoreInteractions(conduit);
+  }
+
+  @Test
+  public void testPerformActionAddProjectConduitException() throws Exception {
+    when(conduit.maniphestEdit(4711, null, "bar", null)).thenThrow(new ConduitException());
+
+    PhabricatorItsFacade itsFacade = createPhabricatorItsFacade();
+    assertThrows(IOException.class, () -> itsFacade.performAction("4711", "add-project bar"));
+
+    verify(conduit).maniphestEdit(4711, null, "bar", null);
+    verifyNoMoreInteractions(conduit);
+  }
+
+  @Test
+  public void testPerformActionRemoveProjectPlain() throws Exception {
+    when(conduit.maniphestEdit(4711, null, null, "bar")).thenReturn(new ManiphestEdit());
+
+    PhabricatorItsFacade itsFacade = createPhabricatorItsFacade();
+    itsFacade.performAction("4711", "remove-project bar");
+
+    verify(conduit).maniphestEdit(4711, null, null, "bar");
+    verifyNoMoreInteractions(conduit);
+  }
+
+  @Test
+  public void testPerformActionRemoveProjectConduitException() throws Exception {
+    when(conduit.maniphestEdit(4711, null, null, "bar")).thenThrow(new ConduitException());
+
+    PhabricatorItsFacade itsFacade = createPhabricatorItsFacade();
+    assertThrows(IOException.class, () -> itsFacade.performAction("4711", "remove-project bar"));
+
+    verify(conduit).maniphestEdit(4711, null, null, "bar");
+    verifyNoMoreInteractions(conduit);
   }
 
   private PhabricatorItsFacade createPhabricatorItsFacade() {
