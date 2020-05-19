@@ -50,7 +50,7 @@ public class PhabricatorItsFacade implements ItsFacade {
     try {
       conduit.maniphestEdit(task_id, comment, null, null);
     } catch (ConduitException e) {
-      throw new IOException("Could not update message for task " + task_id, e);
+      throw new IOException("Could not add comment for task " + task_id, e);
     }
     logger.atFine().log("Added comment %s to bug %s", comment, task_id);
   }
