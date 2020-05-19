@@ -13,6 +13,7 @@
 // limitations under the License.
 package com.googlesource.gerrit.plugins.its.phabricator;
 
+import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -38,7 +39,7 @@ public class PhabricatorItsFacadeTest extends LoggingMockingTestCase {
     PhabricatorItsFacade itsFacade = createPhabricatorItsFacade();
     String actual = itsFacade.createLinkForWebui("Test-Url", "Test-Text");
 
-    assertEquals("[[Test-Url|Test-Text]]", actual);
+    assertThat(actual).isEqualTo("[[Test-Url|Test-Text]]");
   }
 
   @Test
@@ -48,7 +49,7 @@ public class PhabricatorItsFacadeTest extends LoggingMockingTestCase {
     PhabricatorItsFacade itsFacade = createPhabricatorItsFacade();
     String actual = itsFacade.createLinkForWebui("Test-Url", "Test-Url");
 
-    assertEquals("[[Test-Url]]", actual);
+    assertThat(actual).isEqualTo("[[Test-Url]]");
   }
 
   @Test
@@ -58,7 +59,7 @@ public class PhabricatorItsFacadeTest extends LoggingMockingTestCase {
     PhabricatorItsFacade itsFacade = createPhabricatorItsFacade();
     String actual = itsFacade.createLinkForWebui("Test-Url", null);
 
-    assertEquals("[[Test-Url]]", actual);
+    assertThat(actual).isEqualTo("[[Test-Url]]");
   }
 
   @Test
@@ -68,7 +69,7 @@ public class PhabricatorItsFacadeTest extends LoggingMockingTestCase {
     PhabricatorItsFacade itsFacade = createPhabricatorItsFacade();
     String actual = itsFacade.createLinkForWebui("Test-Url", "");
 
-    assertEquals("[[Test-Url]]", actual);
+    assertThat(actual).isEqualTo("[[Test-Url]]");
   }
 
   private PhabricatorItsFacade createPhabricatorItsFacade() {
