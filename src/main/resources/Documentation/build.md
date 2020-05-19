@@ -32,7 +32,7 @@ Gerrit core in `tools/bzl/plugins.bzl`, and execute:
 To execute the tests run:
 
 ```
-  bazel test plugins/@PLUGIN@:its_phabricator_tests
+  bazel test plugins/@PLUGIN@:all
 ```
 
 [Back to @PLUGIN@ documentation index][index]
