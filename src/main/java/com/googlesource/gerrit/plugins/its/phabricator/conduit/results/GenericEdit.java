@@ -1,4 +1,4 @@
-// Copyright (C) 2018 The Android Open Source Project
+// Copyright (C) 2020 The Android Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 
 package com.googlesource.gerrit.plugins.its.phabricator.conduit.results;
 
-import com.google.gson.JsonElement;
+import java.util.List;
 
 /**
  * Models the result for API methods
@@ -23,26 +23,29 @@ import com.google.gson.JsonElement;
  *
  * <pre>
  * {
- *   "data": [
- *     { ... }
- *   ],
- *   "maps": {},
- *   "query": {
- *     "queryKey": null
+ *   "object":{
+ *     "id":2,
+ *     "phid":"PHID-TASK-wzydcwamkp5rjhg45ocq"
  *   },
- *   "cursor": {
- *     "limit": 100,
- *     "after": null,
- *     "before": null,
- *     "order": null
- *   }
+ *   "transactions":[
+ *     {"phid":"PHID-XACT-TASK-sghfp7saytwmun3"}
+ *   ]
  * }
  * </pre>
  */
-public class ProjectResults {
-  private JsonElement data;
+public class GenericEdit {
+  private ResultObject object;
+  private List<Transaction> transactions;
 
-  public JsonElement getData() {
-    return data;
+  public ResultObject getObject() {
+    return object;
   }
+
+  public List<Transaction> getTransactions() {
+    return transactions;
+  }
+
+  public class Transaction extends PhabObject {}
+
+  public class ResultObject extends PhabObjectWithId {}
 }

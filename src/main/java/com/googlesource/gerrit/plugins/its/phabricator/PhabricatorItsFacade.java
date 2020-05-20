@@ -14,54 +14,45 @@
 
 package com.googlesource.gerrit.plugins.its.phabricator;
 
-import com.google.common.collect.Sets;
+import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.server.config.GerritServerConfig;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.Conduit;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.ConduitErrorException;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.ConduitException;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestResults;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestSearch;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectSearch;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Set;
 import org.eclipse.jgit.lib.Config;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class PhabricatorItsFacade implements ItsFacade {
-  private static final Logger log = LoggerFactory.getLogger(PhabricatorItsFacade.class);
+  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   private static final String GERRIT_CONFIG_URL = "url";
   private static final String GERRIT_CONFIG_TOKEN = "token";
 
   private final Conduit conduit;
-  private final Gson gson;
 
   @Inject
-  public PhabricatorItsFacade(@PluginName String pluginName, @GerritServerConfig Config cfg) {
+  public PhabricatorItsFacade(
+      @PluginName String pluginName,
+      @GerritServerConfig Config cfg,
+      Conduit.Factory conduitFactory) {
     String url = cfg.getString(pluginName, null, GERRIT_CONFIG_URL);
     String token = cfg.getString(pluginName, null, GERRIT_CONFIG_TOKEN);
 
-    this.conduit = new Conduit(url, token);
-    this.gson = new Gson();
+    this.conduit = conduitFactory.create(url, token);
   }
 
   @Override
   public void addComment(final String bugId, final String comment) throws IOException {
     int task_id = Integer.parseInt(bugId);
     try {
-      conduit.maniphestEdit(task_id, comment);
+      conduit.maniphestEdit(task_id, comment, null, null);
     } catch (ConduitException e) {
-      throw new IOException("Could not update message for task " + task_id, e);
+      throw new IOException("Could not add comment for task " + task_id, e);
     }
-    log.debug("Added comment " + comment + " to bug " + task_id);
+    logger.atFine().log("Added comment %s to bug %s", comment, task_id);
   }
 
   @Override
@@ -76,18 +67,7 @@ public class PhabricatorItsFacade implements ItsFacade {
     Boolean ret = false;
     int task_id = Integer.parseInt(bugId);
     try {
-      try {
-        conduit.maniphestSearch(task_id);
-        ret = true;
-      } catch (ConduitErrorException e) {
-        // An ERR_BAD_TASK just means that the task does not exist.
-        // So the default value of ret would be ok
-        if (!("ERR_BAD_TASK".equals(e.getErrorCode()))) {
-          // So we had an exception that is /not/ ERR_BAD_TASK.
-          // We have to relay that to the caller.
-          throw e;
-        }
-      }
+      ret = (conduit.maniphestSearch(task_id) != null);
     } catch (ConduitException e) {
       throw new IOException("Could not check existence of task " + task_id, e);
     }
@@ -101,19 +81,21 @@ public class PhabricatorItsFacade implements ItsFacade {
     String chopped[] = actionString.split(" ");
     if (chopped.length >= 1) {
       String action = chopped[0];
-      switch (action) {
-        case "add-project":
-          assertParameters(action, chopped, 1);
-
-          maniphestEdit(chopped[1], taskId, Conduit.ACTION_PROJECT_ADD);
-          break;
-        case "remove-project":
-          assertParameters(action, chopped, 1);
-
-          maniphestEdit(chopped[1], taskId, Conduit.ACTION_PROJECT_REMOVE);
-          break;
-        default:
-          throw new IOException("Unknown action " + action);
+      try {
+        switch (action) {
+          case "add-project":
+            assertParameters(action, chopped, 1);
+            conduit.maniphestEdit(taskId, null, chopped[1], null);
+            break;
+          case "remove-project":
+            assertParameters(action, chopped, 1);
+            conduit.maniphestEdit(taskId, null, null, chopped[1]);
+            break;
+          default:
+            throw new IOException("Unknown action " + action);
+        }
+      } catch (ConduitException e) {
+        throw new IOException("Could not perform action " + action, e);
       }
     } else {
       throw new IOException("Could not parse action " + actionString);
@@ -126,35 +108,6 @@ public class PhabricatorItsFacade implements ItsFacade {
           String.format(
               "Action %s expects exactly %d parameter(s) but %d given",
               action, length, params.length - 1));
-    }
-  }
-
-  private void maniphestEdit(String projectName, int taskId, String actions) throws IOException {
-    try {
-      ProjectSearch projectSearch = conduit.projectSearch(projectName);
-      String projectPhid = projectSearch.getPhid();
-
-      Set<String> projectPhids = Sets.newHashSet(projectPhid);
-
-      ManiphestResults taskSearch = conduit.maniphestSearch(taskId);
-      JsonArray maniphestResultEntryValue = taskSearch.getData().getAsJsonArray();
-
-      for (JsonElement jsonElement : maniphestResultEntryValue) {
-        ManiphestSearch maniphestResultManiphestSearch =
-            gson.fromJson(jsonElement, ManiphestSearch.class);
-        for (JsonElement jsonElement2 :
-            maniphestResultManiphestSearch
-                .getAttachments()
-                .getProjects()
-                .getProjectPHIDs()
-                .getAsJsonArray()) {
-          projectPhids.add(jsonElement2.getAsString());
-        }
-      }
-
-      conduit.maniphestEdit(taskId, projectPhids, actions);
-    } catch (ConduitException e) {
-      throw new IOException("Error on conduit", e);
     }
   }
 

@@ -1,4 +1,4 @@
-// Copyright (C) 2018 The Android Open Source Project
+// Copyright (C) 2020 The Android Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,35 +14,18 @@
 
 package com.googlesource.gerrit.plugins.its.phabricator.conduit.results;
 
-import com.google.gson.JsonElement;
+public class PhabObject {
+  private String phid;
 
-/**
- * Models the result for API methods
- *
- * <p>JSON looks like:
- *
- * <pre>
- * {
- *   "data": [
- *     { ... }
- *   ],
- *   "maps": {},
- *   "query": {
- *     "queryKey": null
- *   },
- *   "cursor": {
- *     "limit": 100,
- *     "after": null,
- *     "before": null,
- *     "order": null
- *   }
- * }
- * </pre>
- */
-public class ManiphestResults {
-  private JsonElement data;
+  public PhabObject() {
+    this(null);
+  }
 
-  public JsonElement getData() {
-    return data;
+  public PhabObject(String phid) {
+    this.phid = phid;
+  }
+
+  public String getPhid() {
+    return phid;
   }
 }

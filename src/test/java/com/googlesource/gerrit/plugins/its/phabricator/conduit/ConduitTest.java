@@ -13,404 +13,336 @@
 // limitations under the License.
 package com.googlesource.gerrit.plugins.its.phabricator.conduit;
 
-import static org.easymock.EasyMock.capture;
-import static org.easymock.EasyMock.eq;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.resetToStrict;
-import static org.powermock.api.easymock.PowerMock.expectNew;
+import static com.google.common.truth.Truth.assertThat;
+import static com.google.gerrit.testing.GerritJUnit.assertThrows;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ConduitPing;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestEdit;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestInfo;
-import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectInfo;
-import java.util.Arrays;
-import java.util.List;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ManiphestSearch;
+import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.ProjectSearch;
+import java.util.HashMap;
 import java.util.Map;
-import org.easymock.Capture;
-import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.junit.Before;
+import org.junit.Test;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(Conduit.class)
 public class ConduitTest extends LoggingMockingTestCase {
   private static final String URL = "urlFoo";
   private static final String TOKEN = "tokenFoo";
+  private ConduitConnection.Factory conduitConnectionFactory;
+  private ConduitConnection conduitConnection;
 
-  private ConduitConnection connection;
+  @Override
+  @Before
+  public void setUp() throws Exception {
+    super.setUp();
+    conduitConnection = mock(ConduitConnection.class);
+    conduitConnectionFactory = mock(ConduitConnection.Factory.class);
+    when(conduitConnectionFactory.create(URL)).thenReturn(conduitConnection);
+  }
 
+  @Test
   public void testConduitPingPass() throws Exception {
-    mockConnection();
+    JsonElement result = new JsonPrimitive("hostFoo");
+    Map<String, Object> params = new HashMap<>();
+    when(conduitConnection.call("conduit.ping", params, TOKEN)).thenReturn(result);
 
-    resetToStrict(connection);
-
-    Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
-
-    expect(connection.call(eq("conduit.ping"), capture(paramsCaptureRelevant), eq(TOKEN)))
-        .andReturn(new JsonPrimitive("foo"))
-        .once();
-
-    replayMocks();
-
-    Conduit conduit = new Conduit(URL, TOKEN);
+    Conduit conduit = createConduit();
 
     ConduitPing actual = conduit.conduitPing();
-
-    assertEquals("Hostname does not match", "foo", actual.getHostname());
+    assertThat(actual.getHostname()).isEqualTo("hostFoo");
   }
 
+  @Test
   public void testConduitPingConnectionFail() throws Exception {
-    mockConnection();
+    ConduitException e = new ConduitException();
 
-    resetToStrict(connection);
+    Map<String, Object> params = new HashMap<>();
+    when(conduitConnection.call("conduit.ping", params, TOKEN)).thenThrow(e);
 
-    ConduitException conduitException = new ConduitException();
+    Conduit conduit = createConduit();
 
-    Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
-
-    expect(connection.call(eq("conduit.ping"), capture(paramsCaptureRelevant), eq(TOKEN)))
-        .andThrow(conduitException)
-        .once();
-
-    replayMocks();
-
-    Conduit conduit = new Conduit(URL, TOKEN);
-
-    try {
-      conduit.conduitPing();
-      fail("no exception got thrown");
-    } catch (ConduitException e) {
-      assertSame(conduitException, e);
-    }
+    assertThrows(ConduitException.class, () -> conduit.conduitPing());
   }
 
-  public void testManiphestInfoPass() throws Exception {
-    mockConnection();
-
-    resetToStrict(connection);
-
-    Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
-
-    JsonObject retRelevant = new JsonObject();
-    retRelevant.add("id", new JsonPrimitive(42));
-
-    expect(connection.call(eq("maniphest.info"), capture(paramsCaptureRelevant), eq(TOKEN)))
-        .andReturn(retRelevant)
-        .once();
-
-    replayMocks();
-
-    Conduit conduit = new Conduit(URL, TOKEN);
-
-    ManiphestInfo maniphestInfo = conduit.maniphestInfo(42);
-
-    Map<String, Object> paramsRelevant = paramsCaptureRelevant.getValue();
-    assertEquals("Task id is not set", 42, paramsRelevant.get("task_id"));
-
-    assertEquals("ManiphestInfo's id does not match", 42, maniphestInfo.getId());
-  }
-
-  public void testManiphestInfoFailConnect() throws Exception {
-    mockConnection();
-
-    ConduitException conduitException = new ConduitException();
-
-    Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
-
-    expect(connection.call(eq("maniphest.info"), capture(paramsCaptureRelevant), eq(TOKEN)))
-        .andThrow(conduitException)
-        .once();
-
-    replayMocks();
-
-    Conduit conduit = new Conduit(URL, TOKEN);
-
-    try {
-      conduit.maniphestInfo(42);
-      fail("no exception got thrown");
-    } catch (ConduitException e) {
-      assertSame(conduitException, e);
-    }
-  }
-
-  public void testManiphestInfoFailRelevant() throws Exception {
-    mockConnection();
-
-    resetToStrict(connection);
-
-    ConduitException conduitException = new ConduitException();
-
-    Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
-
-    expect(connection.call(eq("maniphest.info"), capture(paramsCaptureRelevant), eq(TOKEN)))
-        .andThrow(conduitException)
-        .once();
-
-    replayMocks();
-
-    Conduit conduit = new Conduit(URL, TOKEN);
-
-    try {
-      conduit.maniphestInfo(42);
-      fail("no exception got thrown");
-    } catch (ConduitException e) {
-      assertSame(conduitException, e);
-    }
-
-    Map<String, Object> paramsRelevant = paramsCaptureRelevant.getValue();
-    assertEquals("Task id is not set", 42, paramsRelevant.get("task_id"));
-  }
-
-  public void testManiphestEditPassComment() throws Exception {
-    mockConnection();
-
-    resetToStrict(connection);
-
-    JsonObject retRelevant = new JsonObject();
-    retRelevant.add("id", new JsonPrimitive(42));
-
-    Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
-
-    expect(connection.call(eq("maniphest.update"), capture(paramsCaptureRelevant), eq(TOKEN)))
-        .andReturn(retRelevant)
-        .once();
-
-    replayMocks();
-
-    Conduit conduit = new Conduit(URL, TOKEN);
-
-    ManiphestEdit maniphestEdit = conduit.maniphestEdit(42, "foo");
-
-    Map<String, Object> paramsRelevant = paramsCaptureRelevant.getValue();
-    assertEquals("Task id is not set", 42, paramsRelevant.get("id"));
-
-    assertEquals("ManiphestInfo's id does not match", 42, maniphestEdit.getId());
-  }
-
-  public void testManiphestEditPassProjects() throws Exception {
-    mockConnection();
-
-    resetToStrict(connection);
-
-    JsonObject retRelevant = new JsonObject();
-    retRelevant.add("id", new JsonPrimitive(42));
-
-    Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
-
-    expect(connection.call(eq("maniphest.edit"), capture(paramsCaptureRelevant), eq(TOKEN)))
-        .andReturn(retRelevant)
-        .once();
-
-    replayMocks();
-
-    Conduit conduit = new Conduit(URL, TOKEN);
-
-    ManiphestEdit maniphestEdit =
-        conduit.maniphestEdit(42, Arrays.asList("foo", "bar"), Conduit.ACTION_PROJECT_ADD);
-
-    Map<String, Object> paramsRelevant = paramsCaptureRelevant.getValue();
-    assertEquals("Task id is not set", 42, paramsRelevant.get("id"));
-    assertEquals(
-        "Task projects are not set",
-        Arrays.asList("foo", "bar"),
-        paramsRelevant.get("projectPHIDs"));
-
-    assertEquals("ManiphestEdit's id does not match", 42, maniphestEdit.getId());
-  }
-
-  public void testManiphestEditPassCommentAndProjects() throws Exception {
-    mockConnection();
-
-    resetToStrict(connection);
-
-    JsonObject retRelevant = new JsonObject();
-    retRelevant.add("id", new JsonPrimitive(42));
-
-    Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
-
-    expect(connection.call(eq("maniphest.edit"), capture(paramsCaptureRelevant), eq(TOKEN)))
-        .andReturn(retRelevant)
-        .once();
-
-    replayMocks();
-
-    Conduit conduit = new Conduit(URL, TOKEN);
-
-    ManiphestEdit maniphestEdit =
-        conduit.maniphestEdit(
-            42, "baz", Arrays.asList("foo", "bar"), Conduit.ACTION_PROJECT_REMOVE);
-
-    Map<String, Object> paramsRelevant = paramsCaptureRelevant.getValue();
-    assertEquals("Task id is not set", 42, paramsRelevant.get("id"));
-    assertEquals("Task comment is not set", "baz", paramsRelevant.get("comments"));
-    assertEquals(
-        "Task projects are not set",
-        Arrays.asList("foo", "bar"),
-        paramsRelevant.get("projectPHIDs"));
-
-    assertEquals("ManiphestUpdate's id does not match", 42, maniphestEdit.getId());
-  }
-
-  public void testManiphestEditFailConnect() throws Exception {
-    mockConnection();
-
-    ConduitException conduitException = new ConduitException();
-
-    Capture<Map<String, Object>> paramsCapture = new Capture<>();
-
-    expect(connection.call(eq("conduit.connect"), capture(paramsCapture), eq(TOKEN)))
-        .andThrow(conduitException)
-        .once();
-
-    replayMocks();
-
-    Conduit conduit = new Conduit(URL, null);
-
-    try {
-      conduit.maniphestEdit(42, "foo");
-      fail("no exception got thrown");
-    } catch (ConduitException e) {
-      assertSame(conduitException, e);
-    }
-  }
-
-  public void testManiphestEditFailRelevant() throws Exception {
-    mockConnection();
-
-    resetToStrict(connection);
-
-    ConduitException conduitException = new ConduitException();
-
-    Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
-
-    expect(connection.call(eq("maniphest.edit"), capture(paramsCaptureRelevant), eq(TOKEN)))
-        .andThrow(conduitException)
-        .once();
-
-    replayMocks();
-
-    Conduit conduit = new Conduit(URL, TOKEN);
-
-    try {
-      conduit.maniphestEdit(42, "foo");
-      fail("no exception got thrown");
-    } catch (ConduitException e) {
-      assertSame(conduitException, e);
-    }
-
-    Map<String, Object> paramsRelevant = paramsCaptureRelevant.getValue();
-    assertEquals("Task id is not set", 42, paramsRelevant.get("id"));
-  }
-
+  @Test
   public void testConnectionReuse() throws Exception {
-    mockConnection();
+    JsonElement result1 = new JsonPrimitive("hostFoo");
+    JsonElement result2 = new JsonPrimitive("hostBar");
+    Map<String, Object> params = new HashMap<>();
+    when(conduitConnection.call("conduit.ping", params, TOKEN)).thenReturn(result1, result2);
 
-    resetToStrict(connection);
+    Conduit conduit = createConduit();
 
-    JsonObject retRelevant = new JsonObject();
-    retRelevant.add("id", new JsonPrimitive(42));
+    ConduitPing actual1 = conduit.conduitPing();
+    assertThat(actual1.getHostname()).isEqualTo("hostFoo");
+    ConduitPing actual2 = conduit.conduitPing();
+    assertThat(actual2.getHostname()).isEqualTo("hostBar");
 
-    Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
-
-    expect(connection.call(eq("maniphest.info"), capture(paramsCaptureRelevant), eq(TOKEN)))
-        .andReturn(retRelevant)
-        .once();
-
-    replayMocks();
-
-    Conduit conduit = new Conduit(URL, TOKEN);
-
-    ManiphestInfo maniphestInfo = conduit.maniphestInfo(42);
-
-    Map<String, Object> paramsRelevant = paramsCaptureRelevant.getValue();
-    assertEquals("Task id is not set", 42, paramsRelevant.get("task_id"));
-
-    assertEquals("ManiphestInfo's id does not match", 42, maniphestInfo.getId());
+    verify(conduitConnectionFactory).create(URL);
+    verifyNoMoreInteractions(conduitConnectionFactory);
   }
 
-  public void testProjectQueryPass() throws Exception {
-    mockConnection();
+  @Test
+  public void testProjectSearchPass() throws Exception {
+    Map<String, Object> params = new HashMap<>();
+    params.put("constraints", ImmutableMap.of("query", "foo"));
 
-    resetToStrict(connection);
+    JsonArray data = new JsonArray();
+    data.add(createProjectJson(2, "foo"));
 
-    JsonObject projectInfoJson = new JsonObject();
-    projectInfoJson.addProperty("name", "foo");
-    projectInfoJson.addProperty("phid", "PHID-PROJ-bar");
+    JsonObject result = new JsonObject();
+    result.add("data", data);
 
-    JsonObject queryDataJson = new JsonObject();
-    queryDataJson.add("PHID-PROJ-bar", projectInfoJson);
+    when(conduitConnection.call("project.search", params, TOKEN)).thenReturn(result);
 
-    JsonObject retRelevant = new JsonObject();
-    retRelevant.add("data", queryDataJson);
+    Conduit conduit = createConduit();
 
-    Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
-
-    expect(connection.call(eq("project.query"), capture(paramsCaptureRelevant), eq(TOKEN)))
-        .andReturn(retRelevant)
-        .once();
-
-    replayMocks();
-
-    Conduit conduit = new Conduit(URL, TOKEN);
-
-    ProjectInfo projectInfo = conduit.projectQuery("foo");
-
-    Map<String, Object> paramsRelevant = paramsCaptureRelevant.getValue();
-    List<String> expectedNames = Arrays.asList("foo");
-    assertEquals("Project name does not match", expectedNames, paramsRelevant.get("names"));
-
-    assertEquals("ProjectInfo's name does not match", "foo", projectInfo.getName());
+    ProjectSearch actual = conduit.projectSearch("foo");
+    assertThat(actual.getPhid()).isEqualTo("PHID-PROJ-foo");
   }
 
-  public void testProjectQueryPassMultipleResults() throws Exception {
-    mockConnection();
+  @Test
+  public void testProjectSearchNotFound() throws Exception {
+    Map<String, Object> params = new HashMap<>();
+    params.put("constraints", ImmutableMap.of("query", "foo"));
 
-    resetToStrict(connection);
+    JsonObject result = new JsonObject();
+    result.add("data", new JsonArray());
 
-    JsonObject projectInfoJson1 = new JsonObject();
-    projectInfoJson1.addProperty("name", "foo1");
-    projectInfoJson1.addProperty("phid", "PHID-PROJ-bar1");
+    when(conduitConnection.call("project.search", params, TOKEN)).thenReturn(result);
 
-    JsonObject projectInfoJson2 = new JsonObject();
-    projectInfoJson2.addProperty("name", "foo2");
-    projectInfoJson2.addProperty("phid", "PHID-PROJ-bar2");
+    Conduit conduit = createConduit();
 
-    JsonObject projectInfoJson3 = new JsonObject();
-    projectInfoJson3.addProperty("name", "foo3");
-    projectInfoJson3.addProperty("phid", "PHID-PROJ-bar3");
-
-    JsonObject queryDataJson = new JsonObject();
-    queryDataJson.add("PHID-PROJ-bar1", projectInfoJson1);
-    queryDataJson.add("PHID-PROJ-bar2", projectInfoJson2);
-    queryDataJson.add("PHID-PROJ-bar3", projectInfoJson3);
-
-    JsonObject retRelevant = new JsonObject();
-    retRelevant.add("data", queryDataJson);
-
-    Capture<Map<String, Object>> paramsCaptureRelevant = new Capture<>();
-
-    expect(connection.call(eq("project.query"), capture(paramsCaptureRelevant), eq(TOKEN)))
-        .andReturn(retRelevant)
-        .once();
-
-    replayMocks();
-
-    Conduit conduit = new Conduit(URL, TOKEN);
-
-    ProjectInfo projectInfo = conduit.projectQuery("foo2");
-
-    Map<String, Object> paramsRelevant = paramsCaptureRelevant.getValue();
-    List<String> expectedNames = Arrays.asList("foo2");
-    assertEquals("Project name does not match", expectedNames, paramsRelevant.get("names"));
-
-    assertEquals("ProjectInfo's name does not match", "foo2", projectInfo.getName());
+    ProjectSearch actual = conduit.projectSearch("foo");
+    assertThat(actual).isNull();
   }
 
-  private void mockConnection() throws Exception {
-    connection = createMock(ConduitConnection.class);
-    expectNew(ConduitConnection.class, URL).andReturn(connection).once();
+  @Test
+  public void testManiphestEditNoop() throws Exception {
+    Conduit conduit = createConduit();
+    ManiphestEdit actual = conduit.maniphestEdit(4711, null, null, null);
+
+    verifyZeroInteractions(conduitConnection);
+    assertThat(actual).isNull();
+  }
+
+  @Test
+  public void testManiphestEditEmpty() throws Exception {
+    Conduit conduit = createConduit();
+    ManiphestEdit actual = conduit.maniphestEdit(4711, "", "", "");
+
+    verifyZeroInteractions(conduitConnection);
+    assertThat(actual).isNull();
+  }
+
+  @Test
+  public void testManiphestEditAddComment() throws Exception {
+    Map<String, Object> transaction = new HashMap<>();
+    transaction.put("type", "comment");
+    transaction.put("value", "foo");
+
+    Map<String, Object> params = new HashMap<>();
+    params.put("objectIdentifier", 4711);
+    params.put("transactions", ImmutableList.of(transaction));
+
+    JsonArray data = new JsonArray();
+    data.add(createProjectJson(2, "foo"));
+
+    JsonObject response = createEditResponse(1);
+    when(conduitConnection.call("maniphest.edit", params, TOKEN)).thenReturn(response);
+
+    Conduit conduit = createConduit();
+
+    ManiphestEdit actual = conduit.maniphestEdit(4711, "foo", null, null);
+
+    assertThat(actual.getObject().getId()).isEqualTo(4712);
+    assertThat(actual.getObject().getPhid()).isEqualTo("PHID-foo");
+    assertThat(actual.getTransactions()).hasSize(1);
+    assertThat(actual.getTransactions().get(0).getPhid()).isEqualTo("trans@0");
+  }
+
+  @Test
+  public void testManiphestEditAddProject() throws Exception {
+    Map<String, Object> transaction = new HashMap<>();
+    transaction.put("type", "projects.add");
+    transaction.put("value", ImmutableList.of("PHID-bar"));
+
+    Map<String, Object> params = new HashMap<>();
+    params.put("objectIdentifier", 4711);
+    params.put("transactions", ImmutableList.of(transaction));
+
+    JsonArray data = new JsonArray();
+    data.add(createProjectJson(2, "foo"));
+
+    JsonObject response = createEditResponse(1);
+    when(conduitConnection.call("maniphest.edit", params, TOKEN)).thenReturn(response);
+
+    Conduit conduit = spy(createConduit());
+
+    // shortcut the needed project search
+    doReturn(new ProjectSearch("PHID-bar", 12)).when(conduit).projectSearch("foo");
+
+    ManiphestEdit actual = conduit.maniphestEdit(4711, null, "foo", null);
+
+    assertThat(actual.getObject().getId()).isEqualTo(4712);
+    assertThat(actual.getObject().getPhid()).isEqualTo("PHID-foo");
+    assertThat(actual.getTransactions()).hasSize(1);
+    assertThat(actual.getTransactions().get(0).getPhid()).isEqualTo("trans@0");
+  }
+
+  @Test
+  public void testManiphestEditRemoveProject() throws Exception {
+    Map<String, Object> transaction = new HashMap<>();
+    transaction.put("type", "projects.remove");
+    transaction.put("value", ImmutableList.of("PHID-bar"));
+
+    Map<String, Object> params = new HashMap<>();
+    params.put("objectIdentifier", 4711);
+    params.put("transactions", ImmutableList.of(transaction));
+
+    JsonArray data = new JsonArray();
+    data.add(createProjectJson(2, "foo"));
+
+    JsonObject response = createEditResponse(1);
+    when(conduitConnection.call("maniphest.edit", params, TOKEN)).thenReturn(response);
+
+    Conduit conduit = spy(createConduit());
+
+    // shortcut the needed project search
+    doReturn(new ProjectSearch("PHID-bar", 12)).when(conduit).projectSearch("foo");
+
+    ManiphestEdit actual = conduit.maniphestEdit(4711, null, null, "foo");
+
+    assertThat(actual.getObject().getId()).isEqualTo(4712);
+    assertThat(actual.getObject().getPhid()).isEqualTo("PHID-foo");
+    assertThat(actual.getTransactions()).hasSize(1);
+    assertThat(actual.getTransactions().get(0).getPhid()).isEqualTo("trans@0");
+  }
+
+  @Test
+  public void testManiphestEditAllParams() throws Exception {
+    Map<String, Object> transaction1 = new HashMap<>();
+    transaction1.put("type", "comment");
+    transaction1.put("value", "foo");
+
+    Map<String, Object> transaction2 = new HashMap<>();
+    transaction2.put("type", "projects.add");
+    transaction2.put("value", ImmutableList.of("PHID-bar"));
+
+    Map<String, Object> transaction3 = new HashMap<>();
+    transaction3.put("type", "projects.remove");
+    transaction3.put("value", ImmutableList.of("PHID-baz"));
+
+    Map<String, Object> params = new HashMap<>();
+    params.put("objectIdentifier", 4711);
+    params.put("transactions", ImmutableList.of(transaction1, transaction2, transaction3));
+
+    JsonArray data = new JsonArray();
+    data.add(createProjectJson(2, "foo"));
+
+    JsonObject response = createEditResponse(3);
+    when(conduitConnection.call("maniphest.edit", params, TOKEN)).thenReturn(response);
+
+    Conduit conduit = spy(createConduit());
+
+    // shortcut the needed project searches
+    doReturn(new ProjectSearch("PHID-bar", 12)).when(conduit).projectSearch("bar");
+    doReturn(new ProjectSearch("PHID-baz", 13)).when(conduit).projectSearch("baz");
+
+    ManiphestEdit actual = conduit.maniphestEdit(4711, "foo", "bar", "baz");
+
+    assertThat(actual.getObject().getId()).isEqualTo(4712);
+    assertThat(actual.getObject().getPhid()).isEqualTo("PHID-foo");
+    assertThat(actual.getTransactions()).hasSize(3);
+    assertThat(actual.getTransactions().get(0).getPhid()).isEqualTo("trans@0");
+    assertThat(actual.getTransactions().get(1).getPhid()).isEqualTo("trans@1");
+    assertThat(actual.getTransactions().get(2).getPhid()).isEqualTo("trans@2");
+  }
+
+  @Test
+  public void testManiphestSearchNotFound() throws Exception {
+    Map<String, Object> params = new HashMap<>();
+    params.put("constraints", ImmutableMap.of("ids", ImmutableList.of(4711)));
+
+    JsonObject result = new JsonObject();
+    result.add("data", new JsonArray());
+
+    when(conduitConnection.call("maniphest.search", params, TOKEN)).thenReturn(result);
+    Conduit conduit = createConduit();
+
+    verifyNoMoreInteractions(conduitConnection);
+    ManiphestSearch actual = conduit.maniphestSearch(4711);
+    assertThat(actual).isNull();
+  }
+
+  @Test
+  public void testManiphestSearchPass() throws Exception {
+    Map<String, Object> params = new HashMap<>();
+    params.put("constraints", ImmutableMap.of("ids", ImmutableList.of(4711)));
+
+    JsonObject needle = new JsonObject();
+    needle.addProperty("id", 23);
+
+    JsonArray data = new JsonArray();
+    data.add(needle);
+
+    JsonObject result = new JsonObject();
+    result.add("data", data);
+
+    when(conduitConnection.call("maniphest.search", params, TOKEN)).thenReturn(result);
+    Conduit conduit = createConduit();
+
+    ManiphestSearch actual = conduit.maniphestSearch(4711);
+    assertThat(actual.getId()).isEqualTo(23);
+  }
+
+  private JsonObject createEditResponse(int transactions) {
+    JsonObject resultObject = new JsonObject();
+    resultObject.addProperty("id", 4712);
+    resultObject.addProperty("phid", "PHID-foo");
+
+    JsonArray transactionArray = new JsonArray();
+    for (int i = 0; i < transactions; i++) {
+      JsonObject transaction = new JsonObject();
+      transaction.addProperty("phid", "trans@" + i);
+      transactionArray.add(transaction);
+    }
+
+    JsonObject response = new JsonObject();
+    response.add("object", resultObject);
+    response.add("transactions", transactionArray);
+
+    return response;
+  }
+
+  private JsonObject createProjectJson(int id, String name) {
+    JsonObject fields = new JsonObject();
+    fields.addProperty("name", name);
+    fields.addProperty("slug", name);
+
+    JsonObject ret = new JsonObject();
+    ret.addProperty("id", id);
+    ret.addProperty("type", "PROJ");
+    ret.addProperty("phid", "PHID-PROJ-" + name);
+    ret.add("fields", fields);
+    return ret;
+  }
+
+  private Conduit createConduit() {
+    return new Conduit(conduitConnectionFactory, new SearchUtils(), URL, TOKEN);
   }
 }
