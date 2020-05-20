@@ -1,4 +1,4 @@
-// Copyright (C) 2014 The Android Open Source Project
+// Copyright (C) 2018 The Android Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,23 +11,38 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
 package com.googlesource.gerrit.plugins.its.phabricator.conduit.results;
 
+import com.google.gson.JsonArray;
+
 /**
- * Models the result for a call to maniphest.edit
+ * Models the result for API methods
  *
  * <p>JSON looks like:
  *
  * <pre>
  * {
- *   "object":{
- *     "id":2,
- *     "phid":"PHID-TASK-wzydcwamkp5rjhg45ocq"
+ *   "data": [
+ *     { ... }
+ *   ],
+ *   "maps": {},
+ *   "query": {
+ *     "queryKey": null
  *   },
- *   "transactions":[
- *     {"phid":"PHID-XACT-TASK-sghfp7saytwmun3"}
- *   ]
+ *   "cursor": {
+ *     "limit": 100,
+ *     "after": null,
+ *     "before": null,
+ *     "order": null
+ *   }
  * }
  * </pre>
  */
-public class ManiphestEdit extends GenericEdit {}
+public class GenericSearch {
+  private JsonArray data;
+
+  public JsonArray getData() {
+    return data;
+  }
+}

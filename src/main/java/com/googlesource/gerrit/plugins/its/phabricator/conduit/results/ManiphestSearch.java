@@ -14,8 +14,6 @@
 
 package com.googlesource.gerrit.plugins.its.phabricator.conduit.results;
 
-import com.google.gson.JsonElement;
-
 /**
  * Models the result for a call to maniphest.search
  *
@@ -67,36 +65,4 @@ import com.google.gson.JsonElement;
  * }
  * </pre>
  */
-public class ManiphestSearch {
-  private int id;
-  private JsonElement fields;
-  private Attachments attachments;
-
-  public int getId() {
-    return id;
-  }
-
-  public JsonElement getFields() {
-    return fields;
-  }
-
-  public Attachments getAttachments() {
-    return attachments;
-  }
-
-  public class Attachments {
-    private Projects projects;
-
-    public Projects getProjects() {
-      return projects;
-    }
-  }
-
-  public class Projects {
-    private JsonElement projectPHIDs;
-
-    public JsonElement getProjectPHIDs() {
-      return projectPHIDs;
-    }
-  }
-}
+public class ManiphestSearch extends PhabObjectWithId {}

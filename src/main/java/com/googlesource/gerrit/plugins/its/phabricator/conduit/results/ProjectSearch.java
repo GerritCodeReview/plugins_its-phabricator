@@ -14,7 +14,6 @@
 
 package com.googlesource.gerrit.plugins.its.phabricator.conduit.results;
 
-
 /**
  * Models the result for API methods returning Project searches.
  *
@@ -57,33 +56,8 @@ package com.googlesource.gerrit.plugins.its.phabricator.conduit.results;
  * }
  * </pre>
  */
-public class ProjectSearch {
-  private int id;
-  private String type;
-  private String phid;
-  private Fields fields;
-
-  public int getId() {
-    return id;
-  }
-
-  public String getType() {
-    return type;
-  }
-
-  public String getPhid() {
-    return phid;
-  }
-
-  public Fields getFields() {
-    return fields;
-  }
-
-  public class Fields {
-    private String name;
-
-    public String getName() {
-      return name;
-    }
+public class ProjectSearch extends PhabObjectWithId {
+  public ProjectSearch(String phid, int id) {
+    super(phid, id);
   }
 }
