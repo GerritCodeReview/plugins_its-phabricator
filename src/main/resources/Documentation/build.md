@@ -18,7 +18,7 @@ in the root of Gerrit's source tree to build
 The output is created in
 
 ```
-  bazel-genfiles/plugins/@PLUGIN@/@PLUGIN@.jar
+  bazel-bin/plugins/@PLUGIN@/@PLUGIN@.jar
 ```
 
 This project can be imported into the Eclipse IDE,
@@ -32,7 +32,7 @@ Gerrit core in `tools/bzl/plugins.bzl`, and execute:
 To execute the tests run:
 
 ```
-  bazel test plugins/@PLUGIN@:its_phabricator_tests
+  bazel test plugins/@PLUGIN@:all
 ```
 
 [Back to @PLUGIN@ documentation index][index]
