@@ -22,14 +22,18 @@ import com.google.inject.assistedinject.Assisted;
 import com.googlesource.gerrit.plugins.its.phabricator.conduit.results.CallCapsule;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.apache.http.HttpEntity;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 /** Abstracts the connection to Conduit API */
@@ -101,7 +105,10 @@ public class ConduitConnection {
     String json = gson.toJson(params);
 
     logger.atFinest().log("Calling phabricator method %s with the parameters %s", method, json);
-    httppost.setEntity(new StringEntity("params=" + json, StandardCharsets.UTF_8));
+
+    List<NameValuePair> values = new ArrayList<NameValuePair>();
+    values.add(new BasicNameValuePair("params", json));
+    httppost.setEntity(new UrlEncodedFormEntity(values, StandardCharsets.UTF_8));
 
     try (CloseableHttpResponse response = getClient().execute(httppost)) {
       logger.atFinest().log("Phabricator HTTP response status: %s", response.getStatusLine());
