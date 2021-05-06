@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c382283_72996126",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1010788
+      },
+      "writtenOn": "2021-05-06T20:22:23Z",
+      "side": 1,
+      "message": "I got the lead from https://gerrit.wikimedia.org/g/phabricator/deployment/+/refs/heads/wmf/stable/scripts/conduit.py which mentions the URL encoding. A few search about to use Apache HTTP  to do the form encoding and I got code!\n\nThere is no test cause there is no boilerplate or test for ConduitConnection.java and have zero idea how to intercept the HTTP client to check what it would send in the POST.\n\nGuess I could test by writting a mock Phabricator web service to spy the response but I am getting lazy this days.  I might explore setting up a Gerrit locally using my credentials and test it out, or just deploy to prod and verify (but that is not ideal).",
+      "revId": "ab1afdcce4608caddfcfef7a1cfe4383244793ed",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
