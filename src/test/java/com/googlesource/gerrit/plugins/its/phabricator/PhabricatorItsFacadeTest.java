@@ -22,7 +22,7 @@ import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import com.google.gerrit.extensions.annotations.PluginName;
@@ -54,7 +54,7 @@ public class PhabricatorItsFacadeTest extends LoggingMockingTestCase {
 
     assertThat(actual).isEqualTo("[[Test-Url|Test-Text]]");
 
-    verifyZeroInteractions(conduit);
+    verifyNoInteractions(conduit);
   }
 
   @Test
@@ -64,7 +64,7 @@ public class PhabricatorItsFacadeTest extends LoggingMockingTestCase {
 
     assertThat(actual).isEqualTo("[[Test-Url]]");
 
-    verifyZeroInteractions(conduit);
+    verifyNoInteractions(conduit);
   }
 
   @Test
@@ -74,7 +74,7 @@ public class PhabricatorItsFacadeTest extends LoggingMockingTestCase {
 
     assertThat(actual).isEqualTo("[[Test-Url]]");
 
-    verifyZeroInteractions(conduit);
+    verifyNoInteractions(conduit);
   }
 
   @Test
@@ -84,7 +84,7 @@ public class PhabricatorItsFacadeTest extends LoggingMockingTestCase {
 
     assertThat(actual).isEqualTo("[[Test-Url]]");
 
-    verifyZeroInteractions(conduit);
+    verifyNoInteractions(conduit);
   }
 
   @Test
@@ -106,7 +106,7 @@ public class PhabricatorItsFacadeTest extends LoggingMockingTestCase {
     PhabricatorItsFacade itsFacade = createPhabricatorItsFacade();
     assertThrows(RuntimeException.class, () -> itsFacade.addComment("foo", "bar"));
 
-    verifyZeroInteractions(conduit);
+    verifyNoInteractions(conduit);
   }
 
   @Test
@@ -179,7 +179,7 @@ public class PhabricatorItsFacadeTest extends LoggingMockingTestCase {
     PhabricatorItsFacade itsFacade = createPhabricatorItsFacade();
     assertThrows(RuntimeException.class, () -> itsFacade.exists("foo"));
 
-    verifyZeroInteractions(conduit);
+    verifyNoInteractions(conduit);
   }
 
   @Test
@@ -187,7 +187,7 @@ public class PhabricatorItsFacadeTest extends LoggingMockingTestCase {
     PhabricatorItsFacade itsFacade = createPhabricatorItsFacade();
     assertThrows(RuntimeException.class, () -> itsFacade.performAction("Foo", "add-project bar"));
 
-    verifyZeroInteractions(conduit);
+    verifyNoInteractions(conduit);
   }
 
   @Test

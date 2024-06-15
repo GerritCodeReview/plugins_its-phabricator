@@ -20,7 +20,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import com.google.common.collect.ImmutableList;
@@ -136,7 +136,7 @@ public class ConduitTest extends LoggingMockingTestCase {
     Conduit conduit = createConduit();
     ManiphestEdit actual = conduit.maniphestEdit(4711, null, null, null);
 
-    verifyZeroInteractions(conduitConnection);
+    verifyNoInteractions(conduitConnection);
     assertThat(actual).isNull();
   }
 
@@ -145,7 +145,7 @@ public class ConduitTest extends LoggingMockingTestCase {
     Conduit conduit = createConduit();
     ManiphestEdit actual = conduit.maniphestEdit(4711, "", "", "");
 
-    verifyZeroInteractions(conduitConnection);
+    verifyNoInteractions(conduitConnection);
     assertThat(actual).isNull();
   }
 
