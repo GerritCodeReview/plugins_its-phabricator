@@ -1,5 +1,23 @@
 {
-  "comments": [],
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eac1a262_19d78214",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1087826
+      },
+      "writtenOn": "2024-06-18T17:01:46Z",
+      "side": 1,
+      "message": "Friendly reminder that in current versions of zuul, the gerrit change-id form of depends-on is deprecated in favor of:\n\nDepends-On: https://gerrit-review.googlesource.com/c/zuul/jobs/+/430479\n\nOr:\n\nDepends-On: https://gerrit-review.googlesource.com/430479",
+      "revId": "62d8fe7a930caf35aa42807f7a923073ca98f1f5",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ],
   "submitRequirementResults": [
     {
       "submitRequirement": {
