@@ -1,5 +1,23 @@
 {
-  "comments": [],
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9934243_930a9d39",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1010788
+      },
+      "writtenOn": "2024-06-18T11:43:14Z",
+      "side": 1,
+      "message": "I have had it verified with Gerrit stable-3.9 on https://gerrit.wikimedia.org/r/c/operations/software/gerrit/+/1046783/2",
+      "revId": "e6025437701378c0cdb831b0d36ef9384d3742f4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ],
   "submitRequirementResults": [
     {
       "submitRequirement": {
