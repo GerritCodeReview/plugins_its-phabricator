@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7de6b145_59d04264",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1010788
+      },
+      "writtenOn": "2024-06-18T12:03:04Z",
+      "side": 1,
+      "message": "Shouldn\u0027t it be moved to `stable-3.9` then once passing and merge a merge be proposed for `master`?",
+      "revId": "46efcc451469bf73934963ad30ca15599a5abb2e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
