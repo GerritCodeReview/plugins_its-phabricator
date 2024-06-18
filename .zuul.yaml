@@ -1,0 +1,12 @@
+- job:
+    name: plugins-its-phabricator-build
+    parent: gerrit-plugin-build
+    required-projects:
+      - plugins/its-base
+
+- project:
+    description: |
+      Build the plugin in check.
+    check:
+      jobs:
+        - plugins-plugin-its-phabricator-build
